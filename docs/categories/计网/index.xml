@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>计网 - 分类 - Charmer</title>
+        <link>https://oliverdding.github.io/categories/%E8%AE%A1%E7%BD%91/</link>
+        <description>计网 - 分类 - Charmer</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 03 Jan 2021 16:15:54 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/categories/%E8%AE%A1%E7%BD%91/" rel="self" type="application/rss+xml" /><item>
+    <title>浏览网站时会发生什么</title>
+    <link>https://oliverdding.github.io/what-would-happen-when-browsing-website-in-the-internet/</link>
+    <pubDate>Sun, 03 Jan 2021 16:15:54 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/what-would-happen-when-browsing-website-in-the-internet/</guid>
+    <description><![CDATA[由于这个问题非常泛, 几乎设计计算机发展以来所有的内容, 怎么发挥最好依照你面试的岗位. 这篇回答是站在一个本科毕业生, 面试后端反向时的回答例子.]]></description>
+</item></channel>
+</rss>

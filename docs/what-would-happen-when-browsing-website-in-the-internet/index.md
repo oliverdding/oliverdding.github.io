@@ -1,62 +1,5 @@
----
-title: "浏览网站时会发生什么"
-subtitle: "访问www.google.com流程解析"
-date: 2021-01-03T16:15:54+08:00
-lastmod: 2021-01-03T16:15:54+08:00
-draft: false
-author: "Charmer"
-authorLink: "https://oliverdding.github.io"
-description: "当我们往浏览器中输入url并回车后, 到网页展示给我们地全过程, 发生了什么?"
-images: []
+# 浏览网站时会发生什么
 
-tags: ["计网", "面试", "基础"]
-categories: ["计网"]
-featuredImage: ""
-featuredImagePreview: ""
-
-hiddenFromHomePage: false
-hiddenFromSearch: false
-twemoji: false
-lightgallery: true
-ruby: true
-fraction: true
-fontawesome: true
-linkToMarkdown: true
-rssFullText: false
-
-toc:
-  enable: true
-  auto: true
-code:
-  copy: true
-  # ...
-math:
-  enable: true
-  # ...
-mapbox:
-  accessToken: ""
-  # ...
-share:
-  enable: true
-  # ...
-comment:
-  enable: true
-  # ...
-library:
-  css:
-    # someCSS = "some.css"
-    # 位于 "assets/"
-    # 或者
-    # someCSS = "https://cdn.example.com/some.css"
-  js:
-    # someJS = "some.js"
-    # 位于 "assets/"
-    # 或者
-    # someJS = "https://cdn.example.com/some.js"
-seo:
-  images: []
-  # ...
----
 
 > 由于这个问题非常泛, 几乎设计计算机发展以来所有的内容, 怎么发挥最好依照你面试的岗位.
 > 
@@ -108,3 +51,4 @@ CDN会定时询问源服务器`if-modified-since`，服务器会返回`304 NOT M
 2. 第二次挥手。另一方(叫它B)收到FIN，发送ACK表示知道了。此时A进入FIN_WAIT_2，但是B还是能发消息。
 3. 第三次挥手。B发送FIN给A，表示没消息了，进入LAST_ACK状态。
 4. 第四次挥手。A收到FIN后，发送ACK，进入TIME_WAIT。B收到后就直接关闭socket，A还要等2MSL时间后关闭。
+

@@ -1,62 +1,5 @@
----
-title: "Java单例模式"
-subtitle: "单例模式的代码实现"
-date: 2021-01-03T16:25:21+08:00
-lastmod: 2021-01-03T16:25:21+08:00
-draft: false
-author: "Charmer"
-authorLink: "https://oliverdding.github.io"
-description: "单例模式是设计模式中一种很常见的模式, 本文以代码的形式记录了单例模式的实现方式"
-images: []
+# Java单例模式
 
-tags: ["Java", "基础", "设计模式"]
-categories: ["Java"]
-featuredImage: ""
-featuredImagePreview: ""
-
-hiddenFromHomePage: false
-hiddenFromSearch: false
-twemoji: false
-lightgallery: true
-ruby: true
-fraction: true
-fontawesome: true
-linkToMarkdown: true
-rssFullText: false
-
-toc:
-  enable: true
-  auto: true
-code:
-  copy: true
-  # ...
-math:
-  enable: true
-  # ...
-mapbox:
-  accessToken: ""
-  # ...
-share:
-  enable: true
-  # ...
-comment:
-  enable: true
-  # ...
-library:
-  css:
-    # someCSS = "some.css"
-    # 位于 "assets/"
-    # 或者
-    # someCSS = "https://cdn.example.com/some.css"
-  js:
-    # someJS = "some.js"
-    # 位于 "assets/"
-    # 或者
-    # someJS = "https://cdn.example.com/some.js"
-seo:
-  images: []
-  # ...
----
 
 首先一点, 只有枚举饿汉保证不会被反射的方式生成多个实例。
 
@@ -134,3 +77,4 @@ public class LazySingleton {
     }
 }
 ```
+
