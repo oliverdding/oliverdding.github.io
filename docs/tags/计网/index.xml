@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>计网 - 标签 - Charmer</title>
+        <link>https://oliverdding.github.io/tags/%E8%AE%A1%E7%BD%91/</link>
+        <description>计网 - 标签 - Charmer</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sat, 02 Jan 2021 10:55:50 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E8%AE%A1%E7%BD%91/" rel="self" type="application/rss+xml" /><item>
+    <title>Synchronous, Asynchronous, Blocking and Non-blocking</title>
+    <link>https://oliverdding.github.io/synchronous-asynchronous-blocking-and-nonblocking/</link>
+    <pubDate>Sat, 02 Jan 2021 10:55:50 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/synchronous-asynchronous-blocking-and-nonblocking/</guid>
+    <description><![CDATA[在大三学习中, 经常会遇到这四个名词交替出现, 概念比较模糊. 于是记录下自己的理解, 留作备份. 说真的, 对于这类概念的东西, 需要真正用在实处才能真]]></description>
+</item></channel>
+</rss>
