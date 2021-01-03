@@ -141,7 +141,7 @@ enableEmoji = true
           # 是否显示社交账号
           social = true
           # 免责声明 (支持 HTML 格式)
-          disclaimer = ""
+          disclaimer = "免责声明：</strong><br>本文中使用的部分图片来自于网络，如有侵权,请联系<a href=\"mailto:oliverdd@qq.com\" target=\"_blank\">Charmer</a>进行删除"
         # 主页文章列表
         [languages.zh-cn.params.home.posts]
           enable = true

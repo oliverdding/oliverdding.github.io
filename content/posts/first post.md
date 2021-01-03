@@ -14,7 +14,7 @@ categories: ["生活"]
 featuredImage: ""
 featuredImagePreview: ""
 
-hiddenFromHomePage: false
+hiddenFromHomePage: true
 hiddenFromSearch: true
 twemoji: false
 lightgallery: true

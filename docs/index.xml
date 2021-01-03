@@ -4,9 +4,16 @@
         <link>https://oliverdding.github.io/</link>
         <description>Charmer&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 03 Jan 2021 18:07:01 &#43;0800</lastBuildDate>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 03 Jan 2021 21:42:48 &#43;0800</lastBuildDate>
             <atom:link href="https://oliverdding.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>做任何事情要有明确的目的</title>
+    <link>https://oliverdding.github.io/2021/01/do-anything-with-clear-purpose/</link>
+    <pubDate>Sun, 03 Jan 2021 21:42:48 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/01/do-anything-with-clear-purpose/</guid>
+    <description><![CDATA[最近面临实习面试, 一连串的准备以及扑街告诉我一个道理: stay hungry, stay foolish 说真的, 懈怠了半年, 发现自己很多知识都被抛之脑后, 每天沉迷奶头乐, 刷刷知乎, 看]]></description>
+</item><item>
     <title>Linux中I/O多路复用(Select Poll and Epoll)</title>
     <link>https://oliverdding.github.io/2021/01/select-poll-and-epoll/</link>
     <pubDate>Sun, 03 Jan 2021 18:07:01 &#43;0800</pubDate>
