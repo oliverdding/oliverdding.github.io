@@ -1,14 +1,31 @@
 ---
-title: "About"
-author: "OliverDD"
-showToc: false
-TocOpen: false
+title: "关于Charmer"
+date: 2020-01-01T00:00:00+8:00
 draft: false
-hidemeta: true
-disableShare: true
+author: "Charmer"
+authorLink: "https://oliverdding.github.io"
+hiddenFromHomePage: true
+hiddenFromSearch: true
+toc:
+  enable: false
+  auto: true
+code:
+  copy: false
+  # ...
+math:
+  enable: false
+  # ...
+mapbox:
+  accessToken: ""
+  # ...
+share:
+  enable: false
+  # ...
+comment:
+  enable: false
 ---
 
-我叫*Charmer*, 这里是我的博客, 记录着我平日所学所思, 若有任何错误还望不嫌麻烦发送邮件给我帮我指出, 谢谢.
+我叫*Charmer*, 这里是我的博客, 记录着我平日所学所思, 若有任何错误还望不嫌麻烦发送邮件给我或者直接在文章中评论帮我指出, 谢谢.
 
 我是一名IT从业人员, 主要使用JAVA, python有所接触当并不深入(我讨厌python, js这些动态语言), c语言也有所涉猎. 2022年将从电子科技大学毕业, 若遇到校友不妨和我叨唠叨唠, 毕竟缘分至此.
 
