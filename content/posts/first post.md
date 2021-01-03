@@ -15,7 +15,7 @@ featuredImage: ""
 featuredImagePreview: ""
 
 hiddenFromHomePage: false
-hiddenFromSearch: false
+hiddenFromSearch: true
 twemoji: false
 lightgallery: true
 ruby: true
@@ -31,16 +31,16 @@ code:
   copy: true
   # ...
 math:
-  enable: true
+  enable: false
   # ...
 mapbox:
   accessToken: ""
   # ...
 share:
-  enable: true
+  enable: false
   # ...
 comment:
-  enable: true
+  enable: false
   # ...
 library:
   css:

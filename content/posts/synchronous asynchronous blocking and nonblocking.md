@@ -7,10 +7,9 @@ draft: false
 author: "Charmer"
 authorLink: "https://oliverdding.github.io"
 description: "记录下辨析这四个容易混乱的概念"
-license: ""
 images: []
 
-tags: ["基础", "学习", "操作系统", "计网"]
+tags: ["基础", "操作系统", "计网"]
 categories: ["基础"]
 featuredImage: ""
 featuredImagePreview: ""
