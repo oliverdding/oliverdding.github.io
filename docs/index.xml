@@ -14,12 +14,12 @@
     <guid>https://oliverdding.github.io/singleton-in-java/</guid>
     <description><![CDATA[首先一点, 只有枚举饿汉保证不会被反射的方式生成多个实例。 饿汉模式 普通饿汉 1 2 3 4 5 6 7 8 9 10 11 public class HungrySingleton { private static final HungrySingleton instance = new HungrySingleton(); private HungrySingleton() { } public static HungrySingleton getInstance() { return instance;]]></description>
 </item><item>
-    <title>浏览网站时会发生什么</title>
+    <title>浏览网站时会发生什么:confused:</title>
     <link>https://oliverdding.github.io/what-would-happen-when-browsing-website-in-the-internet/</link>
     <pubDate>Sun, 03 Jan 2021 16:15:54 &#43;0800</pubDate>
     <author>作者</author>
     <guid>https://oliverdding.github.io/what-would-happen-when-browsing-website-in-the-internet/</guid>
-    <description><![CDATA[由于这个问题非常泛, 几乎设计计算机发展以来所有的内容, 怎么发挥最好依照你面试的岗位. 这篇回答是站在一个本科毕业生, 面试后端反向时的回答例子.]]></description>
+    <description><![CDATA[由于这个问题非常泛, 几乎设计计算机发展以来所有的内容, 怎么发挥最好依照你面试的岗位. 这篇回答是站在一个本科毕业生, 面试后端方向时的回答例子.]]></description>
 </item><item>
     <title>Synchronous, Asynchronous, Blocking and Non-blocking</title>
     <link>https://oliverdding.github.io/synchronous-asynchronous-blocking-and-nonblocking/</link>
@@ -28,7 +28,7 @@
     <guid>https://oliverdding.github.io/synchronous-asynchronous-blocking-and-nonblocking/</guid>
     <description><![CDATA[在大三学习中, 经常会遇到这四个名词交替出现, 概念比较模糊. 于是记录下自己的理解, 留作备份. 说真的, 对于这类概念的东西, 需要真正用在实处才能真]]></description>
 </item><item>
-    <title>第一篇博文</title>
+    <title>第一篇博文:laughing:</title>
     <link>https://oliverdding.github.io/first-post/</link>
     <pubDate>Fri, 01 Jan 2021 00:00:00 &#43;0800</pubDate>
     <author>作者</author>
@@ -40,7 +40,7 @@
 <h2 id="目的">目的</h2>
 <p>将知识体系化, 按照一定的分类方式将知识记录在网络上, 方便自己复习, 可能的话帮助其他需要他们的人.</p>
 <h2 id="关于我">关于我</h2>
-<p>你们可以叫我<em>Charmer</em>, 这也是我第一个代号. 起这个名字是希望自己能像一个魔术师一样, 让代码在我手掌间飞舞.</p>
+<p>你们可以叫我<em>Charmer</em>, 这也是我第一个代号. 起这个名字是希望自己能像一个魔术师一样, 让代码在我手掌间飞舞😜.</p>
 <p><strong>希望你我都能保持本心.</strong></p>
 ]]></description>
 </item></channel>
