@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Synchronous, Asynchronous, Blocking and Non-blocking - Charmer</title><meta name="Description" content="记录下辨析这四个容易混乱的概念"><meta property="og:title" content="Synchronous, Asynchronous, Blocking and Non-blocking" />
+<meta property="og:description" content="记录下辨析这四个容易混乱的概念" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/" />
+<meta property="og:image" content="https://oliverdding.github.io/favicon.ico"/>
+<meta property="article:published_time" content="2021-01-02T10:55:50+08:00" />
+<meta property="article:modified_time" content="2021-01-03T16:29:43+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://oliverdding.github.io/favicon.ico"/>
+
+<meta name="twitter:title" content="Synchronous, Asynchronous, Blocking and Non-blocking"/>
+<meta name="twitter:description" content="记录下辨析这四个容易混乱的概念"/>
+<meta name="application-name" content="charmer">
+<meta name="apple-mobile-web-app-title" content="charmer"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/" /><link rel="prev" href="https://oliverdding.github.io/2021/01/first-post/" /><link rel="next" href="https://oliverdding.github.io/2021/01/what-would-happen-when-browsing-website-in-the-internet/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Synchronous, Asynchronous, Blocking and Non-blocking",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/oliverdding.github.io\/2021\/01\/synchronous-asynchronous-blocking-and-nonblocking\/"
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "基础, 操作系统, 计网","wordcount":  749 ,
+        "url": "https:\/\/oliverdding.github.io\/2021\/01\/synchronous-asynchronous-blocking-and-nonblocking\/","datePublished": "2021-01-02T10:55:50+08:00","dateModified": "2021-01-03T16:29:43+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Charmer"
+            },"description": "记录下辨析这四个容易混乱的概念"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Synchronous, Asynchronous, Blocking and Non-blocking</h1><h2 class="single-subtitle">同步, 异步, 阻塞与非阻塞的辨析</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%9F%BA%E7%A1%80/"><i class="far fa-folder fa-fw"></i>基础</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-1-2">2021-1-2</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 749 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#同步与异步">同步与异步</a></li>
+    <li><a href="#阻塞与非阻塞">阻塞与非阻塞</a></li>
+    <li><a href="#例子">例子</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>在大三学习中, 经常会遇到这四个名词交替出现, 概念比较模糊. 于是记录下自己的理解, 留作备份.</p>
+<blockquote>
+<p>说真的, 对于这类概念的东西, 需要真正用在实处才能真正掌握, 如果没有遇到就去&quot;学&quot;, 那只能说记住了&hellip;</p>
+</blockquote>
+<h2 id="同步与异步">同步与异步</h2>
+<p>同步(Synchronous)和异步(Asynchronous)描述方法调用结果返回的过程.</p>
+<ul>
+<li>同步: 调用一旦开始，调用者必须等到被调用者返回结果后, 才能继续后续的行为</li>
+<li>异步: 调用方法后就会立即返回, 调用者就可以继续后续的操作, 而调用者在后台真正地运行</li>
+</ul>
+<blockquote>
+<p>重点在于:</p>
+<ol>
+<li><strong>有效的</strong>异步不是随便实现的, 必须是任务之间没有关联, 不存在先后关系的. 比如我烧水时可以去读报纸, 但是不能泡咖啡(要等水烧开)</li>
+<li>异步需要提供相应的消息机制, 得以通知调用者获取结果</li>
+</ol>
+</blockquote>
+<h2 id="阻塞与非阻塞">阻塞与非阻塞</h2>
+<p>阻塞和非阻塞关注的是调用者在等待调用结果时的状态, 专指调用者的.</p>
+<ul>
+<li>阻塞: 是指调用结果返回之前, 当前线程会被挂起. 调用者所在线程只有在得到结果之后才会继续往下执行</li>
+<li>非阻塞: 是指在不能立刻得到结果之前, 调用者所在线程不会被阻塞, 而可以继续往下执行</li>
+</ul>
+<h2 id="例子">例子</h2>
+<p>假设你刚刚起床, 从要做的一堆事情里面拿出三件事连续的事情:</p>
+<ol>
+<li>烧水</li>
+<li>泡咖啡</li>
+<li>看报纸</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">阻塞</th>
+<th style="text-align:center">非阻塞</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">同步</td>
+<td style="text-align:center">你先烧水, 并且盯着水烧开后泡咖啡, 然后看报纸</td>
+<td style="text-align:center">你先烧水, 发呆并时不时看一眼水烧开没, 然后泡咖啡, 最后看报纸</td>
+</tr>
+<tr>
+<td style="text-align:center">异步</td>
+<td style="text-align:center">你先烧水, 然后发呆, 直到听到水响了泡咖啡, 最后看报纸</td>
+<td style="text-align:center">你先烧水, 然后看报纸, 听到水响了泡咖啡, 继续看报纸</td>
+</tr>
+</tbody>
+</table>
+<p>在例子中, 同步异步重点在于水烧开这个结果你是如何获取的. 同步时你一定要看到水烧开这个结果返回了, 你才继续干别的事情; 异步时你不管水怎么样了, 直接做别的事情, 等到水烧开了发出响声你再来处理.</p>
+<p>阻塞非阻塞则关注你烧水后干啥了, 阻塞时你只能等水烧开才能继续后续事情; 非阻塞时你能继续做别的事情.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-1-3&nbsp;<a class="git-hash" href="https://github.com/oliverdding/oliverdding.github.io/commit/e286a6f3371525de2cb1aad89f7e9bf0311d212f" target="_blank" title="commit by OliverDD(QAQddbest@outlook.com) e286a6f3371525de2cb1aad89f7e9bf0311d212f: 添加两篇旧文章">
+                                    <i class="fas fa-hashtag fa-fw"></i>e286a6f</a></span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/2021/01/synchronous-asynchronous-blocking-and-nonblocking/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/" data-title="Synchronous, Asynchronous, Blocking and Non-blocking" data-hashtags="基础,操作系统,计网"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/" data-hashtag="基础"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/" data-title="Synchronous, Asynchronous, Blocking and Non-blocking"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a><a href="javascript:void(0);" title="分享到 Pocket" data-sharer="pocket" data-url="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/"><i class="fab fa-get-pocket fa-fw"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/" data-title="Synchronous, Asynchronous, Blocking and Non-blocking"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/" data-title="Synchronous, Asynchronous, Blocking and Non-blocking"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%BA%E7%A1%80/">基础</a>,&nbsp;<a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>,&nbsp;<a href="/tags/%E8%AE%A1%E7%BD%91/">计网</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/first-post/" class="prev" rel="prev" title="第一篇博文"><i class="fas fa-angle-left fa-fw"></i>第一篇博文</a>
+            <a href="/2021/01/what-would-happen-when-browsing-website-in-the-internet/" class="next" rel="next" title="浏览网站时会发生什么">浏览网站时会发生什么<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Stay hungry, Stay foolish</div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://oliverdding.github.io" target="_blank">Charmer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.8/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["oliverdding"],"clientID":"8ed51e4ff5906df5735d","clientSecret":"0fc867049835e59f54c1aa67c59443d6db7fe01b","id":"2021-01-02T10:55:50+08:00","owner":"oliverdding","repo":"oliverdding.github.io","title":"Synchronous, Asynchronous, Blocking and Non-blocking"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

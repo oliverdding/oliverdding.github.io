@@ -9,7 +9,7 @@ authorLink: "https://oliverdding.github.io"
 description: "单例模式是设计模式中一种很常见的模式, 本文以代码的形式记录了单例模式的实现方式"
 images: []
 
-tags: ["Java", "基础", "设计模式"]
+tags: ["java", "基础", "设计模式"]
 categories: ["Java"]
 featuredImage: ""
 featuredImagePreview: ""

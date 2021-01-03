@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Linux中I/O多路复用(Select Poll and Epoll) - Charmer</title><meta name="Description" content="本篇文章简单介绍了Linux的I/O多路复用的三种方式的一些区别和联系"><meta property="og:title" content="Linux中I/O多路复用(Select Poll and Epoll)" />
+<meta property="og:description" content="本篇文章简单介绍了Linux的I/O多路复用的三种方式的一些区别和联系" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://oliverdding.github.io/2021/01/select-poll-and-epoll/" />
+<meta property="og:image" content="https://oliverdding.github.io/favicon.ico"/>
+<meta property="article:published_time" content="2021-01-03T18:07:01+08:00" />
+<meta property="article:modified_time" content="2021-01-03T18:07:01+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://oliverdding.github.io/favicon.ico"/>
+
+<meta name="twitter:title" content="Linux中I/O多路复用(Select Poll and Epoll)"/>
+<meta name="twitter:description" content="本篇文章简单介绍了Linux的I/O多路复用的三种方式的一些区别和联系"/>
+<meta name="application-name" content="charmer">
+<meta name="apple-mobile-web-app-title" content="charmer"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://oliverdding.github.io/2021/01/select-poll-and-epoll/" /><link rel="prev" href="https://oliverdding.github.io/2021/01/singleton-in-java/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Linux中I/O多路复用(Select Poll and Epoll)",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/oliverdding.github.io\/2021\/01\/select-poll-and-epoll\/"
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, 操作系统, 计网, 基础, 面试","wordcount":  2155 ,
+        "url": "https:\/\/oliverdding.github.io\/2021\/01\/select-poll-and-epoll\/","datePublished": "2021-01-03T18:07:01+08:00","dateModified": "2021-01-03T18:07:01+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Charmer"
+            },"description": "本篇文章简单介绍了Linux的I/O多路复用的三种方式的一些区别和联系"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Linux中I/O多路复用(Select Poll and Epoll)</h1><h2 class="single-subtitle">Linux的I/O多路复用的个人理解</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-1-3">2021-1-3</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2155 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#概念">概念</a>
+      <ul>
+        <li><a href="#nix四种io模型">*nix四种IO模型</a></li>
+        <li><a href="#nix的文件描述符和句柄">*nix的文件描述符和句柄</a></li>
+      </ul>
+    </li>
+    <li><a href="#select">Select</a>
+      <ul>
+        <li><a href="#函数声明">函数声明</a></li>
+        <li><a href="#缺点">缺点</a></li>
+      </ul>
+    </li>
+    <li><a href="#poll">Poll</a>
+      <ul>
+        <li><a href="#函数声明-1">函数声明</a></li>
+        <li><a href="#缺点-1">缺点</a></li>
+      </ul>
+    </li>
+    <li><a href="#epoll">Epoll</a>
+      <ul>
+        <li><a href="#函数声明-2">函数声明</a></li>
+        <li><a href="#触发方式">触发方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><blockquote>
+<p>废话时间:</p>
+<p>我第一次接触I/O多路复用是在自己人生中第一次外包项目, 给学校某个实验室的一个FPGA开发上位机. 使用串口的方式发送接受数据.</p>
+<p>一开始我用一个线程去监听串口, 处理数据并调用UI dispatcher更新界面, 结果处理过慢, 串口的FIFO缓冲区爆了.</p>
+<p>接着我用一个线程去监听数据, 收到数据就调用其他线程去处理, 展示数据. (这就是I/O多路复用的雏形了, 当时并不知道)</p>
+<p>还有后续, 由于串口是一字节一字节发送的, 而我需要的数据都为7字节, 可能会存在半包导致. 于是我的办法是将数据读取到一块公共内存, 消费者线程要待数据足够才去消费.</p>
+</blockquote>
+<h2 id="概念">概念</h2>
+<blockquote>
+<p>I/O多路复用(multiplexing)的本质是通过一种机制(系统内核缓冲I/O数据), 让单个进程可以监视多个文件描述符,一旦某个描述符就绪(一般是读就绪或写就绪), 能够通知程序进行相应的读写操作.</p>
+</blockquote>
+<p>用自己的话说, I/O多路复用就是让一个进程同步, 阻塞地监听多个文件描述符, 以此减少系统中地线程数量, 减少资源消耗, 提高负载能力.</p>
+<p>而Linux提供了Select, Poll和Epoll三种I/O复用的方式.</p>
+<h3 id="nix四种io模型">*nix四种IO模型</h3>
+<p>这里推荐这一篇<a href="https://zhuanlan.zhihu.com/p/115912936" target="_blank" rel="noopener noreffer">文章</a>, 讲得很清晰明了.</p>
+<ol>
+<li>blocking I/O</li>
+<li>nonblocking I/O</li>
+<li>IO multiplexing</li>
+<li>signal driven I/O</li>
+<li>asynchronous I/O</li>
+</ol>
+<h3 id="nix的文件描述符和句柄">*nix的文件描述符和句柄</h3>
+<p>每个进程都会有一个<code>打开的文件表</code>(fdtable), 表中每一项都是<code>struct file</code>类型, 包含打开的文件的一些属性, 比如偏移量, 读写访问模式等等, 这个表的每一个元素就是一个文件句柄. 而文件描述符就是这个句柄在这个fdtable中的下标.</p>
+<h2 id="select">Select</h2>
+<p>select提供fd_set这一数据结构(一个long类型数组组成的structure), 程序员将其存储一系列文件句柄, 调用select()时, 由内核根据I/O状态从fd_set中删除无对应事件发生的句柄, 由此来通知执行select()的进程哪一个文件可读可写或发生异常.</p>
+<p>因为是在注册好的fd_set中删掉没有相应事件的句柄, 因此可想而知select会有很多多余的操作.</p>
+<h3 id="函数声明">函数声明</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">maxfdp1</span><span class="p">,</span><span class="n">fd_set</span> <span class="o">*</span><span class="n">readset</span><span class="p">,</span><span class="n">fd_set</span> <span class="o">*</span><span class="n">writeset</span><span class="p">,</span><span class="n">fd_set</span> <span class="o">*</span><span class="n">exceptset</span><span class="p">,</span><span class="k">const</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>操作fd_set集合的宏有:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">FD_ZERO</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">fdset</span><span class="p">);</span>   
+<span class="kt">int</span> <span class="nf">FD_CLR</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">fdset</span><span class="p">);</span>   
+<span class="kt">int</span> <span class="nf">FD_SET</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">fd_set</span><span class="p">);</span>   
+<span class="kt">int</span> <span class="nf">FD_ISSET</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">fdset</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="缺点">缺点</h3>
+<ol>
+<li>每次调用select()都需要把fd_set从用户态拷贝到内核态.</li>
+<li>每次调用select()都需要在内核遍历传递进来的fd_set, 返回时只返回数量, 同样需要遍历以找到对应的文件句柄.</li>
+<li>每次调用select()都需要重新注册句柄和关心的事件.</li>
+<li>为了减少数据拷贝的消耗, fd_set集合大小被限制, 在x86下是1024, x64下是2048.</li>
+</ol>
+<h2 id="poll">Poll</h2>
+<p>poll和select几乎一样, 除了以下两点:</p>
+<ol>
+<li>poll提供的pollfd数据结构, 不再有数量上的限制.</li>
+<li>poll提供的pollfd数据结构, 使用额外变量revents表示事件发生与否, 因此再次调用不必重新注册关心事件与句柄.</li>
+</ol>
+<h3 id="函数声明-1">函数声明</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">poll</span><span class="p">(</span><span class="k">struct</span> <span class="n">pollfd</span> <span class="o">*</span><span class="n">fds</span><span class="p">,</span> <span class="n">nfds_t</span> <span class="n">nfds</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">pollfd</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>                         <span class="c1">// 需要被检测或选择的文件描述符
+</span><span class="c1"></span>        <span class="kt">short</span> <span class="n">events</span><span class="p">;</span>                   <span class="c1">// 对文件描述符fd上感兴趣的事件
+</span><span class="c1"></span>        <span class="kt">short</span> <span class="n">revents</span><span class="p">;</span>                  <span class="c1">// 文件描述符fd上当前实际发生的事件
+</span><span class="c1"></span><span class="p">}</span> <span class="n">pollfd_t</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="缺点-1">缺点</h3>
+<ol>
+<li>每次调用poll()都需要把pollfd数组从用户态拷贝到内核态.</li>
+<li>每次调用poll()都需要在内核遍历传递进来的pollfd数组, 返回时只返回数量, 同样需要遍历以找到对应的文件句柄.</li>
+</ol>
+<h2 id="epoll">Epoll</h2>
+<p>epoll是Linux内核版本2.6提出的, 基于事件驱动的I/O复用方式. epoll使用一个epoll句柄管理多个句柄, 将用户关心的事件存放到内核的一个事件表中, 这样用户空间和内核空间的拷贝只会发生一次.</p>
+<p>epoll是Linux内核为处理大批量文件描述符而作了改进的poll，是Linux下多路复用IO接口select/poll的增强版本，它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统CPU利用率。原因就是获取事件的时候，它无须遍历整个被侦听的描述符集，只要遍历那些被内核IO事件异步唤醒而加入Ready队列的描述符集合就行了。</p>
+<h3 id="函数声明-2">函数声明</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">epoll_create</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">epoll_ctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">epfd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">op</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">epoll_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">epoll_wait</span><span class="p">(</span><span class="kt">int</span> <span class="n">epfd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">epoll_event</span> <span class="o">*</span> <span class="n">events</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxevents</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>相关数据结构如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">epoll_event</span> <span class="p">{</span>
+    <span class="n">__uint32_t</span> <span class="n">events</span><span class="p">;</span>  <span class="cm">/* Epoll events */</span>
+    <span class="n">epoll_data_t</span> <span class="n">data</span><span class="p">;</span>  <span class="cm">/* User data variable */</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span> <span class="k">union</span> <span class="n">epoll_data</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+    <span class="n">__uint32_t</span> <span class="n">u32</span><span class="p">;</span>
+    <span class="n">__uint64_t</span> <span class="n">u64</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">epoll_data_t</span><span class="p">;</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="触发方式">触发方式</h3>
+<p>epoll除了像select/poll提供的水平触发(level triggered)外, 还提供了边缘触发(edge triggered)方式, 用户空间可能缓存I/O事件, 减少了epoll调用.</p>
+<ul>
+<li><strong>水平触发</strong>(LT): 默认工作模式，即当epoll_wait检测到某描述符事件就绪并通知应用程序时，应用程序可以不立即处理该事件；下次调用epoll_wait时，会再次通知此事件</li>
+<li><strong>边缘触发</strong>(ET): 当epoll_wait检测到某描述符事件就绪并通知应用程序时，应用程序必须立即处理该事件。如果不处理，下次调用epoll_wait时，不会再次通知此事件。（直到你做了某些操作导致该描述符变成未就绪状态了，也就是说边缘触发只在状态由未就绪变为就绪时只通知一次）</li>
+</ul>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">select</th>
+<th style="text-align:center">poll</th>
+<th style="text-align:center">epoll</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">操作方式</td>
+<td style="text-align:center">遍历</td>
+<td style="text-align:center">遍历</td>
+<td style="text-align:center">回调</td>
+</tr>
+<tr>
+<td style="text-align:center">底层实现</td>
+<td style="text-align:center">数组</td>
+<td style="text-align:center">链表</td>
+<td style="text-align:center">哈希表</td>
+</tr>
+<tr>
+<td style="text-align:center">I/O效率</td>
+<td style="text-align:center">o(n)</td>
+<td style="text-align:center">o(n)</td>
+<td style="text-align:center">o(1)</td>
+</tr>
+<tr>
+<td style="text-align:center">最大连接数</td>
+<td style="text-align:center">1024(x86)/2048(x64)</td>
+<td style="text-align:center">无上限</td>
+<td style="text-align:center">无上限</td>
+</tr>
+<tr>
+<td style="text-align:center">拷贝</td>
+<td style="text-align:center">每次调用需要重新注册fd_set并从用户态拷贝到内核态</td>
+<td style="text-align:center">每次调用需要把pollfd从用户态拷贝到内核态</td>
+<td style="text-align:center">拷贝一次</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.itqiankun.com/article/select-poll-epoll" target="_blank" rel="noopener noreffer">搞懂Select，Poll，Epoll的区别</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/126278747" target="_blank" rel="noopener noreffer">IO复用之select、poll、epoll模型</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-1-3</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/2021/01/select-poll-and-epoll/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://oliverdding.github.io/2021/01/select-poll-and-epoll/" data-title="Linux中I/O多路复用(Select Poll and Epoll)" data-hashtags="linux,操作系统,计网,基础,面试"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://oliverdding.github.io/2021/01/select-poll-and-epoll/" data-hashtag="linux"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://oliverdding.github.io/2021/01/select-poll-and-epoll/" data-title="Linux中I/O多路复用(Select Poll and Epoll)"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a><a href="javascript:void(0);" title="分享到 Pocket" data-sharer="pocket" data-url="https://oliverdding.github.io/2021/01/select-poll-and-epoll/"><i class="fab fa-get-pocket fa-fw"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://oliverdding.github.io/2021/01/select-poll-and-epoll/" data-title="Linux中I/O多路复用(Select Poll and Epoll)"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://oliverdding.github.io/2021/01/select-poll-and-epoll/" data-title="Linux中I/O多路复用(Select Poll and Epoll)"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/linux/">linux</a>,&nbsp;<a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>,&nbsp;<a href="/tags/%E8%AE%A1%E7%BD%91/">计网</a>,&nbsp;<a href="/tags/%E5%9F%BA%E7%A1%80/">基础</a>,&nbsp;<a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/singleton-in-java/" class="prev" rel="prev" title="Java单例模式"><i class="fas fa-angle-left fa-fw"></i>Java单例模式</a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Stay hungry, Stay foolish</div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://oliverdding.github.io" target="_blank">Charmer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.8/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["oliverdding"],"clientID":"8ed51e4ff5906df5735d","clientSecret":"0fc867049835e59f54c1aa67c59443d6db7fe01b","id":"2021-01-03T18:07:01+08:00","owner":"oliverdding","repo":"oliverdding.github.io","title":"Linux中I/O多路复用(Select Poll and Epoll)"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
