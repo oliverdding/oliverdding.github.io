@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>算法 - 分类 - Charmer</title>
+        <link>https://oliverdding.github.io/categories/%E7%AE%97%E6%B3%95/</link>
+        <description>算法 - 分类 - Charmer</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 04 Jan 2021 14:26:00 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/categories/%E7%AE%97%E6%B3%95/" rel="self" type="application/rss+xml" /><item>
+    <title>算法题小抄(未完)</title>
+    <link>https://oliverdding.github.io/2021/01/notes-for-algorithm/</link>
+    <pubDate>Mon, 04 Jan 2021 14:26:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/01/notes-for-algorithm/</guid>
+    <description><![CDATA[问题 思路 连续子数组 1. 滑动窗口(双指针) 2. 前缀和]]></description>
+</item></channel>
+</rss>
