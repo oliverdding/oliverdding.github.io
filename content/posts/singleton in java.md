@@ -126,8 +126,7 @@ public class LazySingleton {
     }
     
     /**
-     * 只有访问了Holder内部类JVM才会加载class
-     * 也就实现了懒汉单例
+     * 静态内部类只有被调用才会被载入JVM, 也就实现了懒加载+线程安全
      */
     public static LazySingleton getInstance() {
         return Holder.instance;

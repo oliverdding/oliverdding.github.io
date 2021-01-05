@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/oliverdding.github.io\/2021\/01\/singleton-in-java\/"
-        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, 基础, 设计模式","wordcount":  281 ,
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, 基础, 设计模式","wordcount":  276 ,
         "url": "https:\/\/oliverdding.github.io\/2021\/01\/singleton-in-java\/","datePublished": "2021-01-03T16:25:21+08:00","dateModified": "2021-01-03T21:10:56+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
@@ -120,7 +120,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Java单例模式</h1><h2 class="single-subtitle">单例模式的代码实现</h2><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/java/"><i class="far fa-folder fa-fw"></i>Java</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-1-3">2021-1-3</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 281 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-1-3">2021-1-3</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 276 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -254,7 +254,6 @@
 </span><span class="lnt">14
 </span><span class="lnt">15
 </span><span class="lnt">16
-</span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LazySingleton</span> <span class="o">{</span>
@@ -267,8 +266,7 @@
     <span class="o">}</span>
     
     <span class="cm">/**
-</span><span class="cm">     * 只有访问了Holder内部类JVM才会加载class
-</span><span class="cm">     * 也就实现了懒汉单例
+</span><span class="cm">     * 静态内部类只有被调用才会被载入JVM, 也就实现了懒加载+线程安全
 </span><span class="cm">     */</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="n">LazySingleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">Holder</span><span class="o">.</span><span class="na">instance</span><span class="o">;</span>
