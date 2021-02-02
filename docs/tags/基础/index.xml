@@ -4,7 +4,14 @@
         <link>https://oliverdding.github.io/tags/%E5%9F%BA%E7%A1%80/</link>
         <description>基础 - 标签 - Charmer</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 03 Jan 2021 18:07:01 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E5%9F%BA%E7%A1%80/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E5%9F%BA%E7%A1%80/" rel="self" type="application/rss+xml" /><item>
+    <title>Docker入门</title>
+    <link>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</link>
+    <pubDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</guid>
+    <description><![CDATA[什么是Docker Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 OverlayFS 类的 Union FS 等技术，对进程进行封装隔]]></description>
+</item><item>
     <title>Linux中I/O多路复用(Select Poll and Epoll)</title>
     <link>https://oliverdding.github.io/2021/01/select-poll-and-epoll/</link>
     <pubDate>Sun, 03 Jan 2021 18:07:01 &#43;0800</pubDate>

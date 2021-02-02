@@ -4,13 +4,27 @@
         <link>https://oliverdding.github.io/posts/</link>
         <description>所有文章 | Charmer</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 28 Jan 2021 13:59:31 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Docker入门</title>
+    <link>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</link>
+    <pubDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</guid>
+    <description><![CDATA[什么是Docker Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 OverlayFS 类的 Union FS 等技术，对进程进行封装隔]]></description>
+</item><item>
     <title>结构化思维</title>
     <link>https://oliverdding.github.io/2021/01/structured-thinking/</link>
     <pubDate>Thu, 28 Jan 2021 13:59:31 &#43;0800</pubDate>
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/structured-thinking/</guid>
     <description><![CDATA[结构化思维是商务沟通中非常重要的一种思维方式. 记录下思维导图.]]></description>
+</item><item>
+    <title>来深圳的第一天</title>
+    <link>https://oliverdding.github.io/2021/01/first-day-to-shenzhen/</link>
+    <pubDate>Thu, 21 Jan 2021 14:52:04 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/01/first-day-to-shenzhen/</guid>
+    <description><![CDATA[总结全文: 深圳不适合我个人发展 正午的飞机, 但是昨晚熬夜打游戏+吃了一份中华炸鸡, 一早起来喉咙非常干燥难忍. 飞机上明显感觉到自己发热了, 全程纠]]></description>
 </item><item>
     <title>算法题小抄(未完)</title>
     <link>https://oliverdding.github.io/2021/01/notes-for-algorithm/</link>
