@@ -4,9 +4,16 @@
         <link>https://oliverdding.github.io/</link>
         <description>Charmer&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</lastBuildDate>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 03 Feb 2021 00:40:58 &#43;0800</lastBuildDate>
             <atom:link href="https://oliverdding.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>与FreeBSD一见钟情</title>
+    <link>https://oliverdding.github.io/2021/02/first-meeting-with-freebsd/</link>
+    <pubDate>Wed, 03 Feb 2021 00:40:58 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/02/first-meeting-with-freebsd/</guid>
+    <description><![CDATA[背景 我这个人对计算机有很重的洁癖, 若系统有一点不满足我的想法, 我会很难受很厌恶. 比如win安装后若登录系统, 用户文件夹将会以你microso]]></description>
+</item><item>
     <title>Docker入门</title>
     <link>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</link>
     <pubDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</pubDate>
@@ -69,21 +76,5 @@
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/</guid>
     <description><![CDATA[在大三学习中, 经常会遇到这四个名词交替出现, 概念比较模糊. 于是记录下自己的理解, 留作备份. 说真的, 对于这类概念的东西, 需要真正用在实处才能真]]></description>
-</item><item>
-    <title>第一篇博文</title>
-    <link>https://oliverdding.github.io/2021/01/first-post/</link>
-    <pubDate>Fri, 01 Jan 2021 00:00:00 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://oliverdding.github.io/2021/01/first-post/</guid>
-    <description><![CDATA[<h2 id="前言">前言</h2>
-<p>这是我第二次写博客, 上一次是2019年初, 当时初次接触hexo引擎, 因为觉得新奇且在网上受到很多大佬博客的帮助, 于是也想记录下自己学到的东西, 以回馈开源.</p>
-<p>结果比较尴尬, 因为个人积累有限, 很难写出有深度的文章, 自己的能力未到达表达自我的深度, 很多东西都不是自己的, 慢慢就放弃了😆.</p>
-<p>直到2021年, 我决定在20201第一天重启我的博客, 目的比较单纯, 我需要归纳我的知识, 将他们体系化.</p>
-<h2 id="目的">目的</h2>
-<p>将知识体系化, 按照一定的分类方式将知识记录在网络上, 方便自己复习, 可能的话帮助其他需要他们的人.</p>
-<h2 id="关于我">关于我</h2>
-<p>你们可以叫我<em>Charmer</em>, 这也是我第一个代号. 起这个名字是希望自己能像一个魔术师一样, 让代码在我手掌间飞舞😜.</p>
-<p><strong>希望你我都能保持本心.</strong></p>
-]]></description>
 </item></channel>
 </rss>
