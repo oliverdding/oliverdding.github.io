@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Docker入门 - Charmer</title><meta name="Description" content="这里存储着"><meta property="og:title" content="Docker入门" />
+<meta property="og:description" content="这里存储着" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://oliverdding.github.io/2021/01/notes-for-learning-docker/" />
+<meta property="og:image" content="https://oliverdding.github.io/favicon.ico"/>
+<meta property="article:published_time" content="2021-01-28T15:35:48+08:00" />
+<meta property="article:modified_time" content="2021-01-28T15:35:48+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://oliverdding.github.io/favicon.ico"/>
+
+<meta name="twitter:title" content="Docker入门"/>
+<meta name="twitter:description" content="这里存储着"/>
+<meta name="application-name" content="charmer">
+<meta name="apple-mobile-web-app-title" content="charmer"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://oliverdding.github.io/2021/01/notes-for-learning-docker/" /><link rel="prev" href="https://oliverdding.github.io/2021/01/structured-thinking/" /><link rel="next" href="https://oliverdding.github.io/2021/02/first-meeting-with-freebsd/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Docker入门",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/oliverdding.github.io\/2021\/01\/notes-for-learning-docker\/"
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "基础, 操作系统, linux","wordcount":  986 ,
+        "url": "https:\/\/oliverdding.github.io\/2021\/01\/notes-for-learning-docker\/","datePublished": "2021-01-28T15:35:48+08:00","dateModified": "2021-01-28T15:35:48+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Charmer"
+            },"description": "这里存储着"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Docker入门</h1><h2 class="single-subtitle">学习笔记</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-1-28">2021-1-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 986 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是docker">什么是Docker</a>
+      <ul>
+        <li><a href="#基本概念">基本概念</a>
+          <ul>
+            <li><a href="#镜像image">镜像(Image)</a></li>
+            <li><a href="#容器container">容器(Container)</a></li>
+            <li><a href="#仓库repository">仓库(Repository)</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#为什么要使用docker">为什么要使用Docker</a></li>
+    <li><a href="#如何使用docker">如何使用Docker</a></li>
+    <li><a href="#底层介绍">底层介绍</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="什么是docker">什么是Docker</h2>
+<blockquote>
+<p><strong>Docker</strong> 使用 <code>Google</code> 公司推出的 <a href="https://golang.org/" target="_blank" rel="noopener noreffer">Go 语言</a> 进行开发实现，基于 <code>Linux</code> 内核的 <a href="https://zh.wikipedia.org/wiki/Cgroups" target="_blank" rel="noopener noreffer">cgroup</a>，<a href="https://en.wikipedia.org/wiki/Linux_namespaces" target="_blank" rel="noopener noreffer">namespace</a>，以及 <a href="https://docs.docker.com/storage/storagedriver/overlayfs-driver/" target="_blank" rel="noopener noreffer">OverlayFS</a> 类的 <a href="https://en.wikipedia.org/wiki/Union_mount" target="_blank" rel="noopener noreffer">Union FS</a> 等技术，对进程进行封装隔离，属于 <a href="https://en.wikipedia.org/wiki/Operating-system-level_virtualization" target="_blank" rel="noopener noreffer">操作系统层面的虚拟化技术</a>。 &ndash; <a href="https://yeasy.gitbook.io/docker_practice/introduction/what" target="_blank" rel="noopener noreffer">《Docker&ndash;从入门到实践》</a></p>
+</blockquote>
+<p>Docker是C/S架构的软件, 架构如下:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://docs.docker.com/engine/images/architecture.svg"
+        data-srcset="https://docs.docker.com/engine/images/architecture.svg, https://docs.docker.com/engine/images/architecture.svg 1.5x, https://docs.docker.com/engine/images/architecture.svg 2x"
+        data-sizes="auto"
+        alt="https://docs.docker.com/engine/images/architecture.svg"
+        title="Docker架构" /></p>
+<h3 id="基本概念">基本概念</h3>
+<h4 id="镜像image">镜像(Image)</h4>
+<p>镜像是一层层的文件系统联合组成的可分发的应用. 利用Union FS的技术.</p>
+<p>这里提到Docker中最重要的特性之一: <strong>分层存储</strong>.</p>
+<p>Docker构建镜像时会一层层构建, 每一层构建好后将不再发生改变, 后续基于前一层的改变都只会变动自己这一层. 比如删除前一层文件, 实际上只是在本层将这个文件标记为删除, 最终运行后看不到这个文件, 但事实上它仍然存在.</p>
+<hr>
+<p>Docker最佳实践:</p>
+<ol>
+<li>每一层操作完后一定要在构建完成前将本层镜像清除干净.</li>
+<li>尽量将变动不大的层放前面, 经常变动的层放后面.</li>
+</ol>
+<hr>
+<h4 id="容器container">容器(Container)</h4>
+<p>容器就是部署运行的镜像, 就像是被加载到JVM中的类, 被实例化为一个对象. 容器的实质是实体机上的进程, 运行在独立的命名空间中, 拥有自己的root文件系统、网络配置、进程空间甚至用户ID空间.</p>
+<p>容器以镜像为基础层, 在其上创建一个当前容器的存储层, 被称为<strong>容器存储层</strong>. 也就是说, 容器被删除后, 该层也将被删除, 任何运行产生的信息都将被删除.</p>
+<hr>
+<p>Docker最佳实践:</p>
+<p>不应往存储层写入任何数据, 容器存储层要保证无状态话. 所有的文件写入应当使用<strong>数据卷</strong>或者<strong>绑定宿主目录</strong>, 在这些位置的读写会跳过容器存储层，直接对宿主（或网络存储）发生读写，其性能和稳定性更高。</p>
+<hr>
+<h4 id="仓库repository">仓库(Repository)</h4>
+<p>Docker Registry就是用于存储、分发用户的镜像的服务.</p>
+<p>一个Docker Registry可以包含多个仓库, 每个仓库可以包含多个标签(Tag), 每个标签对应一个镜像.</p>
+<h2 id="为什么要使用docker">为什么要使用Docker</h2>
+<p>官网挂着的<code>Package Software into Standardized Units for Development, Shipment and Deployment</code>应该可以说明问题了.</p>
+<p><strong>为了解决开发、部署的一致性问题.</strong></p>
+<p>原本部署方式有两种:</p>
+<ol>
+<li>
+<p>全部部署到实体机器上.</p>
+<p>缺点:</p>
+<ol>
+<li>依赖交叉. 可能不同应用对某个相同库的不同版本有依赖.</li>
+<li>资源问题. 某个应用完全有可能挤占其他应用的资源.</li>
+</ol>
+</li>
+<li>
+<p>实体机器上安装虚拟机后, 将应用部署到虚拟机上.</p>
+<p>缺点:</p>
+<ol>
+<li>太重型. 每每部署应用都要整个系统环境, 占用大量存储与内存, 以及CPU.</li>
+<li>性能低. 虚拟机的系统调用比不上实体机.</li>
+</ol>
+</li>
+</ol>
+<h2 id="如何使用docker">如何使用Docker</h2>
+<p>待续</p>
+<h2 id="底层介绍">底层介绍</h2>
+<p>待续</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-1-28</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/2021/01/notes-for-learning-docker/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://oliverdding.github.io/2021/01/notes-for-learning-docker/" data-title="Docker入门" data-hashtags="基础,操作系统,linux"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://oliverdding.github.io/2021/01/notes-for-learning-docker/" data-hashtag="基础"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://oliverdding.github.io/2021/01/notes-for-learning-docker/" data-title="Docker入门"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a><a href="javascript:void(0);" title="分享到 Pocket" data-sharer="pocket" data-url="https://oliverdding.github.io/2021/01/notes-for-learning-docker/"><i class="fab fa-get-pocket fa-fw"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://oliverdding.github.io/2021/01/notes-for-learning-docker/" data-title="Docker入门"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://oliverdding.github.io/2021/01/notes-for-learning-docker/" data-title="Docker入门"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%BA%E7%A1%80/">基础</a>,&nbsp;<a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>,&nbsp;<a href="/tags/linux/">linux</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/structured-thinking/" class="prev" rel="prev" title="结构化思维"><i class="fas fa-angle-left fa-fw"></i>结构化思维</a>
+            <a href="/2021/02/first-meeting-with-freebsd/" class="next" rel="next" title="与FreeBSD一见钟情">与FreeBSD一见钟情<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Stay hungry, Stay foolish</div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://oliverdding.github.io" target="_blank">Charmer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.8/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["oliverdding"],"clientID":"8ed51e4ff5906df5735d","clientSecret":"0fc867049835e59f54c1aa67c59443d6db7fe01b","id":"2021-01-28T15:35:48+08:00","owner":"oliverdding","repo":"oliverdding.github.io","title":"Docker入门"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
