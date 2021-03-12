@@ -3,7 +3,7 @@ title: "unix文件系统"
 subtitle: "APUE系列"
 date: 2021-03-12T23:12:30+08:00
 lastmod: 2021-03-12T23:12:30+08:00
-draft: true
+draft: false
 author: "Charmer"
 authorLink: "https://oliverdding.github.io"
 description: "APUE系列: 探索linux文件底层"

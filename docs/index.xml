@@ -4,9 +4,16 @@
         <link>https://oliverdding.github.io/</link>
         <description>Charmer&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 03 Feb 2021 00:40:58 &#43;0800</lastBuildDate>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 12 Mar 2021 23:12:30 &#43;0800</lastBuildDate>
             <atom:link href="https://oliverdding.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>unix文件系统</title>
+    <link>https://oliverdding.github.io/2021/03/unix-file-system/</link>
+    <pubDate>Fri, 12 Mar 2021 23:12:30 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/unix-file-system/</guid>
+    <description><![CDATA[引子: 还记得大二操作系统课上, 在讲到文件系统时, 我问了老师问什么剪切文件(夹)后粘贴会如此迅速访问没有经过拷贝, 而复制啊, 跨盘啊都会经过读盘]]></description>
+</item><item>
     <title>与FreeBSD一见钟情</title>
     <link>https://oliverdding.github.io/2021/02/first-meeting-with-freebsd/</link>
     <pubDate>Wed, 03 Feb 2021 00:40:58 &#43;0800</pubDate>
@@ -69,12 +76,5 @@
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/what-would-happen-when-browsing-website-in-the-internet/</guid>
     <description><![CDATA[由于这个问题非常泛, 几乎设计计算机发展以来所有的内容, 怎么发挥最好依照你面试的岗位. 这篇回答是站在一个本科毕业生, 面试后端方向时的回答例子.]]></description>
-</item><item>
-    <title>Synchronous, Asynchronous, Blocking and Non-blocking</title>
-    <link>https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/</link>
-    <pubDate>Sat, 02 Jan 2021 10:55:50 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://oliverdding.github.io/2021/01/synchronous-asynchronous-blocking-and-nonblocking/</guid>
-    <description><![CDATA[在大三学习中, 经常会遇到这四个名词交替出现, 概念比较模糊. 于是记录下自己的理解, 留作备份. 说真的, 对于这类概念的东西, 需要真正用在实处才能真]]></description>
 </item></channel>
 </rss>
