@@ -10,7 +10,7 @@ publishDir = "docs"
 
 # website title
 # 网站标题
-title = "Charmer"
+title = "Charmer的博客"
 
 # whether to use robots.txt
 # 是否使用 robots.txt
@@ -251,7 +251,7 @@ enableEmoji = true
       logo = "/apple-touch-icon.png"
       # title name
       # 标题名称
-      name = "Charmer's World"
+      name = "😘"
       # you can add extra information before the name (HTML format is supported), such as icons
       # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
       pre = ""
