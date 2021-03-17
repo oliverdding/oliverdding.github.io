@@ -10,7 +10,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oliverdding.github.io/2021/03/linux-boot-process/" /><meta property="og:image" content="https://oliverdding.github.io/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-03-17T13:26:45&#43;08:00" />
-<meta property="article:modified_time" content="2021-03-17T15:00:02&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-17T15:39:01&#43;08:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://oliverdding.github.io/favicon.ico"/>
@@ -29,8 +29,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/oliverdding.github.io\/2021\/03\/linux-boot-process\/"
-        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, 操作系统","wordcount":  1649 ,
-        "url": "https:\/\/oliverdding.github.io\/2021\/03\/linux-boot-process\/","datePublished": "2021-03-17T13:26:45+08:00","dateModified": "2021-03-17T15:00:02+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, 操作系统","wordcount":  1634 ,
+        "url": "https:\/\/oliverdding.github.io\/2021\/03\/linux-boot-process\/","datePublished": "2021-03-17T13:26:45+08:00","dateModified": "2021-03-17T15:39:01+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
                 "@type": "Person",
@@ -120,7 +120,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">linux boot process(UEFI)</h1><h2 class="single-subtitle">基于Arch探索linux的启动过程</h2><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a>&nbsp;<a href="/categories/%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-3-17">2021-3-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1649 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-3-17">2021-3-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1634 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -178,7 +178,14 @@
 <p>UEFI读取<a href="https://en.wikipedia.org/wiki/Non-volatile_random-access_memory" target="_blank" rel="noopener noreffer">NVRAM</a>中的第一条启动项. 启动项顺序可以在开机时连按ESC后进入修改启动选项.</p>
 <p>启动项往往是UEFI扫描硬盘的ESP(EFI System Partition)后写入NVRAM的. 扫描的时机不清楚, 但是每每插入系统安装U盘, UEFI中可以看看到启动选项, 应该是每次开机都会扫描?</p>
 <p>对于我的系统来说, 就是这个文件:</p>
-<p>![My Boot Entry](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot</a> 2021-03-17 142514.png)</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot%2021-03-17%142514.png"
+        data-srcset="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot%2021-03-17%142514.png, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot%2021-03-17%142514.png 1.5x, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot%2021-03-17%142514.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot%2021-03-17%142514.png"
+        title="My Boot Entry" /></p>
 </li>
 <li>
 <p>UEFI执行对应的EFI应用程序. 此时把控制权交到了EFI应用程序手里.</p>
@@ -193,7 +200,14 @@
 <p>Boot Loader种类繁多, 具体可以看archwiki页面:</p>
 <p><a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader" target="_blank" rel="noopener noreffer">Arch boot process - ArchWiki (archlinux.org)</a></p>
 <p>拿System Boot举例, 安装好system boot后, 需要手动添加一条entry:</p>
-<p>![My Boot Entry](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry</a> 2021-03-17 143254.png)</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry%2021-03-17%143254.png"
+        data-srcset="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry%2021-03-17%143254.png, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry%2021-03-17%143254.png 1.5x, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry%2021-03-17%143254.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry%2021-03-17%143254.png"
+        title="My Boot Entry" /></p>
 <p>这个文件会在system boot的启动页面添加一条entry, 它加载linux kernel、微码和initramfs文件.</p>
 <h2 id="kernel">Kernel</h2>
 <p>kernel是操作系统的核心。它在底层(内核空间)运行，在机器的硬件和使用该硬件运行的程序之间进行交互。</p>
@@ -205,7 +219,14 @@
 <blockquote>
 <p>对于archlinux而言, 内部的initramfs是空的, 外部的文件是通过mkinitcpio、dracut或者booster生产的.</p>
 </blockquote>
-<p>![My Boot Entry](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules</a> 2021-03-17 145317.png)</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules%2021-03-17%145317.png"
+        data-srcset="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules%2021-03-17%145317.png, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules%2021-03-17%145317.png 1.5x, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules%2021-03-17%145317.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules%2021-03-17%145317.png"
+        title="My Boot Entry" /></p>
 <p>载入kernel的目的显而易见, 那么为啥要又initramfs这一步呢? 目的是为了引导系统(bootstrap, 拔鞋带, 这里作引申意)到可以访问root文件系统. 这意味着任何需要访问设备(比如IDE、SCSI、SATA、USB/FW)的模块必须是从initramfs中可载入的(如果内核没提供). 一旦正确的模块被载入, 启动进程将会继续. 因此, 写在<code>/etc/mkinitcpio.conf</code>文件中的modules都是访问根文件系统所必须的模块, 而不是所有模块. 其他的模块会在接下来的<code>init</code>进程中由<code>udev</code>加载.</p>
 <h2 id="init-process">init process</h2>
 <p>这是早期用户空间的最后一步, 载入正在的root文件系统(real root), 并代替先前的<code>initial root</code>文件系统. 调用<code>/sbin/init</code>进程, 替代<code>/init</code>进程. 现在的linux都使用<code>systemd</code>作为默认的init进程.</p>
@@ -223,8 +244,8 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2021-3-17&nbsp;<a class="git-hash" href="https://github.com/oliverdding/oliverdding.github.io/commit/ddb45754531c6e17c1fba1180bf94f296027a318" target="_blank" title="commit by OliverDD(QAQddbest@outlook.com) ddb45754531c6e17c1fba1180bf94f296027a318: update">
-                                    <i class="fas fa-hashtag fa-fw"></i>ddb4575</a></span>
+                <span>更新于 2021-3-17&nbsp;<a class="git-hash" href="https://github.com/oliverdding/oliverdding.github.io/commit/ebcf8f5ded022fef168b52d79b5a6155631ccf3d" target="_blank" title="commit by OliverDD(QAQddbest@outlook.com) ebcf8f5ded022fef168b52d79b5a6155631ccf3d: add">
+                                    <i class="fas fa-hashtag fa-fw"></i>ebcf8f5</a></span>
             </div>
             <div class="post-info-license"></div>
         </div>

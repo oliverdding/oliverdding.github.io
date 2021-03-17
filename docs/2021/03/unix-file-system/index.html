@@ -10,7 +10,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oliverdding.github.io/2021/03/unix-file-system/" /><meta property="og:image" content="https://oliverdding.github.io/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-03-12T23:12:30&#43;08:00" />
-<meta property="article:modified_time" content="2021-03-13T00:21:24&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-17T15:39:01&#43;08:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://oliverdding.github.io/favicon.ico"/>
@@ -29,8 +29,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/oliverdding.github.io\/2021\/03\/unix-file-system\/"
-        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, apue","wordcount":  1301 ,
-        "url": "https:\/\/oliverdding.github.io\/2021\/03\/unix-file-system\/","datePublished": "2021-03-12T23:12:30+08:00","dateModified": "2021-03-13T00:21:24+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, apue","wordcount":  1292 ,
+        "url": "https:\/\/oliverdding.github.io\/2021\/03\/unix-file-system\/","datePublished": "2021-03-12T23:12:30+08:00","dateModified": "2021-03-17T15:39:01+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
                 "@type": "Person",
@@ -120,7 +120,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">unix文件系统</h1><h2 class="single-subtitle">APUE系列</h2><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/apue/"><i class="far fa-folder fa-fw"></i>Apue</a>&nbsp;<a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-3-12">2021-3-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1301 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-3-12">2021-3-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1292 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -150,7 +150,14 @@
 <p>本文将从较为底层的方式, 将我理解的APUE 4.14小节部分道出.</p>
 <h2 id="总体架构">总体架构</h2>
 <p>首先, 文件系统中最大的单位是<code>disk</code>, 也就是一块存储, 机械硬盘、SSD、flash甚至SD之类的. <code>disk</code>会依照我们的需要分为多份<code>file system</code>(这里指文件系统格式, 比如ext4、fat32之类), 而每个<code>file system</code>头两个<code>block</code>分别是<code>boot block</code>和<code>super block</code>. 之后的空间被分为一个个<code>cylinder group</code>, 编号从0-n. 而对于每个cylinder group, 依次会存在<code>super block copy</code>, <code>cg info</code>, <code>inode map</code>, <code>inodes</code>和<code>data blocks</code>.</p>
-<p>![structure](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk</a> 2021-03-17 153411.png)</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk%2021-03-17%153411.png"
+        data-srcset="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk%2021-03-17%153411.png, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk%2021-03-17%153411.png 1.5x, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk%2021-03-17%153411.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk%2021-03-17%153411.png"
+        title="structure" /></p>
 <p>我们今天就聚焦在<code>inodes</code>和<code>data blocks</code>.</p>
 <h2 id="元素">元素</h2>
 <p>uinux中一切皆文件, 我们人为的将unix文件划分为7类:</p>
@@ -165,13 +172,27 @@
 </ol>
 <p>每个inode代表一个文件, 存储了文件的各种相关信息: 文件类型, 文件访问权限位, 文件大小, 指向<code>data blocks</code>的指针们等等. 大部分<code>stat</code>系统调用的信息来源于inode. 但有两个例外: 文件名和inode号(没错你妹看错, inode不知道自己的name和id).</p>
 <h3 id="regular-file">Regular file</h3>
-<p>![structure](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file</a> 2021-03-17 153543.png)</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file%2021-03-17%153543.png"
+        data-srcset="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file%2021-03-17%153543.png, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file%2021-03-17%153543.png 1.5x, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file%2021-03-17%153543.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file%2021-03-17%153543.png"
+        title="structure" /></p>
 <p>指向<code>data blocks</code>的指针们便是文件的真正内容, 注意, 指针指向的是一块块数据块, 也就是说无论用不用的完, 这一块就是分配给你了. 这里就导致<code>du</code>命令和<code>ls</code>命令查到的大小不同, 因为一个是磁盘上真正占用的空间, 一个是文件的大小.</p>
 <blockquote>
 <p>这里我又有个疑问, 要是文件巨大无比, inode的指针预留空间无法存放完, 这该怎么办? 若是我我会考虑二级指针. 欸&hellip;留个坑, 后续填&hellip;</p>
 </blockquote>
 <h3 id="directory-file">Directory file</h3>
-<p>![structure](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory</a> 2021-03-17 153559.png)</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory%2021-03-17%153559.png"
+        data-srcset="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory%2021-03-17%153559.png, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory%2021-03-17%153559.png 1.5x, https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory%2021-03-17%153559.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory%2021-03-17%153559.png"
+        title="structure" /></p>
 <p>对于目录文件, 指向的<code>data blocks</code>存储着一对对<code>inode number</code>:<code>file name</code>. 并且, 对于每个目录文件, unix系统默认插入两对数据: <code>inode number x</code>:<code>.</code>与<code>inode number y</code>:<code>..</code>. 没错, 这就是大名鼎鼎的当前目录和父目录. 注意对于<code>/</code>节点来说, <code>.</code>和<code>..</code>都是指向当前节点.</p>
 <p>这里顺带提出<code>hard link</code>的概念. 所谓的<code>hard link</code>也就是在一个目录文件中插入了源文件<code>inode number</code>的record. 也就是说, <code>hard link</code>之间的<code>inode number</code>都是相同的, 可以用命令<code>ls -i</code>查看验证. 而在inode数据结构中有一个属性是<code>st_nlink</code>, 代表着文件引用计数. 每每多一个<code>hard link</code>都会导致这个变量+1.</p>
 <blockquote>
@@ -204,8 +225,8 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2021-3-13&nbsp;<a class="git-hash" href="https://github.com/oliverdding/oliverdding.github.io/commit/3599ddcfb74e2e88b6242e6e045d75a01e567534" target="_blank" title="commit by OliverDD(QAQddbest@outlook.com) 3599ddcfb74e2e88b6242e6e045d75a01e567534: update">
-                                    <i class="fas fa-hashtag fa-fw"></i>3599ddc</a></span>
+                <span>更新于 2021-3-17&nbsp;<a class="git-hash" href="https://github.com/oliverdding/oliverdding.github.io/commit/ebcf8f5ded022fef168b52d79b5a6155631ccf3d" target="_blank" title="commit by OliverDD(QAQddbest@outlook.com) ebcf8f5ded022fef168b52d79b5a6155631ccf3d: add">
+                                    <i class="fas fa-hashtag fa-fw"></i>ebcf8f5</a></span>
             </div>
             <div class="post-info-license"></div>
         </div>
