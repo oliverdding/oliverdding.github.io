@@ -4,7 +4,21 @@
         <link>https://oliverdding.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
         <description>操作系统 - 标签 - Charmer</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 17 Mar 2021 13:26:45 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml" /><item>
+    <title>linux boot process(UEFI)</title>
+    <link>https://oliverdding.github.io/2021/03/linux-boot-process/</link>
+    <pubDate>Wed, 17 Mar 2021 13:26:45 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/linux-boot-process/</guid>
+    <description><![CDATA[注意: 不涉及Network booting、secure booting, 略微提到BIOS 注意: 本文基于ArchLinux, 使用UEFI+System Boot, 而不是]]></description>
+</item><item>
+    <title>与FreeBSD一见钟情</title>
+    <link>https://oliverdding.github.io/2021/02/first-meeting-with-freebsd/</link>
+    <pubDate>Wed, 03 Feb 2021 00:40:58 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/02/first-meeting-with-freebsd/</guid>
+    <description><![CDATA[我这个人对计算机有很重的洁癖, 若系统有一点不满足我的想法, 我会很难受很厌恶. 由于家里没有矿, 22年来经手的电脑共5台, 3台台式, 算是我的启蒙]]></description>
+</item><item>
     <title>Docker入门</title>
     <link>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</link>
     <pubDate>Thu, 28 Jan 2021 15:35:48 &#43;0800</pubDate>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>linux boot process(UEFI) - Charmer</title><meta name="Description" content="一直很好奇操作系统的启动过程，而且一直以来对BIOS、UEFI只知道UEFI更新，现在深入了解UEFI的启动过程"><meta property="og:title" content="linux boot process(UEFI)" />
+<meta property="og:description" content="一直很好奇操作系统的启动过程，而且一直以来对BIOS、UEFI只知道UEFI更新，现在深入了解UEFI的启动过程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://oliverdding.github.io/2021/03/linux-boot-process/" /><meta property="og:image" content="https://oliverdding.github.io/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-17T13:26:45&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-17T13:26:45&#43;08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://oliverdding.github.io/favicon.ico"/>
+
+<meta name="twitter:title" content="linux boot process(UEFI)"/>
+<meta name="twitter:description" content="一直很好奇操作系统的启动过程，而且一直以来对BIOS、UEFI只知道UEFI更新，现在深入了解UEFI的启动过程"/>
+<meta name="application-name" content="charmer">
+<meta name="apple-mobile-web-app-title" content="charmer"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://oliverdding.github.io/2021/03/linux-boot-process/" /><link rel="prev" href="https://oliverdding.github.io/2021/03/unix-file-system/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "linux boot process(UEFI)",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/oliverdding.github.io\/2021\/03\/linux-boot-process\/"
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, 操作系统","wordcount":  1649 ,
+        "url": "https:\/\/oliverdding.github.io\/2021\/03\/linux-boot-process\/","datePublished": "2021-03-17T13:26:45+08:00","dateModified": "2021-03-17T13:26:45+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Charmer"
+            },"description": "一直很好奇操作系统的启动过程，而且一直以来对BIOS、UEFI只知道UEFI更新，现在深入了解UEFI的启动过程"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Charmer"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />Charmer&#39;s World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">linux boot process(UEFI)</h1><h2 class="single-subtitle">基于Arch探索linux的启动过程</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a>&nbsp;<a href="/categories/%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-3-17">2021-3-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1649 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#uefi">UEFI</a></li>
+    <li><a href="#boot-loader">Boot Loader</a></li>
+    <li><a href="#kernel">Kernel</a></li>
+    <li><a href="#initramfs">Initramfs</a></li>
+    <li><a href="#init-process">init process</a></li>
+    <li><a href="#getty">getty</a></li>
+    <li><a href="#reference">Reference</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><blockquote>
+<p>注意: 不涉及Network booting、secure booting, 略微提到BIOS</p>
+</blockquote>
+<blockquote>
+<p>注意: 本文基于ArchLinux, 使用UEFI+System Boot, 而不是grub</p>
+</blockquote>
+<p>archlinux启动过程如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">graph LR
+	A[UEFI] --&gt; B[Boot Loader]
+	B --&gt; C[Kernel]
+	C --&gt; D[initramfs]
+	D --&gt; E[init]
+	E --&gt; F[getty]
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="uefi">UEFI</h2>
+<p>固件(firmware)是指提供对具体硬件底层直接控制的软件, 一般比较小. 而目前的固件类型有BIOS(Basic input output system)和UEFI(Unified Extensible Firmware Interface)两种, 他们的区别的联系可以看:</p>
+<p><a href="https://fossbytes.com/uefi-bios-gpt-mbr-whats-difference/" target="_blank" rel="noopener noreffer">UEFI, BIOS, GPT, MBR - What&rsquo;s the Difference? - Fossbytes</a></p>
+<p>当开机键被按下:</p>
+<ol>
+<li>
+<p>首先启动UEFI, 它会进行硬件启动自检(Power-On-Self-Test, 简称POST).</p>
+</li>
+<li>
+<p>UEFI加载启动过程需要的硬件, 比如硬盘、键盘驱动(较新的UEFI甚至会有鼠标)等等.</p>
+</li>
+<li>
+<p>UEFI读取<a href="https://en.wikipedia.org/wiki/Non-volatile_random-access_memory" target="_blank" rel="noopener noreffer">NVRAM</a>中的第一条启动项. 启动项顺序可以在开机时连按ESC后进入修改启动选项.</p>
+<p>启动项往往是UEFI扫描硬盘的ESP(EFI System Partition)后写入NVRAM的. 扫描的时机不清楚, 但是每每插入系统安装U盘, UEFI中可以看看到启动选项, 应该是每次开机都会扫描?</p>
+<p>对于我的系统来说, 就是这个文件:</p>
+<p>![My Boot Entry](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot</a> 2021-03-17 142514.png)</p>
+</li>
+<li>
+<p>UEFI执行对应的EFI应用程序. 此时把控制权交到了EFI应用程序手里.</p>
+<p>EFI应用程序有两种:</p>
+<ol>
+<li>boot loader. 例如本文使用的System Boot, 或者现在大一统的Grub等等.</li>
+<li>linux内核自己(使用EFISTUB)</li>
+</ol>
+</li>
+</ol>
+<h2 id="boot-loader">Boot Loader</h2>
+<p>Boot Loader种类繁多, 具体可以看archwiki页面:</p>
+<p><a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader" target="_blank" rel="noopener noreffer">Arch boot process - ArchWiki (archlinux.org)</a></p>
+<p>拿System Boot举例, 安装好system boot后, 需要手动添加一条entry:</p>
+<p>![My Boot Entry](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry</a> 2021-03-17 143254.png)</p>
+<p>这个文件会在system boot的启动页面添加一条entry, 它加载linux kernel、微码和initramfs文件.</p>
+<h2 id="kernel">Kernel</h2>
+<p>kernel是操作系统的核心。它在底层(内核空间)运行，在机器的硬件和使用该硬件运行的程序之间进行交互。</p>
+<p>继续上图, <code>vmlinuz-linux</code>就是内核. 为什么又vm呢? 这个表示Virtual Memory. 为什么是linuz呢? 这个表示压缩过的.</p>
+<h2 id="initramfs">Initramfs</h2>
+<p>kernel启动后, 就会解压initramfs(initial RAM filesystem)压缩包到空的rootfs(initial root filesystem, specifically a ramfs or tmpfs)中.</p>
+<p>首先解压的initramfs是内核构建期间嵌入内核二进制文件的initramfs，之后解压外部initramfs文件。因此，外部initramfs中的文件会覆盖嵌入initramfs中同名的文件。</p>
+<p>再之后, kernel会在rootfs中执行<code>/init</code>, 这个将作为第一个进程. 此时, 早期用户空间启动(early userspace).</p>
+<blockquote>
+<p>对于archlinux而言, 内部的initramfs是空的, 外部的文件是通过mkinitcpio、dracut或者booster生产的.</p>
+</blockquote>
+<p>![My Boot Entry](<a href="https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules">https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules</a> 2021-03-17 145317.png)</p>
+<p>载入kernel的目的显而易见, 那么为啥要又initramfs这一步呢? 目的是为了引导系统(bootstrap, 拔鞋带, 这里作引申意)到可以访问root文件系统. 这意味着任何需要访问设备(比如IDE、SCSI、SATA、USB/FW)的模块必须是从initramfs中可载入的(如果内核没提供). 一旦正确的模块被载入, 启动进程将会继续. 因此, 写在<code>/etc/mkinitcpio.conf</code>文件中的modules都是访问根文件系统所必须的模块, 而不是所有模块. 其他的模块会在接下来的<code>init</code>进程中由<code>udev</code>加载.</p>
+<h2 id="init-process">init process</h2>
+<p>这是早期用户空间的最后一步, 载入正在的root文件系统(real root), 并代替先前的<code>initial root</code>文件系统. 调用<code>/sbin/init</code>进程, 替代<code>/init</code>进程. 现在的linux都使用<code>systemd</code>作为默认的init进程.</p>
+<blockquote>
+<p>这一点也不K.I.S.S</p>
+</blockquote>
+<h2 id="getty">getty</h2>
+<p>init会在每个虚拟终端(6个左右)都调用getty, 这会初始化tty并弹出输入账户密码的提示, 之后会将用户输入的账户密码和<code>/etc/passwd</code>和<code>/etc/shadow</code>进行对比, 成功后会调用<code>login</code>, 算是正式进入系统.</p>
+<h2 id="reference">Reference</h2>
+<ol>
+<li><a href="https://wiki.archlinux.org/index.php/Arch_boot_process" target="_blank" rel="noopener noreffer">Arch Boot Process</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface" target="_blank" rel="noopener noreffer">Unified Extensible Firmware Interface</a></li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-3-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/2021/03/linux-boot-process/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://oliverdding.github.io/2021/03/linux-boot-process/" data-title="linux boot process(UEFI)" data-hashtags="linux,操作系统"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://oliverdding.github.io/2021/03/linux-boot-process/" data-hashtag="linux"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://oliverdding.github.io/2021/03/linux-boot-process/" data-title="linux boot process(UEFI)"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a><a href="javascript:void(0);" title="分享到 Pocket" data-sharer="pocket" data-url="https://oliverdding.github.io/2021/03/linux-boot-process/"><i class="fab fa-get-pocket fa-fw"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://oliverdding.github.io/2021/03/linux-boot-process/" data-title="linux boot process(UEFI)"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://oliverdding.github.io/2021/03/linux-boot-process/" data-title="linux boot process(UEFI)"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/linux/">linux</a>,&nbsp;<a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/03/unix-file-system/" class="prev" rel="prev" title="unix文件系统"><i class="fas fa-angle-left fa-fw"></i>unix文件系统</a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Stay hungry, Stay foolish</div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://oliverdding.github.io" target="_blank">Charmer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.8/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["oliverdding"],"clientID":"8ed51e4ff5906df5735d","clientSecret":"0fc867049835e59f54c1aa67c59443d6db7fe01b","id":"2021-03-17T13:26:45+08:00","owner":"oliverdding","repo":"oliverdding.github.io","title":"linux boot process(UEFI)"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

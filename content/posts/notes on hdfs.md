@@ -115,7 +115,7 @@ HDFS将metadata和data分开存放, 像其它的同类文件系统比如PVFS[^4]
 
 HDFS的namespace是文件和目录的层次结构. 文件和目录在Name Node中以inode存储, 记录着像是权限, 修改访问时间, namespace和大小等等属性. 文件被切分为大的块(默认是128MB, 可以每个文件单独指定), 并且文件的每个块被独立冗余备份在不同的Data Node上(一般是3份, 同样也可以每个文件单独指定). Name Node维护namespace的树状结构, 并保存文件块到Data Node的映射. 
 
-当读取文件时, HDFS client先从Name Node获取文件数据块的Data Node, 然后直接从**最近**的Data Node获取数据. 同样的, 当写入数据时, 客户端会要求Name Node指定一组Data Node存储文件块和文件块的副本, 之后以管道的方式向Data Nodes写入数据.
+当读取文件时, HDFS client先从Name Node获取存放文件数据块的Data Node, 然后直接从**最近**的Data Node获取数据. 同样的, 当写入数据时, 客户端会要求Name Node指定一组Data Node存储文件块和文件块的副本, 之后以管道的方式向Data Nodes写入数据.
 
 在当前的设计中, 每个集群只有一个Name Node, 但有任意的Data Node和HDFS Client. HDFS将整个namespace存储于RAM中. inode数据和文件块的列表组成了系统的metadata, 被称为image. image被永久存储在本地文件系统, 被称为checkpoint. Name Node同样会存储image的修改日志, 被称为journal. 为了提高耐久性, checkpoint和journal可以冗余备份在不同的服务器. 当重启时, Name Node通过读入checkpoint并执行journal恢复原先的namespace. 块副本的位置可能会改变, 因此checkpoint不包括这部分.
 

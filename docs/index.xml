@@ -4,9 +4,16 @@
         <link>https://oliverdding.github.io/</link>
         <description>Charmer&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 12 Mar 2021 23:12:30 &#43;0800</lastBuildDate>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 17 Mar 2021 13:26:45 &#43;0800</lastBuildDate>
             <atom:link href="https://oliverdding.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>linux boot process(UEFI)</title>
+    <link>https://oliverdding.github.io/2021/03/linux-boot-process/</link>
+    <pubDate>Wed, 17 Mar 2021 13:26:45 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/linux-boot-process/</guid>
+    <description><![CDATA[注意: 不涉及Network booting、secure booting, 略微提到BIOS 注意: 本文基于ArchLinux, 使用UEFI+System Boot, 而不是]]></description>
+</item><item>
     <title>unix文件系统</title>
     <link>https://oliverdding.github.io/2021/03/unix-file-system/</link>
     <pubDate>Fri, 12 Mar 2021 23:12:30 &#43;0800</pubDate>
@@ -19,7 +26,7 @@
     <pubDate>Wed, 03 Feb 2021 00:40:58 &#43;0800</pubDate>
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/02/first-meeting-with-freebsd/</guid>
-    <description><![CDATA[背景 我这个人对计算机有很重的洁癖, 若系统有一点不满足我的想法, 我会很难受很厌恶. 比如win安装后若登录系统, 用户文件夹将会以你microso]]></description>
+    <description><![CDATA[我这个人对计算机有很重的洁癖, 若系统有一点不满足我的想法, 我会很难受很厌恶. 由于家里没有矿, 22年来经手的电脑共5台, 3台台式, 算是我的启蒙]]></description>
 </item><item>
     <title>Docker入门</title>
     <link>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</link>
@@ -69,12 +76,5 @@
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/singleton-in-java/</guid>
     <description><![CDATA[首先一点, 只有枚举饿汉保证不会被反射的方式生成多个实例。 饿汉模式 普通饿汉 1 2 3 4 5 6 7 8 9 10 11 public class HungrySingleton { private static final HungrySingleton instance = new HungrySingleton(); private HungrySingleton() { } public static HungrySingleton getInstance() { return instance;]]></description>
-</item><item>
-    <title>浏览网站时会发生什么</title>
-    <link>https://oliverdding.github.io/2021/01/what-would-happen-when-browsing-website-in-the-internet/</link>
-    <pubDate>Sun, 03 Jan 2021 16:15:54 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://oliverdding.github.io/2021/01/what-would-happen-when-browsing-website-in-the-internet/</guid>
-    <description><![CDATA[由于这个问题非常泛, 几乎设计计算机发展以来所有的内容, 怎么发挥最好依照你面试的岗位. 这篇回答是站在一个本科毕业生, 面试后端方向时的回答例子.]]></description>
 </item></channel>
 </rss>
