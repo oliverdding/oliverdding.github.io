@@ -34,7 +34,7 @@ graph LR
 
    对于我的系统来说, 就是这个文件:
 
-   ![My Boot Entry](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot%2021-03-17%142514.png)
+   ![My Boot Entry](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/boot%202021-03-17%20142514.png)
 
 4. UEFI执行对应的EFI应用程序. 此时把控制权交到了EFI应用程序手里.
 
@@ -51,7 +51,7 @@ Boot Loader种类繁多, 具体可以看archwiki页面:
 
 拿System Boot举例, 安装好system boot后, 需要手动添加一条entry:
 
-![My Boot Entry](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry%2021-03-17%143254.png)
+![My Boot Entry](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/entry%202021-03-17%20143254.png)
 
 这个文件会在system boot的启动页面添加一条entry, 它加载linux kernel、微码和initramfs文件.
 
@@ -71,7 +71,7 @@ kernel启动后, 就会解压initramfs(initial RAM filesystem)压缩包到空的
 
 > 对于archlinux而言, 内部的initramfs是空的, 外部的文件是通过mkinitcpio、dracut或者booster生产的.
 
-![My Boot Entry](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules%2021-03-17%145317.png)
+![My Boot Entry](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/modules%202021-03-17%20145317.png)
 
 载入kernel的目的显而易见, 那么为啥要又initramfs这一步呢? 目的是为了引导系统(bootstrap, 拔鞋带, 这里作引申意)到可以访问root文件系统. 这意味着任何需要访问设备(比如IDE、SCSI、SATA、USB/FW)的模块必须是从initramfs中可载入的(如果内核没提供). 一旦正确的模块被载入, 启动进程将会继续. 因此, 写在`/etc/mkinitcpio.conf`文件中的modules都是访问根文件系统所必须的模块, 而不是所有模块. 其他的模块会在接下来的`init`进程中由`udev`加载.
 
