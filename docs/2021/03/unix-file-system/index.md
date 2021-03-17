@@ -9,6 +9,8 @@
 
 首先, 文件系统中最大的单位是`disk`, 也就是一块存储, 机械硬盘、SSD、flash甚至SD之类的. `disk`会依照我们的需要分为多份`file system`(这里指文件系统格式, 比如ext4、fat32之类), 而每个`file system`头两个`block`分别是`boot block`和`super block`. 之后的空间被分为一个个`cylinder group`, 编号从0-n. 而对于每个cylinder group, 依次会存在`super block copy`, `cg info`, `inode map`, `inodes`和`data blocks`.
 
+![structure](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/disk 2021-03-17 153411.png)
+
 我们今天就聚焦在`inodes`和`data blocks`.
 
 ## 元素
@@ -25,13 +27,17 @@ uinux中一切皆文件, 我们人为的将unix文件划分为7类:
 
 每个inode代表一个文件, 存储了文件的各种相关信息: 文件类型, 文件访问权限位, 文件大小, 指向`data blocks`的指针们等等. 大部分`stat`系统调用的信息来源于inode. 但有两个例外: 文件名和inode号(没错你妹看错, inode不知道自己的name和id).
 
-### `Regular file`
+### Regular file
+
+![structure](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/file 2021-03-17 153543.png)
 
 指向`data blocks`的指针们便是文件的真正内容, 注意, 指针指向的是一块块数据块, 也就是说无论用不用的完, 这一块就是分配给你了. 这里就导致`du`命令和`ls`命令查到的大小不同, 因为一个是磁盘上真正占用的空间, 一个是文件的大小.
 
 > 这里我又有个疑问, 要是文件巨大无比, inode的指针预留空间无法存放完, 这该怎么办? 若是我我会考虑二级指针. 欸...留个坑, 后续填...
 
-### `Diectory file`
+### Directory file
+
+![structure](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory 2021-03-17 153559.png)
 
 对于目录文件, 指向的`data blocks`存储着一对对`inode number`:`file name`. 并且, 对于每个目录文件, unix系统默认插入两对数据: `inode number x`:`.`与`inode number y`:`..`. 没错, 这就是大名鼎鼎的当前目录和父目录. 注意对于`/`节点来说, `.`和`..`都是指向当前节点.
 
@@ -39,23 +45,23 @@ uinux中一切皆文件, 我们人为的将unix文件划分为7类:
 
 > 啊这里我又又有疑问了, 我试着unlink这两个特殊的record, 结果失败了, 我想知道有没有方法可以干掉它们?
 
-### `Block special file`
+### Block special file
 
 > 留个坑
 
-### `Character special file`
+### Character special file
 
 > 留个坑
 
-### `FIFO`
+### FIFO
 
 > 留个坑
 
-### `Socket`
+### Socket
 
 > 留个坑
 
-### `Symbolic link`
+### Symbolic link
 
 > 待验证
 

@@ -147,3 +147,4 @@ init会在每个虚拟终端(6个左右)都调用getty, 这会初始化tty并弹
 
 1. [Arch Boot Process](https://wiki.archlinux.org/index.php/Arch_boot_process)
 2. [Unified Extensible Firmware Interface](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface)
+
