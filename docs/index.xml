@@ -4,9 +4,16 @@
         <link>https://oliverdding.github.io/</link>
         <description>Charmer&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 30 Mar 2021 16:22:12 &#43;0800</lastBuildDate>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</lastBuildDate>
             <atom:link href="https://oliverdding.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Zookeeper清理事物日志和snapshot</title>
+    <link>https://oliverdding.github.io/2021/03/zookeeper-clean-up-log-and-snapshot/</link>
+    <pubDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/zookeeper-clean-up-log-and-snapshot/</guid>
+    <description><![CDATA[zookeeper会生成大量的日志和快照文件，结果它竟然只管杀不管埋，我在部署大约60节点的druid集群时，运行不到3天就挂了(zooke]]></description>
+</item><item>
     <title>一次druid异常排查</title>
     <link>https://oliverdding.github.io/2021/03/a-troubleshooting-on-druid/</link>
     <pubDate>Tue, 30 Mar 2021 16:22:12 &#43;0800</pubDate>
@@ -69,12 +76,5 @@
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/do-anything-with-clear-purpose/</guid>
     <description><![CDATA[最近面临实习面试, 一连串的准备以及扑街告诉我一个道理: stay hungry, stay foolish 说真的, 懈怠了半年, 发现自己很多知识都被抛之脑后, 每天沉迷奶头乐, 刷刷知乎, 看]]></description>
-</item><item>
-    <title>Linux中I/O多路复用(Select Poll and Epoll)</title>
-    <link>https://oliverdding.github.io/2021/01/select-poll-and-epoll/</link>
-    <pubDate>Sun, 03 Jan 2021 18:07:01 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://oliverdding.github.io/2021/01/select-poll-and-epoll/</guid>
-    <description><![CDATA[废话时间: 我第一次接触I/O多路复用是在自己人生中第一次外包项目, 给学校某个实验室的一个FPGA开发上位机. 使用串口的方式发送接受数据. 一开]]></description>
 </item></channel>
 </rss>

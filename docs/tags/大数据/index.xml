@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>大数据 - 标签 - Charmer的博客</title>
+        <link>https://oliverdding.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/</link>
+        <description>大数据 - 标签 - Charmer的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="self" type="application/rss+xml" /><item>
+    <title>Zookeeper清理事物日志和snapshot</title>
+    <link>https://oliverdding.github.io/2021/03/zookeeper-clean-up-log-and-snapshot/</link>
+    <pubDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/zookeeper-clean-up-log-and-snapshot/</guid>
+    <description><![CDATA[zookeeper会生成大量的日志和快照文件，结果它竟然只管杀不管埋，我在部署大约60节点的druid集群时，运行不到3天就挂了(zooke]]></description>
+</item><item>
+    <title>一次druid异常排查</title>
+    <link>https://oliverdding.github.io/2021/03/a-troubleshooting-on-druid/</link>
+    <pubDate>Tue, 30 Mar 2021 16:22:12 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/a-troubleshooting-on-druid/</guid>
+    <description><![CDATA[早上一来公司，熟练的port-forward一下router，打开web端查看下昨晚的ingestion任务执行的怎么样，嗯非常完美。 于是增]]></description>
+</item></channel>
+</rss>
