@@ -93,6 +93,21 @@ uinux中一切皆文件, 我们人为的将unix文件划分为7类:
 
 > 这里我又有个疑问, 要是文件巨大无比, inode的指针预留空间无法存放完, 这该怎么办? 若是我我会考虑二级指针. 欸...留个坑, 后续填...
 
+---
+
+2021/04/08 补充:
+
+俺来填坑了，的确是二级甚至三级指针。对于ext4文件系统来说，inode会有15个指针，前12个直接指向数据块(block)，后三个则是多重索引，比如，第13个指针指向一块存满指向数据块的指针。
+
+举个例子，在我的64位(指针大小为8B)archlinux中，block大小为4096B：
+
+1. 前12个指针可以存储：`4096B*12=48KB`
+2. 一级指针可以存储：`4096B/8B*4096B=2M`
+3. 二级指针可以存储：`(4096B/8B)*(4096B/8B)*4096B=1G`
+4. 三级指针可以存储：`(4096B/8B)*(4096B/8B)*(4096B/8B)*4096B=512G`
+
+---
+
 ### Directory file
 
 ![structure](https://raw.githubusercontent.com/oliverdding/imgur/main/blog/directory%202021-03-17%20153559.png)
@@ -102,6 +117,16 @@ uinux中一切皆文件, 我们人为的将unix文件划分为7类:
 这里顺带提出`hard link`的概念. 所谓的`hard link`也就是在一个目录文件中插入了源文件`inode number`的record. 也就是说, `hard link`之间的`inode number`都是相同的, 可以用命令`ls -i`查看验证. 而在inode数据结构中有一个属性是`st_nlink`, 代表着文件引用计数. 每每多一个`hard link`都会导致这个变量+1.
 
 > 啊这里我又又有疑问了, 我试着unlink这两个特殊的record, 结果失败了, 我想知道有没有方法可以干掉它们?
+
+---
+
+2021/04/08 补充：
+
+`.`、`..`是随着文件夹创建时同时创建的"hard link"，注意这里的是有双引号的，虽然他们会给inode增加引用数，当事实上它们不是hard link，文件夹不能有hard link。
+
+当时技术上讲是可以的，下面的链接给出了在ext4文件系统上删除`.`的办法：[stackexchange](https://unix.stackexchange.com/a/317239)
+
+---
 
 ### Block special file
 

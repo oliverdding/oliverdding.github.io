@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/oliverdding.github.io\/2021\/03\/unix-file-system\/"
-        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, apue","wordcount":  1292 ,
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, apue","wordcount":  1732 ,
         "url": "https:\/\/oliverdding.github.io\/2021\/03\/unix-file-system\/","datePublished": "2021-03-12T23:12:30+08:00","dateModified": "2021-03-17T15:47:56+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
@@ -120,8 +120,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">unix文件系统</h1><h2 class="single-subtitle">APUE系列</h2><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/apue/"><i class="far fa-folder fa-fw"></i>Apue</a>&nbsp;<a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-3-12">2021-3-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1292 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-3-12">2021-3-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1732 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -184,6 +184,17 @@
 <blockquote>
 <p>这里我又有个疑问, 要是文件巨大无比, inode的指针预留空间无法存放完, 这该怎么办? 若是我我会考虑二级指针. 欸&hellip;留个坑, 后续填&hellip;</p>
 </blockquote>
+<hr>
+<p>2021/04/08 补充:</p>
+<p>俺来填坑了，的确是二级甚至三级指针。对于ext4文件系统来说，inode会有15个指针，前12个直接指向数据块(block)，后三个则是多重索引，比如，第13个指针指向一块存满指向数据块的指针。</p>
+<p>举个例子，在我的64位(指针大小为8B)archlinux中，block大小为4096B：</p>
+<ol>
+<li>前12个指针可以存储：<code>4096B*12=48KB</code></li>
+<li>一级指针可以存储：<code>4096B/8B*4096B=2M</code></li>
+<li>二级指针可以存储：<code>(4096B/8B)*(4096B/8B)*4096B=1G</code></li>
+<li>三级指针可以存储：<code>(4096B/8B)*(4096B/8B)*(4096B/8B)*4096B=512G</code></li>
+</ol>
+<hr>
 <h3 id="directory-file">Directory file</h3>
 <p><img
         class="lazyload"
@@ -198,6 +209,11 @@
 <blockquote>
 <p>啊这里我又又有疑问了, 我试着unlink这两个特殊的record, 结果失败了, 我想知道有没有方法可以干掉它们?</p>
 </blockquote>
+<hr>
+<p>2021/04/08 补充：</p>
+<p><code>.</code>、<code>..</code>是随着文件夹创建时同时创建的&quot;hard link&quot;，注意这里的是有双引号的，虽然他们会给inode增加引用数，当事实上它们不是hard link，文件夹不能有hard link。</p>
+<p>当时技术上讲是可以的，下面的链接给出了在ext4文件系统上删除<code>.</code>的办法：<a href="https://unix.stackexchange.com/a/317239" target="_blank" rel="noopener noreffer">stackexchange</a></p>
+<hr>
 <h3 id="block-special-file">Block special file</h3>
 <blockquote>
 <p>留个坑</p>
