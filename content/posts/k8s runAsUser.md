@@ -3,7 +3,7 @@ title: "k8s对象runAsUser"
 subtitle: ""
 date: 2021-03-31T11:03:19+08:00
 lastmod: 2021-03-31T11:03:19+08:00
-draft: true
+draft: false
 author: "Charmer"
 authorLink: "https://oliverdding.github.io"
 description: ""

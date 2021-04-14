@@ -4,7 +4,14 @@
         <link>https://oliverdding.github.io/tags/%E7%BB%8F%E9%AA%8C/</link>
         <description>经验 - 标签 - Charmer的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E7%BB%8F%E9%AA%8C/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E7%BB%8F%E9%AA%8C/" rel="self" type="application/rss+xml" /><item>
+    <title>k8s对象runAsUser</title>
+    <link>https://oliverdding.github.io/2021/03/k8s-runasuser/</link>
+    <pubDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/k8s-runasuser/</guid>
+    <description><![CDATA[通过官网文档我们知道了可以指定 1 2 3 4 securityContext:runAsUser:0runAsGroup:0fsGroup:1000 实现容器内进程以用户0、用户组0和额外用户组1000的权限运行。 可是这个应该放哪呢？ 有两个位置： co]]></description>
+</item><item>
     <title>Zookeeper清理事物日志和snapshot</title>
     <link>https://oliverdding.github.io/2021/03/zookeeper-clean-up-log-and-snapshot/</link>
     <pubDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</pubDate>

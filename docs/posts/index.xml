@@ -4,7 +4,14 @@
         <link>https://oliverdding.github.io/posts/</link>
         <description>所有文章 | Charmer的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>k8s对象runAsUser</title>
+    <link>https://oliverdding.github.io/2021/03/k8s-runasuser/</link>
+    <pubDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/03/k8s-runasuser/</guid>
+    <description><![CDATA[通过官网文档我们知道了可以指定 1 2 3 4 securityContext:runAsUser:0runAsGroup:0fsGroup:1000 实现容器内进程以用户0、用户组0和额外用户组1000的权限运行。 可是这个应该放哪呢？ 有两个位置： co]]></description>
+</item><item>
     <title>Zookeeper清理事物日志和snapshot</title>
     <link>https://oliverdding.github.io/2021/03/zookeeper-clean-up-log-and-snapshot/</link>
     <pubDate>Wed, 31 Mar 2021 10:35:37 &#43;0800</pubDate>
@@ -67,12 +74,5 @@
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/notes-for-algorithm/</guid>
     <description><![CDATA[问题 思路 连续子数组 1. 滑动窗口(双指针) 2. 前缀和]]></description>
-</item><item>
-    <title>做任何事情要有明确的目的</title>
-    <link>https://oliverdding.github.io/2021/01/do-anything-with-clear-purpose/</link>
-    <pubDate>Sun, 03 Jan 2021 21:42:48 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://oliverdding.github.io/2021/01/do-anything-with-clear-purpose/</guid>
-    <description><![CDATA[最近面临实习面试, 一连串的准备以及扑街告诉我一个道理: stay hungry, stay foolish 说真的, 懈怠了半年, 发现自己很多知识都被抛之脑后, 每天沉迷奶头乐, 刷刷知乎, 看]]></description>
 </item></channel>
 </rss>
