@@ -4,7 +4,14 @@
         <link>https://oliverdding.github.io/posts/</link>
         <description>所有文章 | Charmer的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 23 Apr 2021 16:46:58 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>写脚本的建议</title>
+    <link>https://oliverdding.github.io/2021/04/suggestion-in-writing-script/</link>
+    <pubDate>Fri, 23 Apr 2021 16:46:58 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/04/suggestion-in-writing-script/</guid>
+    <description><![CDATA[第一个问题是自己基础不够，不经常写bash。 当要传递命令，特别是包含管道的命令时，使用sh/bash的-c参数： 1 sh -c &#34;${commandhere}&#34; 这个问题是用kube]]></description>
+</item><item>
     <title>k8s对象runAsUser</title>
     <link>https://oliverdding.github.io/2021/03/k8s-runasuser/</link>
     <pubDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</pubDate>
@@ -67,12 +74,5 @@
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/first-day-to-shenzhen/</guid>
     <description><![CDATA[总结全文: 深圳不适合我个人发展 正午的飞机, 但是昨晚熬夜打游戏+吃了一份中华炸鸡, 一早起来喉咙非常干燥难忍. 飞机上明显感觉到自己发热了, 全程纠]]></description>
-</item><item>
-    <title>算法题小抄(未完)</title>
-    <link>https://oliverdding.github.io/2021/01/notes-for-algorithm/</link>
-    <pubDate>Mon, 04 Jan 2021 14:26:00 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://oliverdding.github.io/2021/01/notes-for-algorithm/</guid>
-    <description><![CDATA[问题 思路 连续子数组 1. 滑动窗口(双指针) 2. 前缀和]]></description>
 </item></channel>
 </rss>

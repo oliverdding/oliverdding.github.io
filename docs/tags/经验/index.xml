@@ -4,7 +4,14 @@
         <link>https://oliverdding.github.io/tags/%E7%BB%8F%E9%AA%8C/</link>
         <description>经验 - 标签 - Charmer的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E7%BB%8F%E9%AA%8C/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 23 Apr 2021 16:46:58 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E7%BB%8F%E9%AA%8C/" rel="self" type="application/rss+xml" /><item>
+    <title>写脚本的建议</title>
+    <link>https://oliverdding.github.io/2021/04/suggestion-in-writing-script/</link>
+    <pubDate>Fri, 23 Apr 2021 16:46:58 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/04/suggestion-in-writing-script/</guid>
+    <description><![CDATA[第一个问题是自己基础不够，不经常写bash。 当要传递命令，特别是包含管道的命令时，使用sh/bash的-c参数： 1 sh -c &#34;${commandhere}&#34; 这个问题是用kube]]></description>
+</item><item>
     <title>k8s对象runAsUser</title>
     <link>https://oliverdding.github.io/2021/03/k8s-runasuser/</link>
     <pubDate>Wed, 31 Mar 2021 11:03:19 &#43;0800</pubDate>
