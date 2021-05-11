@@ -4,7 +4,14 @@
         <link>https://oliverdding.github.io/posts/</link>
         <description>所有文章 | Charmer的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
-            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 06 May 2021 10:37:24 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 10 May 2021 19:07:43 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>探索linux - umask</title>
+    <link>https://oliverdding.github.io/2021/05/unmask-in-unix/</link>
+    <pubDate>Mon, 10 May 2021 19:07:43 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://oliverdding.github.io/2021/05/unmask-in-unix/</guid>
+    <description><![CDATA[在CS631课程中，详细讲了umask的作用。但是我仍然充满疑惑，这篇博客记录了探索umask的实验过程。 定义 某个进程创建文件时linux会]]></description>
+</item><item>
     <title>深圳之行 - 深圳之眼</title>
     <link>https://oliverdding.github.io/2021/05/eyes-of-shenzhen/</link>
     <pubDate>Thu, 06 May 2021 10:37:24 &#43;0800</pubDate>
@@ -67,12 +74,5 @@
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/01/notes-for-learning-docker/</guid>
     <description><![CDATA[什么是Docker Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 OverlayFS 类的 Union FS 等技术，对进程进行封装隔]]></description>
-</item><item>
-    <title>结构化思维</title>
-    <link>https://oliverdding.github.io/2021/01/structured-thinking/</link>
-    <pubDate>Thu, 28 Jan 2021 13:59:31 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://oliverdding.github.io/2021/01/structured-thinking/</guid>
-    <description><![CDATA[结构化思维是商务沟通中非常重要的一种思维方式. 记录下思维导图.]]></description>
 </item></channel>
 </rss>

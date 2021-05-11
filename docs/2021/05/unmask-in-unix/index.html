@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>探索linux - umask - Charmer的博客</title><meta name="Description" content="Charmer&#39;s Blog"><meta property="og:title" content="探索linux - umask" />
+<meta property="og:description" content="在CS631课程中，详细讲了umask的作用。但是我仍然充满疑惑，这篇博客记录了探索umask的实验过程。 定义 某个进程创建文件时linux会" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://oliverdding.github.io/2021/05/unmask-in-unix/" /><meta property="og:image" content="https://oliverdding.github.io/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-10T19:07:43&#43;08:00" />
+<meta property="article:modified_time" content="2021-05-10T19:07:43&#43;08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://oliverdding.github.io/favicon.ico"/>
+
+<meta name="twitter:title" content="探索linux - umask"/>
+<meta name="twitter:description" content="在CS631课程中，详细讲了umask的作用。但是我仍然充满疑惑，这篇博客记录了探索umask的实验过程。 定义 某个进程创建文件时linux会"/>
+<meta name="application-name" content="charmer">
+<meta name="apple-mobile-web-app-title" content="charmer"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://oliverdding.github.io/2021/05/unmask-in-unix/" /><link rel="prev" href="https://oliverdding.github.io/2021/05/eyes-of-shenzhen/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "探索linux - umask",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/oliverdding.github.io\/2021\/05\/unmask-in-unix\/"
+        },"image": ["https:\/\/oliverdding.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "linux, 基础","wordcount":  952 ,
+        "url": "https:\/\/oliverdding.github.io\/2021\/05\/unmask-in-unix\/","datePublished": "2021-05-10T19:07:43+08:00","dateModified": "2021-05-10T19:07:43+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Charmer","logo": "https:\/\/oliverdding.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Charmer"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Charmer的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />😘</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Charmer的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/apple-touch-icon.png"
+        data-srcset="/apple-touch-icon.png, /apple-touch-icon.png 1.5x, /apple-touch-icon.png 2x"
+        data-sizes="auto"
+        alt="/apple-touch-icon.png"
+        title="/apple-touch-icon.png" />😘</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/oliverdding" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">探索linux - umask</h1><h2 class="single-subtitle">apue学习</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-5-10">2021-5-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 952 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#定义">定义</a></li>
+    <li><a href="#命令行实验">命令行实验</a>
+      <ul>
+        <li><a href="#实验一新建文件">实验一：新建文件</a></li>
+        <li><a href="#实验二新建文件夹">实验二：新建文件夹</a></li>
+        <li><a href="#实验三修改umask">实验三：修改umask</a></li>
+      </ul>
+    </li>
+    <li><a href="#疑问一">疑问一</a></li>
+    <li><a href="#代码实验">代码实验</a></li>
+    <li><a href="#疑问二">疑问二</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>在<a href="https://youtu.be/bRAR2bv2HSM" target="_blank" rel="noopener noreffer">CS631课程</a>中，详细讲了umask的作用。但是我仍然充满疑惑，这篇博客记录了探索umask的实验过程。</p>
+<h2 id="定义">定义</h2>
+<p>某个进程创建文件时linux会指定默认权限，umask用于控制这个默认权限。这是进程的属性。</p>
+<p>顾名思义，umask意味遮蔽，umask中设为1的位会屏蔽。</p>
+<h2 id="命令行实验">命令行实验</h2>
+<h3 id="实验一新建文件">实验一：新建文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">01:13:35 charmer@arch unmask → touch test.<span class="sb">`</span><span class="nb">umask</span><span class="sb">`</span>
+01:13:43 charmer@arch unmask → ls -l
+total <span class="m">0</span>
+-rw-r--r-- <span class="m">1</span> charmer charmer <span class="m">0</span> May <span class="m">11</span> 13:13 test.0022
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到，umask=0022时，对于group、other的写权限被限制；</p>
+<blockquote>
+<p>为什么执行权限也没有呢？</p>
+<p>umask对于文件的限制是从666开始缩减的(文件默认不存在执行权限)；而文件夹需要执行权限去访问内部的条目，所以对于文件夹而言是从777开始缩减；</p>
+</blockquote>
+<h3 id="实验二新建文件夹">实验二：新建文件夹</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">01:19:22 charmer@arch unmask → mkdir test2.<span class="sb">`</span><span class="nb">umask</span><span class="sb">`</span>
+mkdir: created directory <span class="s1">&#39;test2.0022&#39;</span>
+01:19:33 charmer@arch unmask → ls -l
+total <span class="m">4</span>
+-rw-r--r-- <span class="m">1</span> charmer charmer    <span class="m">0</span> May <span class="m">11</span> 13:13 test.0022
+drwxr-xr-x <span class="m">2</span> charmer charmer <span class="m">4096</span> May <span class="m">11</span> 13:19 test2.0022
+</code></pre></td></tr></table>
+</div>
+</div><p>同样的，对于文件夹而言，group、other的写权限被限制；</p>
+<h3 id="实验三修改umask">实验三：修改umask</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">01:22:03 charmer@arch unmask → <span class="nb">umask</span> <span class="m">0077</span>
+01:22:10 charmer@arch unmask → touch test3.<span class="sb">`</span><span class="nb">umask</span><span class="sb">`</span>
+01:22:22 charmer@arch unmask → mkdir test4.<span class="sb">`</span><span class="nb">umask</span><span class="sb">`</span>
+mkdir: created directory <span class="s1">&#39;test4.0077&#39;</span>
+01:22:31 charmer@arch unmask → ls -l
+total <span class="m">8</span>
+-rw-r--r-- <span class="m">1</span> charmer charmer    <span class="m">0</span> May <span class="m">11</span> 13:13 test.0022
+drwxr-xr-x <span class="m">2</span> charmer charmer <span class="m">4096</span> May <span class="m">11</span> 13:19 test2.0022
+-rw------- <span class="m">1</span> charmer charmer    <span class="m">0</span> May <span class="m">11</span> 13:22 test3.0077
+drwx------ <span class="m">2</span> charmer charmer <span class="m">4096</span> May <span class="m">11</span> 13:22 test4.0077
+</code></pre></td></tr></table>
+</div>
+</div><p>无需多言，符合预期。</p>
+<h2 id="疑问一">疑问一</h2>
+<p>umask到底是如何实现限制呢？是touch、mkdir这些命令在创建文件时读取umask的值，对文件进行限制吗？还是他们创建文件后内核自动调整呢？让我们接着做点实验。</p>
+<h2 id="代码实验">代码实验</h2>
+<p>代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+
+    <span class="c1">// --- 0022
+</span><span class="c1"></span>    <span class="n">umask</span><span class="p">(</span><span class="mo">0022</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">fd</span><span class="o">=</span><span class="n">open</span><span class="p">(</span><span class="s">&#34;test5.0022&#34;</span><span class="p">,</span> <span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">O_EXCL</span> <span class="o">|</span> <span class="n">O_WRONLY</span><span class="p">,</span>
+                              <span class="n">S_IRUSR</span> <span class="o">|</span> <span class="n">S_IWUSR</span> <span class="o">|</span> <span class="n">S_IXUSR</span> <span class="o">|</span>
+                              <span class="n">S_IRGRP</span> <span class="o">|</span> <span class="n">S_IWGRP</span> <span class="o">|</span> <span class="n">S_IXGRP</span> <span class="o">|</span>
+                              <span class="n">S_IROTH</span> <span class="o">|</span> <span class="n">S_IWOTH</span> <span class="o">|</span> <span class="n">S_IXOTH</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;open&#34;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+    <span class="n">mkdir</span><span class="p">(</span><span class="s">&#34;test6.0022&#34;</span><span class="p">,</span> <span class="mo">0777</span><span class="p">);</span>
+
+    <span class="c1">// --- 0077
+</span><span class="c1"></span>    <span class="n">umask</span><span class="p">(</span><span class="mo">0077</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">fd</span><span class="o">=</span><span class="n">open</span><span class="p">(</span><span class="s">&#34;test7.0077&#34;</span><span class="p">,</span> <span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">O_EXCL</span> <span class="o">|</span> <span class="n">O_WRONLY</span><span class="p">,</span>
+                              <span class="n">S_IRUSR</span> <span class="o">|</span> <span class="n">S_IWUSR</span> <span class="o">|</span> <span class="n">S_IXUSR</span> <span class="o">|</span>
+                              <span class="n">S_IRGRP</span> <span class="o">|</span> <span class="n">S_IWGRP</span> <span class="o">|</span> <span class="n">S_IXGRP</span> <span class="o">|</span>
+                              <span class="n">S_IROTH</span> <span class="o">|</span> <span class="n">S_IWOTH</span> <span class="o">|</span> <span class="n">S_IXOTH</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;open&#34;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+    <span class="n">mkdir</span><span class="p">(</span><span class="s">&#34;test8.0077&#34;</span><span class="p">,</span> <span class="mo">0777</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>运行结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">01:36:26 charmer@arch unmask → cc umask_test1.c -o umask_test1.out
+01:36:33 charmer@arch unmask → ./umask_test1.out
+01:36:35 charmer@arch unmask → ls -l
+...
+-rwxr-xr-x <span class="m">1</span> charmer charmer     <span class="m">0</span> May <span class="m">11</span> 13:36 test5.0022
+drwxr-xr-x <span class="m">2</span> charmer charmer  <span class="m">4096</span> May <span class="m">11</span> 13:36 test6.0022
+-rwx------ <span class="m">1</span> charmer charmer     <span class="m">0</span> May <span class="m">11</span> 13:36 test7.0077
+drwx------ <span class="m">2</span> charmer charmer  <span class="m">4096</span> May <span class="m">11</span> 13:36 test8.0077
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>不难发现，我们要求创建777的文件、目录，都被系统自动umask了。</p>
+<p>也就是说，<strong>通过系统调用创建文件、文件夹时，内核会自动将用户需要的权限umask一下</strong>。</p>
+<h2 id="疑问二">疑问二</h2>
+<p>那么umask存储在什么地方呢？我第一时间想的是PCB，毕竟这是个进程的属性。</p>
+<p>在<a href="https://elixir.bootlin.com/linux/latest/source/include/linux/sched.h#L649" target="_blank" rel="noopener noreffer">sched.h - include/linux/sched.h - Linux source code (v5.12.2) - Bootlin</a>中查找，未能发现umask相关的属性。那么会存储在哪里呢？</p>
+<p>这个疑问还得等我再探索探索。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-5-10</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/2021/05/unmask-in-unix/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://oliverdding.github.io/2021/05/unmask-in-unix/" data-title="探索linux - umask" data-hashtags="linux,基础"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://oliverdding.github.io/2021/05/unmask-in-unix/" data-hashtag="linux"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://oliverdding.github.io/2021/05/unmask-in-unix/" data-title="探索linux - umask"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a><a href="javascript:void(0);" title="分享到 Pocket" data-sharer="pocket" data-url="https://oliverdding.github.io/2021/05/unmask-in-unix/"><i class="fab fa-get-pocket fa-fw"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://oliverdding.github.io/2021/05/unmask-in-unix/" data-title="探索linux - umask"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://oliverdding.github.io/2021/05/unmask-in-unix/" data-title="探索linux - umask"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/linux/">linux</a>,&nbsp;<a href="/tags/%E5%9F%BA%E7%A1%80/">基础</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/05/eyes-of-shenzhen/" class="prev" rel="prev" title="深圳之行 - 深圳之眼"><i class="fas fa-angle-left fa-fw"></i>深圳之行 - 深圳之眼</a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Stay hungry, Stay foolish</div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://oliverdding.github.io" target="_blank">Charmer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.6.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.8/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["oliverdding"],"clientID":"8ed51e4ff5906df5735d","clientSecret":"0fc867049835e59f54c1aa67c59443d6db7fe01b","id":"2021-05-10T19:07:43+08:00","owner":"oliverdding","repo":"oliverdding.github.io","title":"探索linux - umask"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
