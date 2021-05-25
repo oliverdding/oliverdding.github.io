@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-	<meta name="generator" content="Hugo 0.83.1" />
+	<meta name="generator" content="Hugo 0.82.1" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
@@ -116,6 +116,16 @@
         alt="https://www.gravatar.com/avatar/1009b872df6877dedf5fddc5c50364e7?s=240&amp;d=mp"
         title="https://www.gravatar.com/avatar/1009b872df6877dedf5fddc5c50364e7?s=240&amp;d=mp" /></a></div><h1 class="home-title">Charmer</h1><h2 class="home-subtitle"><div id="id-1" class="typeit"></div></h2><div class="links"><a href="https://github.com/oliverdding" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://stackoverflow.com/users/13760009/oliverdd" title="Stack Overflow" target="_blank" rel="noopener noreffer me"><i class="fab fa-codepen fa-fw"></i></a><a href="https://steamcommunity.com/id/uestc_oliverdd" title="Steam" target="_blank" rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href="mailto:oliverdd@qq.com" title="Email" rel=" me"><i class="far fa-envelope fa-fw"></i></a><a href="/index.xml" title="RSS" target="_blank" rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div><h3 class="home-disclaimer">免责声明：</strong><br>本文中使用的部分图片来自于网络，如有侵权,请联系<a href="mailto:oliverdd@qq.com" target="_blank">Charmer</a>进行删除</h3></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/2021/03/zookeeper-clean-up-log-and-snapshot/">Zookeeper清理事物日志和snapshot</a>
+    </h1><div class="post-meta"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-3-31">2021-3-31</time></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E7%BB%8F%E9%AA%8C/"><i class="far fa-folder fa-fw"></i>经验</a></span></div><div class="content">zookeeper会生成大量的日志和快照文件，结果它竟然只管杀不管埋，我在部署大约60节点的druid集群时，运行不到3天就挂了(zooke</div><div class="post-footer">
+        <a href="/2021/03/zookeeper-clean-up-log-and-snapshot/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E7%BB%8F%E9%AA%8C/">经验</a>,&nbsp;<a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/2021/03/a-troubleshooting-on-druid/">一次druid异常排查</a>
+    </h1><div class="post-meta"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-3-30">2021-3-30</time></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"><i class="far fa-folder fa-fw"></i>大数据</a></span></div><div class="content">早上一来公司，熟练的port-forward一下router，打开web端查看下昨晚的ingestion任务执行的怎么样，嗯非常完美。 于是增</div><div class="post-footer">
+        <a href="/2021/03/a-troubleshooting-on-druid/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>,&nbsp;<a href="/tags/apache/">apache</a>,&nbsp;<a href="/tags/%E7%BB%8F%E9%AA%8C/">经验</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/2021/03/linux-boot-process/">linux boot process(UEFI)</a>
     </h1><div class="post-meta"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-3-17">2021-3-17</time></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a>&nbsp;<a href="/categories/%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>系统</a></span></div><div class="content">注意: 不涉及Network booting、secure booting, 略微提到BIOS 注意: 本文基于ArchLinux, 使用UEFI+System Boot, 而不是</div><div class="post-footer">
         <a href="/2021/03/linux-boot-process/">阅读全文</a><div class="post-tags">
@@ -135,16 +145,6 @@
     </h1><div class="post-meta"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-1-28">2021-1-28</time></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div><div class="content">什么是Docker Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 OverlayFS 类的 Union FS 等技术，对进程进行封装隔</div><div class="post-footer">
         <a href="/2021/01/notes-for-learning-docker/">阅读全文</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%BA%E7%A1%80/">基础</a>,&nbsp;<a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>,&nbsp;<a href="/tags/linux/">linux</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/2021/01/structured-thinking/">结构化思维</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-1-28">2021-1-28</time></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B7%A5%E4%BD%9C/"><i class="far fa-folder fa-fw"></i>工作</a></span></div><div class="content">结构化思维是商务沟通中非常重要的一种思维方式. 记录下思维导图.</div><div class="post-footer">
-        <a href="/2021/01/structured-thinking/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%95%88%E7%8E%87/">效率</a>,&nbsp;<a href="/tags/%E5%B7%A5%E4%BD%9C/">工作</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/2021/01/first-day-to-shenzhen/">来深圳的第一天</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="https://oliverdding.github.io" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Charmer</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-1-21">2021-1-21</time></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E7%94%9F%E6%B4%BB/"><i class="far fa-folder fa-fw"></i>生活</a></span></div><div class="content">总结全文: 深圳不适合我个人发展 正午的飞机, 但是昨晚熬夜打游戏+吃了一份中华炸鸡, 一早起来喉咙非常干燥难忍. 飞机上明显感觉到自己发热了, 全程纠</div><div class="post-footer">
-        <a href="/2021/01/first-day-to-shenzhen/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/">碎碎念</a></div></div>
 </article><ul class="pagination"><li class="page-item ">
                     <span class="page-link">
                         <a href="/">1</a>
