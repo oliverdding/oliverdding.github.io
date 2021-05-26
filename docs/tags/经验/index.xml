@@ -5,12 +5,12 @@
         <description>经验 - 标签 - Charmer的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>oliverdd@qq.com (Charmer)</managingEditor>
             <webMaster>oliverdd@qq.com (Charmer)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 26 May 2021 00:59:48 &#43;0800</lastBuildDate><atom:link href="https://oliverdding.github.io/tags/%E7%BB%8F%E9%AA%8C/" rel="self" type="application/rss+xml" /><item>
-    <title>一个一个解决问题</title>
+    <title>如何解决问题</title>
     <link>https://oliverdding.github.io/2021/05/solve-problem-one-by-one/</link>
     <pubDate>Wed, 26 May 2021 00:59:48 &#43;0800</pubDate>
     <author>作者</author>
     <guid>https://oliverdding.github.io/2021/05/solve-problem-one-by-one/</guid>
-    <description><![CDATA[我在做SRE相关的事情时，发现自己真的很容易拖拉、避开问题。 先是报表没有数据，这个问题仔细寻找原因按理说最多一天，但是我拖了一周。 现在报表数]]></description>
+    <description><![CDATA[我在做SRE相关的事情时，发现自己真的很容易拖拉、避开问题。 先是报表没有数据，这个问题仔细寻找原因按理说最多一天，但是我拖了一周。这期间时间]]></description>
 </item><item>
     <title>写脚本的建议</title>
     <link>https://oliverdding.github.io/2021/04/suggestion-in-writing-script/</link>
