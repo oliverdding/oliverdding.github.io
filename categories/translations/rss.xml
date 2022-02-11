@@ -19,12 +19,11 @@
 &lt;li&gt;运行用户的main函数&lt;&#x2F;li&gt;
 &lt;li&gt;在集群上执行一些并行操作&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
-&lt;pre data-lang=&quot;mermaid&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-mermaid &quot;&gt;&lt;code class=&quot;language-mermaid&quot; data-lang=&quot;mermaid&quot;&gt;&lt;span&gt;graph TD;
-&lt;&#x2F;span&gt;&lt;span&gt;  subgraph spark application;
-&lt;&#x2F;span&gt;&lt;span&gt;  core[driver program] -.职责1.-&amp;gt; act1(run user&amp;#39;s main function);
-&lt;&#x2F;span&gt;&lt;span&gt;  core[driver program] -.职责2.-&amp;gt; act2(execute various parallel operations);
-&lt;&#x2F;span&gt;&lt;span&gt;  end
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;div class=&quot;mermaid is-flex is-justify-content-center is-align-items-center&quot;&gt;graph TD;
+  subgraph spark application;
+  core[driver program] -.职责1.-&amp;gt; act1(run user&amp;#x27;s main function);
+  core[driver program] -.职责2.-&amp;gt; act2(execute various parallel operations);
+  end&lt;&#x2F;div&gt;
 &lt;p&gt;同样，spark提供了两层抽象:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;resilient distributed dataset(RDD): 一组元素的集合，分段地存储在集群不同节点上，并且支持并行操作。
