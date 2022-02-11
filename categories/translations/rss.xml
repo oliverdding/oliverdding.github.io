@@ -2,17 +2,17 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
       <title>Aurora - Translations</title>
-        <link>https://charmer.fun</link>
+        <link>https://charmer.netlify.app</link>
         <description>Sidere mens eadem mutato</description>
         <generator>Zola</generator>
         <language>zh</language>
-        <atom:link href="https://charmer.fun/categories/translations/rss.xml" rel="self" type="application/rss+xml"/>
+        <atom:link href="https://charmer.netlify.app/categories/translations/rss.xml" rel="self" type="application/rss+xml"/>
         <lastBuildDate>Sun, 04 Jul 2021 12:42:17 +0800</lastBuildDate>
         <item>
             <title>翻译：RDD编程指导</title>
             <pubDate>Sun, 04 Jul 2021 12:42:17 +0800</pubDate>
-            <link>https://charmer.fun/posts/translation-rdd-programming-guide/</link>
-            <guid>https://charmer.fun/posts/translation-rdd-programming-guide/</guid>
+            <link>https://charmer.netlify.app/posts/translation-rdd-programming-guide/</link>
+            <guid>https://charmer.netlify.app/posts/translation-rdd-programming-guide/</guid>
             <description>&lt;h2 id=&quot;zong-lan&quot;&gt;总览&lt;&#x2F;h2&gt;
 &lt;p&gt;每个spark应用包含一个驱动程序，两个职责:&lt;&#x2F;p&gt;
 &lt;ol&gt;

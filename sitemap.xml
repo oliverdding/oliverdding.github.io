@@ -1,121 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://charmer.fun/</loc>
+        <loc>https://charmer.netlify.app/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/</loc>
+        <loc>https://charmer.netlify.app/categories/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/bestpractices/</loc>
+        <loc>https://charmer.netlify.app/categories/bestpractices/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/bestpractices/page/1/</loc>
+        <loc>https://charmer.netlify.app/categories/bestpractices/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/datastructures/</loc>
+        <loc>https://charmer.netlify.app/categories/datastructures/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/datastructures/page/1/</loc>
+        <loc>https://charmer.netlify.app/categories/datastructures/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/notes/</loc>
+        <loc>https://charmer.netlify.app/categories/notes/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/notes/page/1/</loc>
+        <loc>https://charmer.netlify.app/categories/notes/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/translations/</loc>
+        <loc>https://charmer.netlify.app/categories/translations/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/translations/page/1/</loc>
+        <loc>https://charmer.netlify.app/categories/translations/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/comment-policy/</loc>
+        <loc>https://charmer.netlify.app/comment-policy/</loc>
         <lastmod>2021-01-01T00:00:00+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/</loc>
+        <loc>https://charmer.netlify.app/posts/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</loc>
+        <loc>https://charmer.netlify.app/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</loc>
         <lastmod>2021-11-18T10:59:50+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/best-practice-for-writing-blog-with-ssg/</loc>
+        <loc>https://charmer.netlify.app/posts/best-practice-for-writing-blog-with-ssg/</loc>
         <lastmod>2022-02-11T20:37:06+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/bloom-filter/</loc>
+        <loc>https://charmer.netlify.app/posts/bloom-filter/</loc>
         <lastmod>2022-02-09T17:13:10+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/page/1/</loc>
+        <loc>https://charmer.netlify.app/posts/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/page/2/</loc>
+        <loc>https://charmer.netlify.app/posts/page/2/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/paper-reading-hdfs/</loc>
+        <loc>https://charmer.netlify.app/posts/paper-reading-hdfs/</loc>
         <lastmod>2021-09-17T13:17:46+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/paper-reading-rdd/</loc>
+        <loc>https://charmer.netlify.app/posts/paper-reading-rdd/</loc>
         <lastmod>2021-10-12T17:31:07+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/translation-rdd-programming-guide/</loc>
+        <loc>https://charmer.netlify.app/posts/translation-rdd-programming-guide/</loc>
         <lastmod>2021-07-04T12:42:17+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/</loc>
+        <loc>https://charmer.netlify.app/tags/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/apache/</loc>
+        <loc>https://charmer.netlify.app/tags/apache/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/apache/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/apache/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/best-practice/</loc>
+        <loc>https://charmer.netlify.app/tags/best-practice/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/best-practice/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/best-practice/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/big-data/</loc>
+        <loc>https://charmer.netlify.app/tags/big-data/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/big-data/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/big-data/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/data-structure/</loc>
+        <loc>https://charmer.netlify.app/tags/data-structure/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/data-structure/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/data-structure/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/note/</loc>
+        <loc>https://charmer.netlify.app/tags/note/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/note/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/note/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/paper-reading/</loc>
+        <loc>https://charmer.netlify.app/tags/paper-reading/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/paper-reading/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/paper-reading/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/spark/</loc>
+        <loc>https://charmer.netlify.app/tags/spark/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/spark/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/spark/page/1/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/tip/</loc>
+        <loc>https://charmer.netlify.app/tags/tip/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/tags/tip/page/1/</loc>
+        <loc>https://charmer.netlify.app/tags/tip/page/1/</loc>
     </url>
 </urlset>
