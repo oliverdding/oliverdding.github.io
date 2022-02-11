@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" integrity="sha384-IJLmUY0f1ePPX6uSCJ9Bxik64/meJmjSYD7dHaJqTXXEBE4y+Oe9P2KBZa/z7p0Q" crossorigin="anonymous">
+  <link href="https://oliverdding.github.io/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+Aurora | 翻译：RDD编程指导
+
+  </title>
+
+  
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J661LYF5TY"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-J661LYF5TY");
+  </script>
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;oliverdding.github.io">Aurora</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;categories">
+            Categories
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;tags">
+            Tags
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            翻译：RDD编程指导
+          </h1>
+          <p class="subtitle">http:&#x2F;&#x2F;spark.apache.org&#x2F;docs&#x2F;latest&#x2F;rdd-programming-guide.html</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>charmer published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2021-07-04T12:42:17+08:00">July 04, 2021</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>12 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>2400 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/translations/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>Translations</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+              
+<p>
+  Tags:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/note/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>note</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/spark/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>spark</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/apache/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>apache</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/big-data/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>big data</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <h2 id="zong-lan">总览</h2>
+<p>每个spark应用包含一个驱动程序，两个职责:</p>
+<ol>
+<li>运行用户的main函数</li>
+<li>在集群上执行一些并行操作</li>
+</ol>
+<pre data-lang="mermaid" style="background-color:#282828;color:#fdf4c1aa;" class="language-mermaid "><code class="language-mermaid" data-lang="mermaid"><span>graph TD;
+</span><span>  subgraph spark application;
+</span><span>  core[driver program] -.职责1.-&gt; act1(run user&#39;s main function);
+</span><span>  core[driver program] -.职责2.-&gt; act2(execute various parallel operations);
+</span><span>  end
+</span></code></pre>
+<p>同样，spark提供了两层抽象:</p>
+<ol>
+<li>resilient distributed dataset(RDD): 一组元素的集合，分段地存储在集群不同节点上，并且支持并行操作。
+<ol>
+<li>可以是分布式文件系统中的一个文件</li>
+<li>可以是driver program中的一个scala集合</li>
+</ol>
+</li>
+<li>shared variables: 可以在并行操作中使用。
+<ol>
+<li>broadcast类型变量: 用于在不同节点地内存中存储一个值</li>
+<li>accumulators类型变量: 只支持&quot;add&quot;操作的变量</li>
+</ol>
+</li>
+</ol>
+<h2 id="chu-shi-hua-spark">初始化spark</h2>
+<ol>
+<li>初始化<code>SparkConf</code>，包含目标应用的信息</li>
+<li>使用<code>SparkConf</code>初始化<code>SparkContext</code>以连接cluster</li>
+</ol>
+<h2 id="resilient-distributed-datasets-rdds">Resilient Distributed Datasets (RDDs)</h2>
+<h3 id="parallelized-collections">Parallelized Collections</h3>
+<p>调用<code>SparkContext</code>的<code>parallelize</code>方法，传入一个普通集合以生产一个并行集合，之后便可以并行操作。</p>
+<p>此外，还可以控制并行集合的分区数量，spark会为并行集合的每一个分区运行一个任务。一般spark会自动设置合适的分区，当然也可以<code>parallelize</code>方法控制。</p>
+<h3 id="external-datasets">External Datasets</h3>
+<p>spark可以从hadoop支持的任何数据源创建RDD，并且支持hadoop支持的所有<code>inputFormat</code>，包括text files、SequenceFiles。</p>
+<p>spark读取文件(<code>textFile</code>方法)的一些提示:</p>
+<ol>
+<li>使用本地文件系统上的文件，，比如保证每个node相同路径上也有这个文件。</li>
+<li>spark所有的文件读取的方法，支持目录、压缩文件以及通配符。</li>
+<li>可选的第二个参数用于控制分块数量。默认情况下，spark会根据文件block大小创建分块(hdfs下默认是128M)。</li>
+</ol>
+<p>除了<code>textFile</code>外，spark还提供了其它格式的数据读取方法:</p>
+<ol>
+<li><code>SparkContext.wholeTextFiles</code>可以读取包含大量小文件的目录，并以文件名:文件内容对的方式返回。</li>
+<li>对于<code>SequenceFile</code>，使用<code>SparkContext.sequenceFile[K, V]</code>方法读取，K、V是文件中key和value的类型，并且应该是hadoop的<code>Writable</code>接口的实现者。</li>
+<li>对于hadoop的<code>inputFormat</code>，可以使用<code>SparkContext.hadoopRDD</code>方法。</li>
+<li><code>saveAsObjectFile</code>和<code>objectFile</code>方法用于保存RDD。</li>
+</ol>
+<h3 id="rddde-cao-zuo">RDD的操作</h3>
+<p>RDD支持两种类型的操作:</p>
+<ol>
+<li>转换(transformations): 从现有数据集中创建新的数据集</li>
+<li>计算(actions): 在某个数据集上运行并获取结果</li>
+</ol>
+<p>举例，map操作就是转换，传入某个数据集的每个元素，返回代表着新数据集的RDD。reduce就是计算，聚合RDD中所有元素，返回最终结果到driver program。</p>
+<p><strong>spark中所有的转换操作都是lazy的</strong>，也就是说不会在调用时立马计算，而是在计算操作被执行时才去计算。</p>
+<p>默认情况下，每次运行计算，所有转换过的RDD都会被重复计算。但是可以配置spark缓存。</p>
+<h4 id="ji-chu">基础</h4>
+<p>举例说明(网站上例子):</p>
+<pre data-lang="java" style="background-color:#282828;color:#fdf4c1aa;" class="language-java "><code class="language-java" data-lang="java"><span style="color:#8ec07c;">JavaRDD</span><span>&lt;</span><span style="color:#8ec07c;">String</span><span>&gt; lines </span><span style="color:#fe8019;">=</span><span> sc.</span><span style="color:#fdf4c1;">textFile(</span><span style="color:#b8bb26;">&quot;data.txt&quot;</span><span style="color:#fdf4c1;">)</span><span>;
+</span><span style="color:#8ec07c;">JavaRDD</span><span>&lt;</span><span style="color:#8ec07c;">Integer</span><span>&gt; lineLengths </span><span style="color:#fe8019;">=</span><span> lines.</span><span style="color:#fdf4c1;">map(s </span><span style="color:#fa5c4b;">-&gt;</span><span style="color:#fdf4c1;"> s.length())</span><span>;
+</span><span style="color:#fa5c4b;">int</span><span> totalLength </span><span style="color:#fe8019;">=</span><span> lineLengths.</span><span style="color:#fdf4c1;">reduce((a, b) </span><span style="color:#fa5c4b;">-&gt;</span><span style="color:#fdf4c1;"> a </span><span style="color:#fe8019;">+</span><span style="color:#fdf4c1;"> b)</span><span>;
+</span></code></pre>
+<p>第一行定义了从文件中获取的RDD。注意，并未实际读取，而只是一个指针。</p>
+<p>第二行对这个文件进行map转换操作。注意，因为懒加载，并未实际处理。</p>
+<p>最后一行执行reduce计算操作。此时spark将计算任务分解为一个个task，运行在集群不同的节点上。每个节点在其part上运行map、reduce操作，并返回结果给driver program。</p>
+<p>通过在reduce前调用</p>
+<pre data-lang="java" style="background-color:#282828;color:#fdf4c1aa;" class="language-java "><code class="language-java" data-lang="java"><span>lineLengths.</span><span style="color:#fdf4c1;">persist(</span><span style="color:#8ec07c;">StorageLevel</span><span style="color:#fdf4c1;">.MEMORY_ONLY())</span><span>;
+</span></code></pre>
+<p>可以将<code>lineLengths</code>RDD缓存起来，之后重复调用reduce时不必重复map。</p>
+<h4 id="han-shu-chuan-di">函数传递</h4>
+<p>spark的api严重依赖于<strong>传递函数</strong>的方式执行任务。具体请看官方网站。</p>
+<h4 id="li-jie-bi-bao">理解闭包</h4>
+<p>spark最难理解的是在群集中执行代码时<em>变量的范围</em>、<em>生命周期</em>和<em>方法</em>。</p>
+<p>最容易犯的错就是在变量的作用域外调用RDD的operations。</p>
+<h5 id="li-zi">例子</h5>
+<pre data-lang="java" style="background-color:#282828;color:#fdf4c1aa;" class="language-java "><code class="language-java" data-lang="java"><span style="color:#fa5c4b;">int</span><span> counter </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">0</span><span>;
+</span><span style="color:#8ec07c;">JavaRDD</span><span>&lt;</span><span style="color:#8ec07c;">Integer</span><span>&gt; rdd </span><span style="color:#fe8019;">=</span><span> sc.</span><span style="color:#fdf4c1;">parallelize(data)</span><span>;
+</span><span>
+</span><span style="font-style:italic;color:#928374;">// Wrong: Don&#39;t do this!!
+</span><span>rdd.</span><span style="color:#fdf4c1;">foreach(x </span><span style="color:#fa5c4b;">-&gt;</span><span style="color:#fdf4c1;"> counter </span><span style="color:#fe8019;">+=</span><span style="color:#fdf4c1;"> x)</span><span>;
+</span><span>
+</span><span style="color:#fdf4c1;">println(</span><span style="color:#b8bb26;">&quot;Counter value: &quot; </span><span style="color:#fe8019;">+</span><span style="color:#fdf4c1;"> counter)</span><span>;
+</span></code></pre>
+<p>这段代码的结果取决于是否运行在同一个JVM中。也就是说，是本地运行 (--master = local[n]) 还是集群运行（spark-submit）。</p>
+<p>运行jobs时，spark会将RDD的operations分解为tasks，交由一个个executor执行。而在执行前，spark会构建task的闭包。闭包是对RDD执行计算时必须要用到的变量(例子中就是counter)和方法(例子中就是foreach())，会被序列化并发送给各个executor。</p>
+<p>在集群模式，闭包使用到的变量会被拷贝进闭包，然后发送给executor执行，executo后续会对闭包内的counter进行处理，而不是driver program中的counter。也就是说，修改并不成功，最终结果还是0。而local模式则相反，task运行在相同JVM，counter的引用就是原变量，因此可以得到正确结果。</p>
+<p>在这个场景中，为了得到正确结果，spark定义了accumulator类型变量，提供了跨节点累加值的机制。</p>
+<h5 id="shu-chu-rddyuan-su">输出RDD元素</h5>
+<p>RDD的另一种常见错误用法是通过forEach(println)和map(println)输出元素。在单例模式下正常运作，但是在集群模式下，打印的值会输出到executor的标准输出，而不是driver program的，因此也就看不到元素内容。</p>
+<p>为了正确获取元素内容，需要先调用<code>collect()</code>函数以将元素收集到driver program，然后再调用输出函数。但是这容易造成OOM。另一种方案是<code>take()</code>函数，只收集一定数量的元素。</p>
+<h4 id="key-valuedui">Key-Value对</h4>
+<p>虽然大多数Spark操作都适用于包含任何类型对象的RDDs，但有几个特殊的操作只适用于键值对的RDDs。最常见的是分布式 &quot;洗牌(shuffle)&quot;操作，如按键分组或聚合元素。</p>
+<h4 id="transformations">Transformations</h4>
+<p>请到网页查看: <a rel="noopener nofollow noreferrer" target="_blank" href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#transformations">transformations</a></p>
+<h4 id="actions">Actions</h4>
+<p>请到网页查看: <a rel="noopener nofollow noreferrer" target="_blank" href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#actions">actions</a></p>
+<h4 id="xi-pai-cao-zuo">洗牌操作</h4>
+<p>Spark中的某些操作会触发一个被称为洗牌的事件。洗牌是Spark重新分配数据的机制，使其在不同的分区中以不同的方式分组。这通常涉及跨执行器和机器的数据复制，使洗牌成为一个复杂而昂贵的操作。</p>
+<h5 id="bei-jing">背景</h5>
+<p>为了解释洗牌操作，用<code>reduceByKey</code>来演示，这个方法生成新的RDD，将所有于key关联的value合并为一个touple。最麻烦的地方是，不是所有和key关联的value在同一个分区、甚至节点。不同executor需要合作以得到结果。</p>
+<p>在spark中，不会为了某个operation去交换分区。在计算过程中，一个task就只操作一个分区；因此，为了规划<code>reduceByKey</code>这个reduce任务，spark需要一个<strong>all-to-all</strong>操作: 从所有分区读取所有key对应的所有的的value，然后跨集群聚集所有value以计算每个key对应的结果集。这就是&quot;洗牌&quot;。</p>
+<p>洗牌后排序看网站</p>
+<h5 id="xing-neng-sun-shi">性能损失</h5>
+<p>洗牌操作非常消耗资源，需要磁盘I/O、序列化和网络I/O。为了聚集洗牌需要的数据，spark会启动一系列task，&quot;map任务&quot;用于组织数据，&quot;reduce任务&quot;用于聚合数据。</p>
+<p>在spark内部，洗牌操作执行时，每个&quot;map任务&quot;会将结果保存在内存中(直到溢出，溢出则分块写入外存)，然后根据分区顺序排序后写入单一的文件内; &quot;reduce任务&quot;会读取这个文件。</p>
+<p>洗牌还会产生大量临时文件，直到RDD生命周期结束并且相关资源被垃圾回收。注意，垃圾回收会在任务停止之后很久很久才进行，也就是说，长期的的spark job会导致大量存储消耗。</p>
+<h3 id="chi-jiu-cun-chu">持久存储</h3>
+<p>RDD可以被持久化存储，每个节点都会将它计算的分区存储在内存中，并在该数据集（或由其衍生的数据集）上的其他操作中重复使用。</p>
+<p>使用方法<code>persist()</code>或者<code>cache()</code>使RDD持久化。</p>
+<p>除此之外，持久化存储级别是可以选择的，默认是内存。具体请看<a rel="noopener nofollow noreferrer" target="_blank" href="https://spark.apache.org/docs/latest/rdd-programming-guide.html#rdd-persistence">网站</a>。</p>
+<h4 id="xuan-ze-chi-jiu-hua-cun-chu-ji-bie">选择持久化存储级别</h4>
+<p>持久化存储关系到内存和CPU的效率，官方给出选择方法，具体请看<a rel="noopener nofollow noreferrer" target="_blank" href="https://spark.apache.org/docs/latest/rdd-programming-guide.html#which-storage-level-to-choose">网站</a>。</p>
+<h4 id="yi-chu-shu-ju">移除数据</h4>
+<p>Spark监控缓存的使用，并依照LRU算法丢弃旧缓存。可以通过<code>unpersist()</code>方法取消缓存，默认异步完成；可以通过传入<code>blocking=true</code>控制为同步方式。</p>
+<h2 id="gong-xiang-bian-liang">共享变量</h2>
+<p>Spark操作的运行类似与函数调用，值传递。为了实现在节点运行的操作改变driver program的数值，spark提供了两种变量类型：broadcast variable、accumulator。</p>
+<h3 id="broadcast-variables">Broadcast Variables</h3>
+<p>广播变量可以让每个节点保存一个只读变量在本地，而不是每次运行task传入。用于高效地给每个节点一些较大数据集。</p>
+<h3 id="accumulators">Accumulators</h3>
+<p>累加器是只通过关联和换元操作 &quot;只增&quot;的变量，因此可以有效地支持并行，可以用来实现计数器（如MapReduce）或总和。Spark原生支持数字类型的累加器，程序员可以增加对新类型的支持。</p>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-zong-lan" class="toc is-size-7 is-active"
+                href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#zong-lan">
+                总览
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-chu-shi-hua-spark" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#chu-shi-hua-spark">
+                初始化spark
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-resilient-distributed-datasets-rdds" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#resilient-distributed-datasets-rdds">
+                Resilient Distributed Datasets (RDDs)
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-parallelized-collections" class="toc is-size-7" href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#parallelized-collections">
+                    Parallelized Collections
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-external-datasets" class="toc is-size-7" href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#external-datasets">
+                    External Datasets
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-rddde-cao-zuo" class="toc is-size-7" href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#rddde-cao-zuo">
+                    RDD的操作
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-chi-jiu-cun-chu" class="toc is-size-7" href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#chi-jiu-cun-chu">
+                    持久存储
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-gong-xiang-bian-liang" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#gong-xiang-bian-liang">
+                共享变量
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-broadcast-variables" class="toc is-size-7" href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#broadcast-variables">
+                    Broadcast Variables
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-accumulators" class="toc is-size-7" href="https://oliverdding.github.io/posts/translation-rdd-programming-guide/#accumulators">
+                    Accumulators
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+          
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;paper-reading-hdfs&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              论文阅读笔记：HDFS
+            </a>
+          </div>
+             
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://oliverdding.github.io/elasticlunr.min.js"></script>
+  <script src="https://oliverdding.github.io/search_index.zh.js"></script><script src="https://oliverdding.github.io/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://oliverdding.github.io";
+    this.page.identifier = "/posts/translation-rdd-programming-guide/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://oliverdding.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>

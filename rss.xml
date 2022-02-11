@@ -50,5 +50,539 @@
 &lt;p&gt;插入回$$f=(1-p)^{k}$$得到alse positive的最小值为$$f_{min}=(\frac{1}{2})^{k}\approx{}(0.6185)^{\frac{m}{n}}$$&lt;&#x2F;p&gt;
 </description>
         </item>
+        <item>
+            <title>Apache Arrow: 大数据在数据湖后的下一个风向标</title>
+            <pubDate>Thu, 18 Nov 2021 10:59:50 +0800</pubDate>
+            <link>https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</link>
+            <guid>https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</guid>
+            <description>&lt;h2 id=&quot;jie-shao&quot;&gt;介绍&lt;&#x2F;h2&gt;
+&lt;p&gt;根据&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;overview&#x2F;&quot;&gt;官方文档&lt;&#x2F;a&gt;介绍，Arrow是&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A language-independent columnar memory format for flat and hierarchical data, organized for efficient analytic operations on modern hardware like CPUs and GPUs. The Arrow memory format also supports zero-copy reads for lightning-fast data access without serialization overhead.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;一句话概括，Arrow用于系统间高效交互数据的组件。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;arrowde-he-xin-neng-li&quot;&gt;Arrow的核心能力&lt;&#x2F;h3&gt;
+&lt;p&gt;Arrow本身不是一个存储、执行引擎，它只是一个交互数据的基础库。比如可以用于以下组件&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;SQL执行引擎 (e.g., Drill and Impala)&lt;&#x2F;li&gt;
+&lt;li&gt;数据分析系统 (e.g., Pandas and Spark)&lt;&#x2F;li&gt;
+&lt;li&gt;流和队列系统 (e.g., Kafka and Storm)&lt;&#x2F;li&gt;
+&lt;li&gt;存储系统 (e.g., Parquet, Kudu, Cassandra and HBase)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;每个事物的产生发展都有其历史原因，如果抛开目的去“学习”，犹如竹篮子打水-一场空&lt;&#x2F;p&gt;
+&lt;p align=&quot;right&quot;&gt;- 我说的 ;)&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;让我们回到2008年，故事从那开始...&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;qi-yin&quot;&gt;起因&lt;&#x2F;h3&gt;
+&lt;p&gt;Wes McKinney在2008年开启了Pandas项目，这个python中分析、操作数据的瑞士军刀。紧接着在2014年，Wes加入Cloudera公司，并着手研究如何让python可以“插入”所有的大数据组件和数据库，但是每个系统都有自己操作数据的方式，于是：&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;Oh my gosh, I&#x27;m going to have to write a dozen different data converters to marshal data, convert data between Pandas each of these data processing systems from Spark, to Impala, to different file formats and HDFS, so it was basically this overwhelming problem.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p align=&quot;right&quot;&gt;- Wes McKinney&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;除此之外，在大数据科学领域，dataframe的概念随处可见，每个框架都将datafrme作为高层定义，代表一个表、一系列API...但是其底层的实现天壤悬隔，Wes完全无法复用代码。&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;无法共享数据&lt;&#x2F;strong&gt;、&lt;strong&gt;无法共享代码&lt;&#x2F;strong&gt;这两个大难题暂时困住了Wes。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;fa-zhan&quot;&gt;发展&lt;&#x2F;h3&gt;
+&lt;p&gt;Wes开始设计一种table middleware，作为不同组件交换数据的中间层，一种表接口的标准(standardized table interface)。&lt;&#x2F;p&gt;
+&lt;p&gt;接着来到2015年，Wes团队遇到了Jacques和Apache Drill社区的小伙伴们，两伙人不谋而合，开始了合作。&lt;&#x2F;p&gt;
+&lt;p&gt;由于业界没有统一规范的定义，他们合作的首个项目就是设计出了一个内存表视图的标准，并在不同语言都给出实现以证明可以在不同语言中共享数据，也就是说，你可以高效地将数据从Java到C++，或者Python。&lt;&#x2F;p&gt;
+&lt;p&gt;自此，arrow项目创立。&lt;&#x2F;p&gt;
+&lt;p&gt;在项目早期，最重要的是设计出一套与语言无关的内存表结构，并一定要方便分析处理。除此之外，还需要将各种格式、类型的数据转换、转出为这个标准格式的库。最后，还需要一个计算处理的库，以便于直接基于arrow进行快速数据分析处理。&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;An important thing to remember about the project is that it&#x27;s front-end agnostic. So it&#x27;s not a new data frame library, like Pandas. It&#x27;s not a new database.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p align=&quot;right&quot;&gt;- Wes McKinney&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;此外，Wes在和Apache Impala团队合作的时候，发现Impala的代码中有大量和pandas做相似事情的片段，比如CSV序列化、反序列化的，I&#x2F;O子系统，自己的查询引擎，甚至自己的前端。在有了这样一个语言无关的内存数据格式，他们开始思考如何避免重复代码。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;shi-xian&quot;&gt;实现&lt;&#x2F;h2&gt;
+&lt;p&gt;故事讲完了，现在让我们一起来探索下arrow的设计。&lt;&#x2F;p&gt;
+&lt;p&gt;面对不同语言、不同大数据组件之间的差异，首先我们肯定需要一个中间的表示来避免我们的后端直面差异，也就是前文提到的语言无关的内存表视图，这里就有一个必须挖掘的点，为了批量数据分析，我们应当选择&lt;strong&gt;列式存储&lt;&#x2F;strong&gt;。&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;13&#x2F;BNGPznF9xUy4qMi.png&quot; alt=&quot;列存表查询&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;使用列存的方式不仅减少了扫描内存的page数，还可以利用现在计算机SIMD(Single Instruction, Multiple Data)指令进行加速。&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;扩展阅读 - &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;http:&#x2F;&#x2F;dbmsmusings.blogspot.com&#x2F;2017&#x2F;10&#x2F;apache-arrow-vs-parquet-and-orc-do-we.html&quot;&gt;Daniel Abadi的实验&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Daniel在亚马逊的EC2 t2.medium机器上创建了一个有60,000,000行数据的内存表。表由6个int32列组成，整个表大概由1.5GB。他创建了行表和列表两个实例，并对两种表进行简单地filter某个值。&lt;&#x2F;p&gt;
+&lt;p&gt;在未开CPU优化的情况下，得到结果：&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;13&#x2F;wjkzO3cfR1BAdiE.png&quot; alt=&quot;无SIMD&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;行表和列表查询耗时相差无几。对于行表，每行都需要扫描，即使只使用到第一列；对于列表则只需要扫描第一列，按理说列表应该是行表的6倍快，但是在这个实验中由于CPU是瓶颈，而不是内存发往CPU的数据。&lt;&#x2F;p&gt;
+&lt;p&gt;但是开启SIMD后，结果如下：&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;13&#x2F;ysv8F1SCMaQHEOw.png&quot; alt=&quot;开SIMD&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;SIMD可以同时比较多个数值（这里是4个数，差不多3倍快），减少打乱流水线的情况&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;现在我们可以继续考虑如何设计语言无关的内存表结构了&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;13&#x2F;Ca6DOkIohglrXx4.png&quot; alt=&quot;直接IPC&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Arrow需要作为通用的传输结构&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;13&#x2F;uJ5fAIYCXZK9eND.png&quot; alt=&quot;通过arrow交互&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;可是代码共享该如何实现呢？Arrow不应该是json、protobuf之流，后者适用于磁盘层面的数据存储交互。Arrow应当作为各个语言、组件中的一种数据格式库，应该是运行时的数据存储交互！直接可以操作数据，存取、计算：&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;13&#x2F;pGxX76nHLvmNPYy.png&quot; alt=&quot;数据操作&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;arrowlie-ge-shi&quot;&gt;Arrow列格式&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;🚧 本节内容翻译整理自apache&#x2F;arrow代码仓库中&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;arrow&#x2F;blob&#x2F;master&#x2F;docs&#x2F;source&#x2F;format&#x2F;Columnar.rst&quot;&gt;Arrow Columnar Format规范&lt;&#x2F;a&gt;。&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Arrow列格式包含三部分：与语言无关的内存数据结构规范、元数据序列化以及一个用于序列化和通用数据传输的协议。&lt;&#x2F;p&gt;
+&lt;p&gt;该列格式支持：&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;顺序访问的数据&lt;&#x2F;li&gt;
+&lt;li&gt;O(1)的随机读写&lt;&#x2F;li&gt;
+&lt;li&gt;支持SIMD，向量化操作友好&lt;&#x2F;li&gt;
+&lt;li&gt;可重新定位而无“pointer swizzling”问题，允许在共享内存中zero-copy&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;扩展阅读 - &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Pointer_swizzling&quot;&gt;pointer swizzling&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;简单来说，内存中指针所指向的地址在写入磁盘（序列化）和从磁盘载入指针数据（反序列化）时，需要通过某种方式（swizzling和unswizzling）来使得指针存储的地址信息有效。&lt;&#x2F;p&gt;
+&lt;p&gt;扩展阅读 - &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Zero-copy&quot;&gt;零拷贝&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;zero-copy（零拷贝）不是指真的没有拷贝了，而是说减少了不必要的数据拷贝与上下文切换（系统调用）。比如正常情况下用户态进程希望从磁盘中读取数据并写入socket，此时需要数据流经过磁盘-&amp;gt;系统态内存-&amp;gt;用户态内存-&amp;gt;系统态内存-&amp;gt;socket，发生了两次系统调用(磁盘的read()和写入socket的write())。使用系统提供的零拷贝函数(比如sendfile())则可以缩减为磁盘-&amp;gt;系统态内存-&amp;gt;socket。&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;在Arrow中，最基本的结构是array(或者叫vector，是由一列相同类型的值组成，长度必须已知，且有上限；换个常见的叫法是field，字段)，每个array都有如下几个部分组成：&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;逻辑上的数据类型（记录array类型）&lt;&#x2F;li&gt;
+&lt;li&gt;一列缓冲区（存放具体数字、null）&lt;&#x2F;li&gt;
+&lt;li&gt;一个长度为64位带符号的整数（记录array长度，也可以是32位）&lt;&#x2F;li&gt;
+&lt;li&gt;另一个长度为64位的带符号的整数（记录null值的数量）&lt;&#x2F;li&gt;
+&lt;li&gt;（可选）字典（用于字典编码的array）&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Arrow还支持嵌套array类型，其实就是一列array组成，它们叫做子array(child arrays)。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;wu-li-nei-cun-bu-ju&quot;&gt;物理内存布局&lt;&#x2F;h3&gt;
+&lt;p&gt;每一个逻辑类型都有一个定义明确的物理布局，Arrow定义了如下物理布局：&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Primitive(fixed-size)：用于存放具有相同长度的数值&lt;&#x2F;li&gt;
+&lt;li&gt;Variable-size Binary：用于存放长度可变的数值。支持32位和64位的长度编码&lt;&#x2F;li&gt;
+&lt;li&gt;Fixed-size List：嵌套类型，但是每个子array长度必须相同&lt;&#x2F;li&gt;
+&lt;li&gt;Variable-size List：嵌套类型，每个子array长度可以不一致。支持32位和64位的长度编码&lt;&#x2F;li&gt;
+&lt;li&gt;Struct：嵌套类型，由一组长度相同的命名子字段组成，但子字段的类型可以不一致。&lt;&#x2F;li&gt;
+&lt;li&gt;Spare和Dense Union：嵌套类型，但是只有一组array，每个数值的类型是子类型集合之一&lt;&#x2F;li&gt;
+&lt;li&gt;Null：存放一组null值，逻辑类型只能是null&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h4 id=&quot;bu-ju-li-zi&quot;&gt;布局例子&lt;&#x2F;h4&gt;
+&lt;p&gt;本小节以Fixed-size Primitive Layout为例子讲述Arrow最基础的内存布局。&lt;&#x2F;p&gt;
+&lt;p&gt;如前文所述，Primitive类型的数值槽长度相同，只能存放固定长度的数值，可以是字节或者比特。&lt;&#x2F;p&gt;
+&lt;p&gt;放到具体内存布局上，本类型包含一个连续的内存缓冲区，总大小则是槽宽*长度（对于比特的槽宽，则需要四舍五入到字节）。&lt;&#x2F;p&gt;
+&lt;p&gt;给出文档中一个Int32 Array的例子：&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;[1, null, 2, 4, 8]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;会这样表示：&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;* Length: 5, Null count: 1
+&lt;&#x2F;span&gt;&lt;span&gt;* Validity bitmap buffer:
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  |Byte 0 (validity bitmap) | Bytes 1-63            |
+&lt;&#x2F;span&gt;&lt;span&gt;  |-------------------------|-----------------------|
+&lt;&#x2F;span&gt;&lt;span&gt;  | 00011101                | 0 (padding)           |
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;* Value Buffer:
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  |Bytes 0-3   | Bytes 4-7   | Bytes 8-11  | Bytes 12-15 | Bytes 16-19 | Bytes 20-63 |
+&lt;&#x2F;span&gt;&lt;span&gt;  |------------|-------------|-------------|-------------|-------------|-------------|
+&lt;&#x2F;span&gt;&lt;span&gt;  | 1          | unspecified | 2           | 4           | 8           | unspecified |
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;其中有效性位图是用于记录每个值槽是否为空的。具体看&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;docs&#x2F;format&#x2F;Columnar.html#validity-bitmaps&quot;&gt;规范&lt;&#x2F;a&gt;。&lt;&#x2F;p&gt;
+&lt;p&gt;剩下的布局都在Primitive布局上变化而来，具体看规范。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;bu-ju-shi-yong-de-huan-chong-qu&quot;&gt;布局使用的缓冲区&lt;&#x2F;h4&gt;
+&lt;p&gt;Arrow的几种物理布局用到的缓冲区如下表所示：&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot;&gt;&lt;strong&gt;Layout Type&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;&lt;strong&gt;Buffer 0&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;&lt;strong&gt;Buffer 1&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;&lt;strong&gt;Buffer 2&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Primitive&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;validity&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;data&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Variable Binary&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;validity&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;offsets&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;data&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;List&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;validity&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;offsets&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Fixed-size List&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;validity&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Struct&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;validity&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Sparse Union&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;type ids&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Dense Union&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;type ids&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;offsets&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Null&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;Dictionary-encoded&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;validity&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;data (indices)&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Arrow如何实现O(1)读写的呢？&lt;&#x2F;p&gt;
+&lt;p&gt;所有的物理布局底层都是用数组存储数据，并且会根据层级嵌套建立offsets bitmap，当然就实现了O(1)的读写速度了。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;luo-ji-lei-xing&quot;&gt;逻辑类型&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;arrow&#x2F;blob&#x2F;master&#x2F;format&#x2F;Schema.fbs&quot;&gt;Schema.fbs&lt;&#x2F;a&gt;定义了Arrow支持的逻辑类型，每种逻辑类型都会对应到一种物理布局。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;xu-lie-hua-yu-ipc&quot;&gt;序列化与IPC&lt;&#x2F;h3&gt;
+&lt;p&gt;列式格式序列化时最原始的单位是&amp;quot;record batch&amp;quot;(也就是一个表，table啦)。一个record batch是一组有序的array的集合，被称为record batch的字段(fields)。每个字段(field)有相同的长度，但是字段的数据类型可以不一样。record batch的字段名、类型构成了它的schema。&lt;&#x2F;p&gt;
+&lt;p&gt;本节描述一个协议，用于将record batch序列化为二进制流，并可以无需内存拷贝重构record batch。&lt;&#x2F;p&gt;
+&lt;p&gt;序列化时会分为这三部分：&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Schema&lt;&#x2F;li&gt;
+&lt;li&gt;RecordBatch&lt;&#x2F;li&gt;
+&lt;li&gt;DictionaryBatch&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;这里我们只提及前两个。&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;16&#x2F;ptCPLjx7bcWOXmi.png&quot; alt=&quot;布局&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;一个schema message和多个record batch message就能完整表示一个record batch。其中schema message存储表结构，record batch message存储字段metadata和字段值。&lt;&#x2F;p&gt;
+&lt;p&gt;值得注意的是，record batch message包含实际的数据缓冲区、对应的物理内存布局。&lt;&#x2F;p&gt;
+&lt;p&gt;然后问题又来了，Arrow为何无需pointer-swizzling即可实现流与数据转换的呢？答案就是message的metadata中存储了每个缓冲区的位置和大小，因此可以字节通过指针计算来重建Array数据结构，同时还避免了内存拷贝。&lt;&#x2F;p&gt;
+&lt;p&gt;于是定义IPC流格式：&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;&amp;lt;SCHEMA&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;DICTIONARY 0&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;DICTIONARY k - 1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;RECORD BATCH 0&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;DICTIONARY x DELTA&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;DICTIONARY y DELTA&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;RECORD BATCH n - 1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;EOS [optional]: 0xFFFFFFFF 0x00000000&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;由于这部分比较“定义”，本文不展开讲，更详细请看&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;docs&#x2F;format&#x2F;Columnar.html#ipc-streaming-format&quot;&gt;规范&lt;&#x2F;a&gt;。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;arrow-flight&quot;&gt;Arrow Flight&lt;&#x2F;h2&gt;
+&lt;p&gt;近段时间Arrow最大的变化就是添加了Flight，一个通用C&#x2F;S架构的高性能数据传输框架。Flight基于gRPC开发，从最开始重点就是优化Arrow格式数据。&lt;&#x2F;p&gt;
+&lt;p&gt;Flight的具体细节请看&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;blog&#x2F;2019&#x2F;10&#x2F;13&#x2F;introducing-arrow-flight&#x2F;&quot;&gt;官方文档&lt;&#x2F;a&gt;。这里只介绍它的优势：&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;无序列化&#x2F;反序列化：Flight会直接将内存中的Arrow发送，不进行任何序列化&#x2F;反序列化操作&lt;&#x2F;li&gt;
+&lt;li&gt;批处理：Flight对record batch的操作无需访问具体的列、记录或者元素&lt;&#x2F;li&gt;
+&lt;li&gt;高并发：Flight的吞吐量只收到客户端和服务端的吞吐量以及网络的限制&lt;&#x2F;li&gt;
+&lt;li&gt;网络利用率高：Flight使用基于HTTP&#x2F;2的gRPC，不仅是快&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.dremio.com&#x2F;is-time-to-replace-odbc-jdbc&#x2F;&quot;&gt;官方给出的数据&lt;&#x2F;a&gt;是Flight的传输大约是标准ODBC的20-50倍。&lt;&#x2F;p&gt;
+&lt;p&gt;对每个batch record平均行数256K时，在单节点传输时的性能对比（因为flight多节点时可以平行传输数据流）：&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;16&#x2F;EOrNiXqY9Le2jTy.png&quot; alt=&quot;性能对比&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;shi-yong-chang-jing&quot;&gt;使用场景&lt;&#x2F;h3&gt;
+&lt;p&gt;最过经典的非&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;blog&#x2F;2017&#x2F;07&#x2F;26&#x2F;spark-arrow&#x2F;&quot;&gt;PySpark&lt;&#x2F;a&gt;莫属，此外还有&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;blog&#x2F;2019&#x2F;01&#x2F;25&#x2F;r-spark-improvements&#x2F;&quot;&gt;sparklyr&lt;&#x2F;a&gt;。&lt;&#x2F;p&gt;
+&lt;p&gt;另外，ClickHouse也有计划实现Arrow Flight的server端，一旦落地可用，spark与clickhouse交互就可以抛弃3G网般的JDBC了~&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h2&gt;
+&lt;p&gt;本文从Arrow立项的背景入手，再到Arrow实现所需的设计，最后到Arrow具体columnar格式定义，介绍了Arrow的各种相关概念。最后补上一张图作为Arrow的优点、限制的总结：&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;11&#x2F;14&#x2F;i9hQ5wd4sj6y8Tf.png&quot; alt=&quot;总结&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;can-kao&quot;&gt;参考&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Wes和Jacques的视频访谈: &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.dremio.com&#x2F;starting-apache-arrow&#x2F;&quot;&gt;Starting Apache Arrow&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Arrow起名投票: &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;docs.google.com&#x2F;spreadsheets&#x2F;d&#x2F;1q6UqluW6SLuMKRwW2TBGBzHfYLlXYm37eKJlIxWQGQM&#x2F;edit#gid=0&quot;&gt;Vector Naming Discussion&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;思路来源: &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;tech.ipalfish.com&#x2F;blog&#x2F;2020&#x2F;12&#x2F;08&#x2F;apache_arrow_summary&#x2F;&quot;&gt;伴鱼技术团队&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;arrow&#x2F;blob&#x2F;master&#x2F;docs&#x2F;source&#x2F;format&#x2F;Columnar.rst&quot;&gt;Arrow Columnar Format&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;faq&#x2F;&quot;&gt;Arrow FAQ&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</description>
+        </item>
+        <item>
+            <title>论文阅读笔记：RDD</title>
+            <pubDate>Tue, 12 Oct 2021 17:31:07 +0800</pubDate>
+            <link>https://oliverdding.github.io/posts/paper-reading-rdd/</link>
+            <guid>https://oliverdding.github.io/posts/paper-reading-rdd/</guid>
+            <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;&#x2F;h2&gt;
+&lt;p&gt;RDD起源于现有的大数据框架对&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;迭代算法: 数据复用&lt;&#x2F;li&gt;
+&lt;li&gt;交互式数据&lt;&#x2F;li&gt;
+&lt;li&gt;挖掘: 数据共享&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;支持过差&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;新提出的Pregel、HaLoop虽然依次针对性提出解决方案，但是方案缺乏统一的抽象接口，无法推广。&lt;&#x2F;p&gt;
+&lt;p&gt;于是，研究人员提出RDD，支持大量场景下内存复用。&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Resilient Distributed Datasets(RDDs): RDDS are fault-tolerant, parallel data structures that enable users explicitly persist intermediate results in memory, control their partitioning to optimize data placement, and manaipulate them using a rich set of operations.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;最大难题是设计接口，如何设计错误容忍度高的接口呢？参考现有设计，DSM、KV-stores、databases和Piccolo，他们提供细粒度内存接口，导致想要支持错误恢复，必须：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;跨设备备份数据&lt;&#x2F;li&gt;
+&lt;li&gt;跨设备日志更新&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;这对于大数据应用而言太昂贵了，于是，RDD被设计为粗粒度内存模型接口，提供transformations接口对不同数据执行某些操作操作。此时，备份变得简单，只要记录“血统”(每个RDD的transformations流程)。如果某个RDD的分区丢失了，完全可以只恢复这个分区的RDD数据。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;rdd&quot;&gt;RDD&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;rddgai-shu&quot;&gt;RDD概述&lt;&#x2F;h3&gt;
+&lt;p&gt;RDD是只读的数据分区集合。每个RDD只有三个来源：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;从内存对象集合生成&lt;&#x2F;li&gt;
+&lt;li&gt;从外存数据生成&lt;&#x2F;li&gt;
+&lt;li&gt;从现有RDD转换&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;用户拿到RDD不一定真实存在，可能只是这个RDD的“血统”。&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A program cannot reference an RDD that it cannot reconstruct after a failure.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h3 id=&quot;sparkbian-cheng-mo-xing&quot;&gt;Spark编程模型&lt;&#x2F;h3&gt;
+&lt;p&gt;spark程序往往起始于通过transformations创建RDD，终止于通过actions处理RDD返回数值结果或者写入存储。&lt;&#x2F;p&gt;
+&lt;p&gt;RDD不一定是实体的，在action被运行前才被计算，因此可以排排站，吃果果。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;rdddui-bi-dsmde-you-dian&quot;&gt;RDD对比DSM的优点&lt;&#x2F;h3&gt;
+&lt;p&gt;Distributed Shared Memory(DSM): 另一种分布式框架，细粒度内存共享。&lt;&#x2F;p&gt;
+&lt;p&gt;RDD的优点：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;更高效的错误容忍度&lt;&#x2F;li&gt;
+&lt;li&gt;得益于RDD不可变，可以运行时同时备份数据&lt;&#x2F;li&gt;
+&lt;li&gt;任务可以被调度到离数据物理更近的节点上&lt;&#x2F;li&gt;
+&lt;li&gt;当内存不够时RDD可以优雅缩减RDD数量规模&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;bu-gua-he-yu-rddde-chang-jing&quot;&gt;不适合于RDD的场景&lt;&#x2F;h3&gt;
+&lt;p&gt;RDD只适合于&lt;strong&gt;批处理&lt;&#x2F;strong&gt;应用。&lt;&#x2F;p&gt;
+&lt;p&gt;RDD不适合于异步细粒度更新共享状态的应用。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;sparkbian-cheng-jie-kou&quot;&gt;Spark编程接口&lt;&#x2F;h2&gt;
+&lt;p&gt;开发人员主要写&lt;code&gt;driver program&lt;&#x2F;code&gt;，用于连接集群中的workers。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;sparkzhong-rddde-cao-zuo&quot;&gt;Spark中RDD的操作&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;transformations&lt;&#x2F;code&gt;: 定义RDD的懒操作&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;actions&lt;&#x2F;code&gt;: 执行计算，返回结果或者写入存储&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;rddshi-xian&quot;&gt;RDD实现&lt;&#x2F;h2&gt;
+&lt;p&gt;提出五个需要实现的接口。&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;partitions()&lt;&#x2F;li&gt;
+&lt;li&gt;preferredLocations(p)&lt;&#x2F;li&gt;
+&lt;li&gt;dependencies()&lt;&#x2F;li&gt;
+&lt;li&gt;iterator(p,parentIters)&lt;&#x2F;li&gt;
+&lt;li&gt;partitioner()&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;依赖分位窄依赖和宽依赖。&lt;&#x2F;p&gt;
+&lt;p&gt;为什么要分窄依赖？&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;可以管道执行&lt;&#x2F;li&gt;
+&lt;li&gt;恢复更简单&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</description>
+        </item>
+        <item>
+            <title>论文阅读笔记：HDFS</title>
+            <pubDate>Fri, 17 Sep 2021 13:17:46 +0800</pubDate>
+            <link>https://oliverdding.github.io/posts/paper-reading-hdfs/</link>
+            <guid>https://oliverdding.github.io/posts/paper-reading-hdfs/</guid>
+            <description>&lt;p&gt;&lt;mark&gt;注意: 本文涉及到的专有名词将直接使用英文, 便于理解记忆&lt;&#x2F;mark&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;mark&gt;注意: 本文面向hadoop 2版本, 其它版本差异并不涉及&lt;&#x2F;mark&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Hadoop是什么? SAS给出的描述&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#6&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;是:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hadoop is an open-source software framework for storing data and running applications on clusters of commodity hardware. It provides massive storage for any kind of data, enormous processing power and the ability to handle virtually limitless concurrent tasks or jobs.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;不难看出, 其中commodity hardware, massive storage和enormous processing power就是Hadoop的重要特点. 而The Hadoop Distributed File System(HDFS)作为Hadoop的核心子项目之一, 是Google File System(GFS)的实现, 为分布式计算提供数据存储和管理的功能.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h2&gt;
+&lt;p&gt;讲到HDFS就不得不提及GFS. 随着业务发展, Google公司对数据存储处理的需要日益增长, 便设计出GFS, 实现了在廉价的商品机型上高容错地存储数据, 并提供了高计算性能, 满足了Google公司的需要&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#5&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;. HDFS正是基于Google公司在2000年左右完成的GFS而改进实现的&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#1&quot;&gt;3&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;, 主要是改为通用文件系统(可以支持更多的存储系统而不只是Google的), 并为了内存一致性和性能, 修改了写入模型和写入流程, 其他几乎和GFS一致.&lt;&#x2F;p&gt;
+&lt;p&gt;HDFS将metadata和data分开存放, 像其它的同类文件系统比如PVFS&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#4&quot;&gt;4&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#7&quot;&gt;5&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;, Lustre&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#3&quot;&gt;6&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;和GFS, HDFS将metadata存储于一个叫Name Node的专用服务器上, 将data存储于叫Data Node的服务器上. 所有的服务器都通过一个基于TCP的专用协议进行互联通信.&lt;&#x2F;p&gt;
+&lt;p&gt;不同于Lustre和PVFS, HDFS的Data Node并不使用诸如RAID的数据保护策略, 而是仿照GFS, 将文件冗余存放于不同的Data Node. 这种方式除了提高数据的安全性, 还提高了系统的可用带宽, 因为随着文件冗余存储于不同的节点, 对于需要数据计算的软件而言, 数据正好在本地Data Node的概率更高.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;mu-de&quot;&gt;目的&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;硬件错误时的高容错性&lt;&#x2F;p&gt;
+&lt;p&gt;对于面向成千上万的廉价机型的集群而言, 机器的硬件错误是非常常见的. HDFS集群中每个节点都存储着文件系统的部分数据, 因此, 为了数据的安全性, HDFS需要能检测硬件错误, 并快速地, 自动地从错误中恢复.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;流式数据读写&lt;&#x2F;p&gt;
+&lt;p&gt;许多应用需要流式数据访问, 但它们并不是运行在通用文件系统上的通用应用程序. 因此, HDFS面向批处理设计而不是普通用户交互访问, 也就是说, 重点是数据访问的高吞吐量而不是数据访问低延迟. 为了实现这一点, HDFS放宽了部分POSIX的要求.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;存储大数据集&lt;&#x2F;p&gt;
+&lt;p&gt;存储在HDFS的文件可能是以GB, TB为单位的文件, HDFS provides high aggregate data bandwidth and can scale to hundreds of nodes in a single cluster.&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#2&quot;&gt;7&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;保证内存一致性&lt;&#x2F;p&gt;
+&lt;p&gt;为了保证内存一致性, HDFS对读写访问模型做了简化, 区别于GFS, HDFS仅仅支持一个写入者和多个读入者. 并且一个文件一旦创建, 写入并关闭, 除了append和truncate外不能执行其他操作. 通过这些约束简化了内存一致性模型, 并支持高吞吐量数据访问.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;更强的可移植性&lt;&#x2F;p&gt;
+&lt;p&gt;基于Java的HDFS, 不必多说.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;jia-gou&quot;&gt;架构&lt;&#x2F;h2&gt;
+&lt;p&gt;这里放上一个视频, 比较生动形象, 先看一篇有个大概的印象再阅读文章.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; title=&quot;Understanding HDFS using Legos&quot; href=&quot;https:&#x2F;&#x2F;youtu.be&#x2F;4Gfl0WuONMY&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;res.cloudinary.com&#x2F;marcomontalbano&#x2F;image&#x2F;upload&#x2F;v1613722386&#x2F;video_to_markdown&#x2F;images&#x2F;youtube--4Gfl0WuONMY-c05b58ac6eb4c4700831b2b3070cd403.jpg&quot; alt=&quot;Understanding HDFS using Legos&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;下图是官网的HDFS架构图解.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;hadoop.apache.org&#x2F;docs&#x2F;r2.10.1&#x2F;hadoop-project-dist&#x2F;hadoop-hdfs&#x2F;images&#x2F;hdfsarchitecture.png&quot; alt=&quot;HDFS Architecture&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;name-node&quot;&gt;Name Node&lt;&#x2F;h3&gt;
+&lt;p&gt;HDFS的namespace是文件和目录的层次结构. 文件和目录在Name Node中以inode存储, 记录着像是权限, 修改访问时间, namespace和大小等等属性. 文件被切分为大的块(默认是128MB, 可以每个文件单独指定), 并且文件的每个块被独立冗余备份在不同的Data Node上(一般是3份, 同样也可以每个文件单独指定). Name Node维护namespace的树状结构, 并保存文件块到Data Node的映射. &lt;&#x2F;p&gt;
+&lt;p&gt;当读取文件时, HDFS client先从Name Node获取存放文件数据块的Data Node, 然后直接从&lt;strong&gt;最近&lt;&#x2F;strong&gt;的Data Node获取数据. 同样的, 当写入数据时, 客户端会要求Name Node指定一组Data Node存储文件块和文件块的副本, 之后以管道的方式向Data Nodes写入数据.&lt;&#x2F;p&gt;
+&lt;p&gt;在当前的设计中, 每个集群只有一个Name Node, 但有任意的Data Node和HDFS Client. HDFS将整个namespace存储于RAM中. inode数据和文件块的列表组成了系统的metadata, 被称为image. image被永久存储在本地文件系统, 被称为checkpoint. Name Node同样会存储image的修改日志, 被称为journal. 为了提高耐久性, checkpoint和journal可以冗余备份在不同的服务器. 当重启时, Name Node通过读入checkpoint并执行journal恢复原先的namespace. 块副本的位置可能会改变, 因此checkpoint不包括这部分.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;data-node&quot;&gt;Data Node&lt;&#x2F;h3&gt;
+&lt;p&gt;每个块存储于Data Node时, 都由两个文件组成. 第一个包含了实际数据本身, 第二个是块的metadata, 包括校验码(checksum)和版本戳(generation stamp). 包含数据的文件的大小等同于块的真实大小, 不需要像传统文件系统那样需要额外空间以填充到标称块大小. 因此一个文件块若是只有一半的大小, 它就仅仅需要本地文件系统半块的的空间.&lt;&#x2F;p&gt;
+&lt;p&gt;在startup阶段, 每个Data Node都会连接到Name Node并执行握手. 握手的目的之一是验证namespace ID和软件版本. 若任意一个没有匹配上, Data Node将会自动关机. 当HDFS文件系统格式化时会生成对应的namespace ID, 之后被存储于集群中所有节点上, 拥有不同的namespace ID的节点不可能在同一集群中, 保证了文件系统的完整性. 软件版本的一致性也是必要的, 因为不同版本的软件会导致数据损坏或丢失, 当更新时, 大集群中总会有节点未能正确关机, 更新, 导致软件版本不对, 这时候就需要关闭这些节点, 等后续手动操作.&lt;&#x2F;p&gt;
+&lt;p&gt;刚刚初始化的Data Node, 可以加入任一集群并接受集群的namespace ID. 在握手后, Data Node注册到Name Node上. Data Node也存储着他自己独一无二的storage ID, 作为Data Node的内部标识, 保证了即使重启后, 被分配了不同的IP地址和端口, 仍能被正确识别. 而storage ID时Data Node注册到Name Node时被分配的, 以后&lt;strong&gt;不会再改变&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Data Node定期发送block report给Name Node, 包含block id, 版本戳和全部块的长度信息. 一经注册就会发送第一个block report. 之后每小时都会发送一次.&lt;&#x2F;p&gt;
+&lt;p&gt;在运转过程中, Data Node会发送heartbeat给Name Node以告知操作正在进行并且数据正常. 默认的时间间隔是3秒. 若是10分钟内, Name Node未能收到Data Node的heartbeat信号, 将会认为Data Node离线并且上面的数据都丢失, 便会重新规划块备份.&lt;&#x2F;p&gt;
+&lt;p&gt;事实上, heartbeat信号还包含了一些额外的信息, 包括中存储容量, 已使用存储的百分比, 正在处理的数据数量. 这些统计信息被Name Node用来平衡负载和安排空间.&lt;&#x2F;p&gt;
+&lt;p&gt;Name Node并不会直接调度Data Node, 而是通过回复heartbeat的方式发送命令. 命令包括:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;往其他Data Node备份块&lt;&#x2F;li&gt;
+&lt;li&gt;删除本地块备份&lt;&#x2F;li&gt;
+&lt;li&gt;重新注册或关闭node&lt;&#x2F;li&gt;
+&lt;li&gt;立刻发送block report&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;hdfs-client&quot;&gt;HDFS Client&lt;&#x2F;h3&gt;
+&lt;p&gt;用户应用程序想要访问HDFS, 必须使用HDFS Client. 和传统文件系统类似, HDFS支持读, 写和删除文件, 以及创建和删除目录. 用户通过路径指定namespace内的文件和目录. 用户完全不用知道细节.&lt;&#x2F;p&gt;
+&lt;p&gt;当应用读取文件时, HDFS Client会向Name Node请求存储着文件块的Data Node列表. 然后直接访问Data Node并获取数据. 当HDFS Client写入数据时, 首先请求Name Node选择第一个块的备份Data Node列表, Client会组织一个node-to-node的管道并写入数据. 当第一个块完成后, Client会再次请求Data Node列表, 再以同样的方式写后面的块.&lt;&#x2F;p&gt;
+&lt;p&gt;不同于传统文件系统, HDFS提供获取文件块位置的API, 允许应用程序直接将任务运行于目标Data Node上, 减少了不必要的流量消耗. 同时, 允许应用程序设置文件的冗余因子, 默认情况下是3. 对于重要的文件和经常访问的文件, 可以设置为更高的值, 以保证数据安全和提高读带宽.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;imagehe-journal&quot;&gt;Image和Journal&lt;&#x2F;h3&gt;
+&lt;p&gt;正如前文所说, image就是当前metadata的版本, 而checkpoint是写入到外存的image, 永远落后于当前RAM中的image, 而journal则记录着checkpoint到当前image之间的操作. checkpoint不会被修改, 只会在重启时被完整替换. 在startup阶段, Name Node从checkpoint中读取image, 并对其执行journal的操作, 以恢复上次的image. 当完成后且开始运作之前, 新的checkpoint和空白的journal文件会被回写.&lt;&#x2F;p&gt;
+&lt;p&gt;若是checkpoint或journal文件丢失或者损坏, namespace的信息就丢失了. 为了保护这重要的信息, HDFS可以存储checkpoint和journal文件在不同的存储目录.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;最佳实践: 将这两个文件存储在不同的卷, 甚至远程NFS服务器.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Name Node是多线程服务器, 可以同时处理多个Client的请求. 于是, 将事务写入外存成为了整个系统的瓶颈, 因为一个线程在同步地写入时, 其他线程只能等待. 为了进一步优化, Name Node通过批处理的方式写入事务. 当一个线程请求flush-and-sync操作时, 所有在等待处理的提交会被同时写入. 剩下的线程只需要去检查自己的事务是否被保存, 而不是都去flush-and-sync.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;checkpoint-node&quot;&gt;Checkpoint Node&lt;&#x2F;h3&gt;
+&lt;p&gt;Name Node在HDFS中, 除了为Client提供服务外, 还可以作为Checkpoint Node和Backup Node.&lt;&#x2F;p&gt;
+&lt;p&gt;Checkpoint Node定时的合并现有的checkpoint和journal, 创建新的checkpoint和空的journal. Checkpoint Node通常是由运行在其他主机, 因为它必须要有和Name Node相同的内存需求. 它会从Name Node下载最新的checkpoint和journal, 合并, 然后回写.&lt;&#x2F;p&gt;
+&lt;p&gt;这种方式减少了startup阶段的耗时, 因为减少了journal文件的大小.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;最佳实践: 每日更新一个checkpoint.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h3 id=&quot;backup-node&quot;&gt;Backup Node&lt;&#x2F;h3&gt;
+&lt;p&gt;这是HDFS的新特性. 这部分不详细说, 类似双机热备份一样, 只是只读的备份.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;geng-xin-yu-wen-jian-xi-tong-kuai-zhao&quot;&gt;更新与文件系统快照&lt;&#x2F;h3&gt;
+&lt;p&gt;在软件更新过程中, 最容易出现数据损坏. 为了降低这种风险, HDFS拥有快照功能. 快照允许管理员永久地保存当前文件系统的状态, 因此当更新异常导致数据丢失损坏时可以恢复到快照的状态.&lt;&#x2F;p&gt;
+&lt;p&gt;在系统开启时, 可以选择开启快照功能(只能同时保存一个快照). 当要求快照时, Name Node首先读取checkpoint和journal文件, 并在内存中合并, 然后将新checkpoint和空的journal写入新的路径, 旧的checkpoint和journal仍然未改变.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;shu-ju-cao-zuo&quot;&gt;数据操作&lt;&#x2F;h2&gt;
+&lt;p&gt;数据操作主要是文件的读取写入以及副本的放置策略, 算是HDFS的核心部分.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;wen-jian-xie-ru&quot;&gt;文件写入&lt;&#x2F;h3&gt;
+&lt;p&gt;前文已经提到, 当一个应用创建文件写入数据并关闭后, 内容不再可以改变, 除了append和truncate.&lt;&#x2F;p&gt;
+&lt;p&gt;HDFS实现single-writer-multiple-reader模式. 也就是说, 当一个HDFS Client打开一个文件并写入数据时, 会暂时独占这个文件的, 我们称之为lease, 其它的client都不再可以写入数据. 写入数据的client通过heartbeat信号更新自己对文件的lease. 当文件关闭, lease被回收. lease的期限受到软限制(soft limit)和硬限制(hard limit). 在软限制过期之前, 写入数据的client独占这个文件. 当软限制过期, 而client未能关闭文件或者更新自己的lease, 另一个client就可以抢占lease. 当硬限制过期(一小时), 而client未能更新lease, HDFS会当作client已经退出, 并自动关闭文件, 回收lease. 注意, lease是写入独占, 其它client仍然可以读取文件.&lt;&#x2F;p&gt;
+&lt;p&gt;HDFS的文件是由block组成的. 当需要新的block时, Name Node将分配一个独一无二的block ID并决定一组Data Node去存放block以及它的副本. Data Node之间会组织管道, 它们的顺序会自动最优化, 降低带宽损耗. 数据被以数据包的方式序列化传输. 当第一个数据包被填满(一般是64KB), 数据包会被推送到管道. 下一个数据包可以在收到ACK(由管道最后一个Data Node回复)之前推出(就是TCP). 已发送未收到ACK的包的数量被client的滑动窗口限制(这里是TCP的滑动窗口).&lt;&#x2F;p&gt;
+&lt;p&gt;数据写入HDFS文件后, 在文件被关闭前, HDFS并不保证文件立马可见. 若是应用程序需要边写边可读, 可以通过&lt;code&gt;hflush&lt;&#x2F;code&gt;操作: 当前数据包被立马发送到管道, 并同步等待管道中的ACK回复再继续写入.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;09&#x2F;17&#x2F;gHwyJF6TKZ8ReNs.png&quot; alt=&quot;HDFS example&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;上图是HDFS写入的例子.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;wen-jian-du-qu&quot;&gt;文件读取&lt;&#x2F;h3&gt;
+&lt;p&gt;在一个由成千上万node组成的集群中, 错误(通常是存储错误)经常发生. 存储于Data Node上的块可能由于内存错误, 硬盘错误或者网络错误导致损坏. 为了避免这些, HDFS生成并存储每个数据block的checksum. checksum被client在读取数据时校验. 当client创建一个HDFS文件时, 同时会计算每个块的checksum并和数据一同发送到管道. 当HDFS读取文件时, 数据block文件和checksum会被同时发送给client, client将会计算校验. 若出错, client会通知Name Node数据算坏, 然后从另一个Data Node获取该block.&lt;&#x2F;p&gt;
+&lt;p&gt;当client打开读取一个文件, client将获取块的存储列表, 并选择最近的Data Node读取数据. 当读取失败, 就会尝试下一个. 可能会有疑问, 什么时候读取会失败呢? 有三个原因:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;目标Data Node挂了.&lt;&#x2F;li&gt;
+&lt;li&gt;目标Data Node并没有目标block了&lt;&#x2F;li&gt;
+&lt;li&gt;目标block校验不通过&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;fu-ben-guan-li&quot;&gt;副本管理&lt;&#x2F;h3&gt;
+&lt;p&gt;Name Node还需要保证每一时刻每个块都有足够数量的副本. 每次收到block report, Name Node都会检测是否有块的副本数量大于少于预设值. 当副本数量大于预设值, Name Node会选择删除副本, 依据尽量不减少拥有副本的rack(这里的rack, 我理解为物理上放置在同一地点, 网络上属于同一网络的群组)数量. 当副本数了小于预设值, Name Node会将它放到复制优先队列(replication priority queue). 一个后台进程会不断扫描该优先队列的队头并决定哪个Data Node放置副本.&lt;&#x2F;p&gt;
+&lt;p&gt;这部分细节非常多, 写下会导致篇幅过大, 请读者自行深入.&lt;&#x2F;p&gt;
+&lt;p&gt;可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. &amp;quot;The Hadoop Distributed File System&amp;quot;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h2&gt;
+&lt;p&gt;综上, HDFS是基于GFS的开源分布式文件系统, 具有高容错性, 可以部署在廉价不可靠的机器上. 适合批处理, 大量数据集存储处理与流式文件访问.&lt;&#x2F;p&gt;
+&lt;p&gt;当然HDFS也有着自己的局限, 世界上没有十全十美的事情, 就好像为了简化内存一致性模型HDFS不得不使用one-writer的模式, 又好像为了提高吞吐量不得不放松POSIX标准.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;不支持低延迟访问&lt;&#x2F;li&gt;
+&lt;li&gt;不适合小文件存储&lt;&#x2F;li&gt;
+&lt;li&gt;不支持并发写入&lt;&#x2F;li&gt;
+&lt;li&gt;不支持修改&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;can-kao&quot;&gt;参考&lt;&#x2F;h2&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;1&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;3&lt;&#x2F;sup&gt;
+&lt;p&gt;Google File System (GFS) and Hadoop Distributed File System (HDFS). http:&#x2F;&#x2F;stg-tud.github.io&#x2F;ctbd&#x2F;2017&#x2F;CTBD_06_gfs-hdfs.pdf . p5
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#2&quot;&gt;7&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:HDFS Architecture. https:&#x2F;&#x2F;hadoop.apache.org&#x2F;docs&#x2F;r2.10.1&#x2F;hadoop-project-dist&#x2F;hadoop-hdfs&#x2F;HdfsDesign.html
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#3&quot;&gt;6&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:Lustre File System. http:&#x2F;&#x2F;www.lustre.org
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#4&quot;&gt;4&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:P. H. Carns, W. B. Ligon III, R. B. Ross, and R. Thakur. “PVFS: A parallel file system for Linux clusters,” in Proc. of 4th Annual Linux Showcase and Conference, 2000, pp. 317–327.
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#5&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:S. Ghemawat, H. Gobioff, S. Leung. “The Google file system,” In Proc. of ACM Symposium on Operating Systems Principles, Lake George, NY, Oct 2003, pp 29–43.
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#6&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:What is Hadoop? - SAS. https:&#x2F;&#x2F;www.sas.com&#x2F;zh_cn&#x2F;insights&#x2F;big-data&#x2F;hadoop.html
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#7&quot;&gt;5&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name ...” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+</description>
+        </item>
+        <item>
+            <title>翻译：RDD编程指导</title>
+            <pubDate>Sun, 04 Jul 2021 12:42:17 +0800</pubDate>
+            <link>https://oliverdding.github.io/posts/translation-rdd-programming-guide/</link>
+            <guid>https://oliverdding.github.io/posts/translation-rdd-programming-guide/</guid>
+            <description>&lt;h2 id=&quot;zong-lan&quot;&gt;总览&lt;&#x2F;h2&gt;
+&lt;p&gt;每个spark应用包含一个驱动程序，两个职责:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;运行用户的main函数&lt;&#x2F;li&gt;
+&lt;li&gt;在集群上执行一些并行操作&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre data-lang=&quot;mermaid&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-mermaid &quot;&gt;&lt;code class=&quot;language-mermaid&quot; data-lang=&quot;mermaid&quot;&gt;&lt;span&gt;graph TD;
+&lt;&#x2F;span&gt;&lt;span&gt;  subgraph spark application;
+&lt;&#x2F;span&gt;&lt;span&gt;  core[driver program] -.职责1.-&amp;gt; act1(run user&amp;#39;s main function);
+&lt;&#x2F;span&gt;&lt;span&gt;  core[driver program] -.职责2.-&amp;gt; act2(execute various parallel operations);
+&lt;&#x2F;span&gt;&lt;span&gt;  end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;同样，spark提供了两层抽象:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;resilient distributed dataset(RDD): 一组元素的集合，分段地存储在集群不同节点上，并且支持并行操作。
+&lt;ol&gt;
+&lt;li&gt;可以是分布式文件系统中的一个文件&lt;&#x2F;li&gt;
+&lt;li&gt;可以是driver program中的一个scala集合&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;shared variables: 可以在并行操作中使用。
+&lt;ol&gt;
+&lt;li&gt;broadcast类型变量: 用于在不同节点地内存中存储一个值&lt;&#x2F;li&gt;
+&lt;li&gt;accumulators类型变量: 只支持&amp;quot;add&amp;quot;操作的变量&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;chu-shi-hua-spark&quot;&gt;初始化spark&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化&lt;code&gt;SparkConf&lt;&#x2F;code&gt;，包含目标应用的信息&lt;&#x2F;li&gt;
+&lt;li&gt;使用&lt;code&gt;SparkConf&lt;&#x2F;code&gt;初始化&lt;code&gt;SparkContext&lt;&#x2F;code&gt;以连接cluster&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;resilient-distributed-datasets-rdds&quot;&gt;Resilient Distributed Datasets (RDDs)&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;parallelized-collections&quot;&gt;Parallelized Collections&lt;&#x2F;h3&gt;
+&lt;p&gt;调用&lt;code&gt;SparkContext&lt;&#x2F;code&gt;的&lt;code&gt;parallelize&lt;&#x2F;code&gt;方法，传入一个普通集合以生产一个并行集合，之后便可以并行操作。&lt;&#x2F;p&gt;
+&lt;p&gt;此外，还可以控制并行集合的分区数量，spark会为并行集合的每一个分区运行一个任务。一般spark会自动设置合适的分区，当然也可以&lt;code&gt;parallelize&lt;&#x2F;code&gt;方法控制。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;external-datasets&quot;&gt;External Datasets&lt;&#x2F;h3&gt;
+&lt;p&gt;spark可以从hadoop支持的任何数据源创建RDD，并且支持hadoop支持的所有&lt;code&gt;inputFormat&lt;&#x2F;code&gt;，包括text files、SequenceFiles。&lt;&#x2F;p&gt;
+&lt;p&gt;spark读取文件(&lt;code&gt;textFile&lt;&#x2F;code&gt;方法)的一些提示:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用本地文件系统上的文件，，比如保证每个node相同路径上也有这个文件。&lt;&#x2F;li&gt;
+&lt;li&gt;spark所有的文件读取的方法，支持目录、压缩文件以及通配符。&lt;&#x2F;li&gt;
+&lt;li&gt;可选的第二个参数用于控制分块数量。默认情况下，spark会根据文件block大小创建分块(hdfs下默认是128M)。&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;除了&lt;code&gt;textFile&lt;&#x2F;code&gt;外，spark还提供了其它格式的数据读取方法:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;SparkContext.wholeTextFiles&lt;&#x2F;code&gt;可以读取包含大量小文件的目录，并以文件名:文件内容对的方式返回。&lt;&#x2F;li&gt;
+&lt;li&gt;对于&lt;code&gt;SequenceFile&lt;&#x2F;code&gt;，使用&lt;code&gt;SparkContext.sequenceFile[K, V]&lt;&#x2F;code&gt;方法读取，K、V是文件中key和value的类型，并且应该是hadoop的&lt;code&gt;Writable&lt;&#x2F;code&gt;接口的实现者。&lt;&#x2F;li&gt;
+&lt;li&gt;对于hadoop的&lt;code&gt;inputFormat&lt;&#x2F;code&gt;，可以使用&lt;code&gt;SparkContext.hadoopRDD&lt;&#x2F;code&gt;方法。&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;saveAsObjectFile&lt;&#x2F;code&gt;和&lt;code&gt;objectFile&lt;&#x2F;code&gt;方法用于保存RDD。&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;rddde-cao-zuo&quot;&gt;RDD的操作&lt;&#x2F;h3&gt;
+&lt;p&gt;RDD支持两种类型的操作:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;转换(transformations): 从现有数据集中创建新的数据集&lt;&#x2F;li&gt;
+&lt;li&gt;计算(actions): 在某个数据集上运行并获取结果&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;举例，map操作就是转换，传入某个数据集的每个元素，返回代表着新数据集的RDD。reduce就是计算，聚合RDD中所有元素，返回最终结果到driver program。&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;spark中所有的转换操作都是lazy的&lt;&#x2F;strong&gt;，也就是说不会在调用时立马计算，而是在计算操作被执行时才去计算。&lt;&#x2F;p&gt;
+&lt;p&gt;默认情况下，每次运行计算，所有转换过的RDD都会被重复计算。但是可以配置spark缓存。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;ji-chu&quot;&gt;基础&lt;&#x2F;h4&gt;
+&lt;p&gt;举例说明(网站上例子):&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;JavaRDD&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;String&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; lines &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; sc.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;textFile(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;data.txt&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;JavaRDD&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Integer&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; lineLengths &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; lines.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;map(s &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; s.length())&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span&gt; totalLength &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; lineLengths.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;reduce((a, b) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; b)&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;第一行定义了从文件中获取的RDD。注意，并未实际读取，而只是一个指针。&lt;&#x2F;p&gt;
+&lt;p&gt;第二行对这个文件进行map转换操作。注意，因为懒加载，并未实际处理。&lt;&#x2F;p&gt;
+&lt;p&gt;最后一行执行reduce计算操作。此时spark将计算任务分解为一个个task，运行在集群不同的节点上。每个节点在其part上运行map、reduce操作，并返回结果给driver program。&lt;&#x2F;p&gt;
+&lt;p&gt;通过在reduce前调用&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span&gt;lineLengths.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;persist(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;StorageLevel&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;.MEMORY_ONLY())&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;可以将&lt;code&gt;lineLengths&lt;&#x2F;code&gt;RDD缓存起来，之后重复调用reduce时不必重复map。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;han-shu-chuan-di&quot;&gt;函数传递&lt;&#x2F;h4&gt;
+&lt;p&gt;spark的api严重依赖于&lt;strong&gt;传递函数&lt;&#x2F;strong&gt;的方式执行任务。具体请看官方网站。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;li-jie-bi-bao&quot;&gt;理解闭包&lt;&#x2F;h4&gt;
+&lt;p&gt;spark最难理解的是在群集中执行代码时&lt;em&gt;变量的范围&lt;&#x2F;em&gt;、&lt;em&gt;生命周期&lt;&#x2F;em&gt;和&lt;em&gt;方法&lt;&#x2F;em&gt;。&lt;&#x2F;p&gt;
+&lt;p&gt;最容易犯的错就是在变量的作用域外调用RDD的operations。&lt;&#x2F;p&gt;
+&lt;h5 id=&quot;li-zi&quot;&gt;例子&lt;&#x2F;h5&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span&gt; counter &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;JavaRDD&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Integer&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; rdd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; sc.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;parallelize(data)&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;&#x2F;&#x2F; Wrong: Don&amp;#39;t do this!!
+&lt;&#x2F;span&gt;&lt;span&gt;rdd.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;foreach(x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; counter &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;+=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; x)&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;println(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;Counter value: &amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; counter)&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这段代码的结果取决于是否运行在同一个JVM中。也就是说，是本地运行 (--master = local[n]) 还是集群运行（spark-submit）。&lt;&#x2F;p&gt;
+&lt;p&gt;运行jobs时，spark会将RDD的operations分解为tasks，交由一个个executor执行。而在执行前，spark会构建task的闭包。闭包是对RDD执行计算时必须要用到的变量(例子中就是counter)和方法(例子中就是foreach())，会被序列化并发送给各个executor。&lt;&#x2F;p&gt;
+&lt;p&gt;在集群模式，闭包使用到的变量会被拷贝进闭包，然后发送给executor执行，executo后续会对闭包内的counter进行处理，而不是driver program中的counter。也就是说，修改并不成功，最终结果还是0。而local模式则相反，task运行在相同JVM，counter的引用就是原变量，因此可以得到正确结果。&lt;&#x2F;p&gt;
+&lt;p&gt;在这个场景中，为了得到正确结果，spark定义了accumulator类型变量，提供了跨节点累加值的机制。&lt;&#x2F;p&gt;
+&lt;h5 id=&quot;shu-chu-rddyuan-su&quot;&gt;输出RDD元素&lt;&#x2F;h5&gt;
+&lt;p&gt;RDD的另一种常见错误用法是通过forEach(println)和map(println)输出元素。在单例模式下正常运作，但是在集群模式下，打印的值会输出到executor的标准输出，而不是driver program的，因此也就看不到元素内容。&lt;&#x2F;p&gt;
+&lt;p&gt;为了正确获取元素内容，需要先调用&lt;code&gt;collect()&lt;&#x2F;code&gt;函数以将元素收集到driver program，然后再调用输出函数。但是这容易造成OOM。另一种方案是&lt;code&gt;take()&lt;&#x2F;code&gt;函数，只收集一定数量的元素。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;key-valuedui&quot;&gt;Key-Value对&lt;&#x2F;h4&gt;
+&lt;p&gt;虽然大多数Spark操作都适用于包含任何类型对象的RDDs，但有几个特殊的操作只适用于键值对的RDDs。最常见的是分布式 &amp;quot;洗牌(shuffle)&amp;quot;操作，如按键分组或聚合元素。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;transformations&quot;&gt;Transformations&lt;&#x2F;h4&gt;
+&lt;p&gt;请到网页查看: &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;http:&#x2F;&#x2F;spark.apache.org&#x2F;docs&#x2F;latest&#x2F;rdd-programming-guide.html#transformations&quot;&gt;transformations&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;actions&quot;&gt;Actions&lt;&#x2F;h4&gt;
+&lt;p&gt;请到网页查看: &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;http:&#x2F;&#x2F;spark.apache.org&#x2F;docs&#x2F;latest&#x2F;rdd-programming-guide.html#actions&quot;&gt;actions&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;xi-pai-cao-zuo&quot;&gt;洗牌操作&lt;&#x2F;h4&gt;
+&lt;p&gt;Spark中的某些操作会触发一个被称为洗牌的事件。洗牌是Spark重新分配数据的机制，使其在不同的分区中以不同的方式分组。这通常涉及跨执行器和机器的数据复制，使洗牌成为一个复杂而昂贵的操作。&lt;&#x2F;p&gt;
+&lt;h5 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h5&gt;
+&lt;p&gt;为了解释洗牌操作，用&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;来演示，这个方法生成新的RDD，将所有于key关联的value合并为一个touple。最麻烦的地方是，不是所有和key关联的value在同一个分区、甚至节点。不同executor需要合作以得到结果。&lt;&#x2F;p&gt;
+&lt;p&gt;在spark中，不会为了某个operation去交换分区。在计算过程中，一个task就只操作一个分区；因此，为了规划&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;这个reduce任务，spark需要一个&lt;strong&gt;all-to-all&lt;&#x2F;strong&gt;操作: 从所有分区读取所有key对应的所有的的value，然后跨集群聚集所有value以计算每个key对应的结果集。这就是&amp;quot;洗牌&amp;quot;。&lt;&#x2F;p&gt;
+&lt;p&gt;洗牌后排序看网站&lt;&#x2F;p&gt;
+&lt;h5 id=&quot;xing-neng-sun-shi&quot;&gt;性能损失&lt;&#x2F;h5&gt;
+&lt;p&gt;洗牌操作非常消耗资源，需要磁盘I&#x2F;O、序列化和网络I&#x2F;O。为了聚集洗牌需要的数据，spark会启动一系列task，&amp;quot;map任务&amp;quot;用于组织数据，&amp;quot;reduce任务&amp;quot;用于聚合数据。&lt;&#x2F;p&gt;
+&lt;p&gt;在spark内部，洗牌操作执行时，每个&amp;quot;map任务&amp;quot;会将结果保存在内存中(直到溢出，溢出则分块写入外存)，然后根据分区顺序排序后写入单一的文件内; &amp;quot;reduce任务&amp;quot;会读取这个文件。&lt;&#x2F;p&gt;
+&lt;p&gt;洗牌还会产生大量临时文件，直到RDD生命周期结束并且相关资源被垃圾回收。注意，垃圾回收会在任务停止之后很久很久才进行，也就是说，长期的的spark job会导致大量存储消耗。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;chi-jiu-cun-chu&quot;&gt;持久存储&lt;&#x2F;h3&gt;
+&lt;p&gt;RDD可以被持久化存储，每个节点都会将它计算的分区存储在内存中，并在该数据集（或由其衍生的数据集）上的其他操作中重复使用。&lt;&#x2F;p&gt;
+&lt;p&gt;使用方法&lt;code&gt;persist()&lt;&#x2F;code&gt;或者&lt;code&gt;cache()&lt;&#x2F;code&gt;使RDD持久化。&lt;&#x2F;p&gt;
+&lt;p&gt;除此之外，持久化存储级别是可以选择的，默认是内存。具体请看&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;spark.apache.org&#x2F;docs&#x2F;latest&#x2F;rdd-programming-guide.html#rdd-persistence&quot;&gt;网站&lt;&#x2F;a&gt;。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;xuan-ze-chi-jiu-hua-cun-chu-ji-bie&quot;&gt;选择持久化存储级别&lt;&#x2F;h4&gt;
+&lt;p&gt;持久化存储关系到内存和CPU的效率，官方给出选择方法，具体请看&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;spark.apache.org&#x2F;docs&#x2F;latest&#x2F;rdd-programming-guide.html#which-storage-level-to-choose&quot;&gt;网站&lt;&#x2F;a&gt;。&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;yi-chu-shu-ju&quot;&gt;移除数据&lt;&#x2F;h4&gt;
+&lt;p&gt;Spark监控缓存的使用，并依照LRU算法丢弃旧缓存。可以通过&lt;code&gt;unpersist()&lt;&#x2F;code&gt;方法取消缓存，默认异步完成；可以通过传入&lt;code&gt;blocking=true&lt;&#x2F;code&gt;控制为同步方式。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;gong-xiang-bian-liang&quot;&gt;共享变量&lt;&#x2F;h2&gt;
+&lt;p&gt;Spark操作的运行类似与函数调用，值传递。为了实现在节点运行的操作改变driver program的数值，spark提供了两种变量类型：broadcast variable、accumulator。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;broadcast-variables&quot;&gt;Broadcast Variables&lt;&#x2F;h3&gt;
+&lt;p&gt;广播变量可以让每个节点保存一个只读变量在本地，而不是每次运行task传入。用于高效地给每个节点一些较大数据集。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;accumulators&quot;&gt;Accumulators&lt;&#x2F;h3&gt;
+&lt;p&gt;累加器是只通过关联和换元操作 &amp;quot;只增&amp;quot;的变量，因此可以有效地支持并行，可以用来实现计数器（如MapReduce）或总和。Spark原生支持数字类型的累加器，程序员可以增加对新类型的支持。&lt;&#x2F;p&gt;
+</description>
+        </item>
     </channel>
 </rss>

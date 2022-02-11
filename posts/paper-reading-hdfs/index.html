@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" integrity="sha384-IJLmUY0f1ePPX6uSCJ9Bxik64/meJmjSYD7dHaJqTXXEBE4y+Oe9P2KBZa/z7p0Q" crossorigin="anonymous">
+  <link href="https://oliverdding.github.io/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+Aurora | 论文阅读笔记：HDFS
+
+  </title>
+
+  
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J661LYF5TY"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-J661LYF5TY");
+  </script>
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;oliverdding.github.io">Aurora</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;categories">
+            Categories
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;tags">
+            Tags
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            论文阅读笔记：HDFS
+          </h1>
+          <p class="subtitle">Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. The Hadoop Distributed File System</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>charmer published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2021-09-17T13:17:46+08:00">September 17, 2021</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>22 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>4369 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/notes/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>Notes</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+              
+<p>
+  Tags:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/paper-reading/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>paper reading</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/note/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>note</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/spark/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>spark</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/apache/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>apache</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/big-data/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>big data</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p><mark>注意: 本文涉及到的专有名词将直接使用英文, 便于理解记忆</mark></p>
+<p><mark>注意: 本文面向hadoop 2版本, 其它版本差异并不涉及</mark></p>
+<p>Hadoop是什么? SAS给出的描述<sup class="footnote-reference"><a href="#6">1</a></sup>是:</p>
+<blockquote>
+<p>Hadoop is an open-source software framework for storing data and running applications on clusters of commodity hardware. It provides massive storage for any kind of data, enormous processing power and the ability to handle virtually limitless concurrent tasks or jobs.</p>
+</blockquote>
+<p>不难看出, 其中commodity hardware, massive storage和enormous processing power就是Hadoop的重要特点. 而The Hadoop Distributed File System(HDFS)作为Hadoop的核心子项目之一, 是Google File System(GFS)的实现, 为分布式计算提供数据存储和管理的功能.</p>
+<h2 id="bei-jing">背景</h2>
+<p>讲到HDFS就不得不提及GFS. 随着业务发展, Google公司对数据存储处理的需要日益增长, 便设计出GFS, 实现了在廉价的商品机型上高容错地存储数据, 并提供了高计算性能, 满足了Google公司的需要<sup class="footnote-reference"><a href="#5">2</a></sup>. HDFS正是基于Google公司在2000年左右完成的GFS而改进实现的<sup class="footnote-reference"><a href="#1">3</a></sup>, 主要是改为通用文件系统(可以支持更多的存储系统而不只是Google的), 并为了内存一致性和性能, 修改了写入模型和写入流程, 其他几乎和GFS一致.</p>
+<p>HDFS将metadata和data分开存放, 像其它的同类文件系统比如PVFS<sup class="footnote-reference"><a href="#4">4</a></sup><sup class="footnote-reference"><a href="#7">5</a></sup>, Lustre<sup class="footnote-reference"><a href="#3">6</a></sup>和GFS, HDFS将metadata存储于一个叫Name Node的专用服务器上, 将data存储于叫Data Node的服务器上. 所有的服务器都通过一个基于TCP的专用协议进行互联通信.</p>
+<p>不同于Lustre和PVFS, HDFS的Data Node并不使用诸如RAID的数据保护策略, 而是仿照GFS, 将文件冗余存放于不同的Data Node. 这种方式除了提高数据的安全性, 还提高了系统的可用带宽, 因为随着文件冗余存储于不同的节点, 对于需要数据计算的软件而言, 数据正好在本地Data Node的概率更高.</p>
+<h2 id="mu-de">目的</h2>
+<ol>
+<li>
+<p>硬件错误时的高容错性</p>
+<p>对于面向成千上万的廉价机型的集群而言, 机器的硬件错误是非常常见的. HDFS集群中每个节点都存储着文件系统的部分数据, 因此, 为了数据的安全性, HDFS需要能检测硬件错误, 并快速地, 自动地从错误中恢复.</p>
+</li>
+<li>
+<p>流式数据读写</p>
+<p>许多应用需要流式数据访问, 但它们并不是运行在通用文件系统上的通用应用程序. 因此, HDFS面向批处理设计而不是普通用户交互访问, 也就是说, 重点是数据访问的高吞吐量而不是数据访问低延迟. 为了实现这一点, HDFS放宽了部分POSIX的要求.</p>
+</li>
+<li>
+<p>存储大数据集</p>
+<p>存储在HDFS的文件可能是以GB, TB为单位的文件, HDFS provides high aggregate data bandwidth and can scale to hundreds of nodes in a single cluster.<sup class="footnote-reference"><a href="#2">7</a></sup></p>
+</li>
+<li>
+<p>保证内存一致性</p>
+<p>为了保证内存一致性, HDFS对读写访问模型做了简化, 区别于GFS, HDFS仅仅支持一个写入者和多个读入者. 并且一个文件一旦创建, 写入并关闭, 除了append和truncate外不能执行其他操作. 通过这些约束简化了内存一致性模型, 并支持高吞吐量数据访问.</p>
+</li>
+<li>
+<p>更强的可移植性</p>
+<p>基于Java的HDFS, 不必多说.</p>
+</li>
+</ol>
+<h2 id="jia-gou">架构</h2>
+<p>这里放上一个视频, 比较生动形象, 先看一篇有个大概的印象再阅读文章.</p>
+<p><a rel="noopener nofollow noreferrer" target="_blank" title="Understanding HDFS using Legos" href="https://youtu.be/4Gfl0WuONMY"><img src="https://res.cloudinary.com/marcomontalbano/image/upload/v1613722386/video_to_markdown/images/youtube--4Gfl0WuONMY-c05b58ac6eb4c4700831b2b3070cd403.jpg" alt="Understanding HDFS using Legos" /></a></p>
+<p>下图是官网的HDFS架构图解.</p>
+<p><img src="https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png" alt="HDFS Architecture" /></p>
+<h3 id="name-node">Name Node</h3>
+<p>HDFS的namespace是文件和目录的层次结构. 文件和目录在Name Node中以inode存储, 记录着像是权限, 修改访问时间, namespace和大小等等属性. 文件被切分为大的块(默认是128MB, 可以每个文件单独指定), 并且文件的每个块被独立冗余备份在不同的Data Node上(一般是3份, 同样也可以每个文件单独指定). Name Node维护namespace的树状结构, 并保存文件块到Data Node的映射. </p>
+<p>当读取文件时, HDFS client先从Name Node获取存放文件数据块的Data Node, 然后直接从<strong>最近</strong>的Data Node获取数据. 同样的, 当写入数据时, 客户端会要求Name Node指定一组Data Node存储文件块和文件块的副本, 之后以管道的方式向Data Nodes写入数据.</p>
+<p>在当前的设计中, 每个集群只有一个Name Node, 但有任意的Data Node和HDFS Client. HDFS将整个namespace存储于RAM中. inode数据和文件块的列表组成了系统的metadata, 被称为image. image被永久存储在本地文件系统, 被称为checkpoint. Name Node同样会存储image的修改日志, 被称为journal. 为了提高耐久性, checkpoint和journal可以冗余备份在不同的服务器. 当重启时, Name Node通过读入checkpoint并执行journal恢复原先的namespace. 块副本的位置可能会改变, 因此checkpoint不包括这部分.</p>
+<h3 id="data-node">Data Node</h3>
+<p>每个块存储于Data Node时, 都由两个文件组成. 第一个包含了实际数据本身, 第二个是块的metadata, 包括校验码(checksum)和版本戳(generation stamp). 包含数据的文件的大小等同于块的真实大小, 不需要像传统文件系统那样需要额外空间以填充到标称块大小. 因此一个文件块若是只有一半的大小, 它就仅仅需要本地文件系统半块的的空间.</p>
+<p>在startup阶段, 每个Data Node都会连接到Name Node并执行握手. 握手的目的之一是验证namespace ID和软件版本. 若任意一个没有匹配上, Data Node将会自动关机. 当HDFS文件系统格式化时会生成对应的namespace ID, 之后被存储于集群中所有节点上, 拥有不同的namespace ID的节点不可能在同一集群中, 保证了文件系统的完整性. 软件版本的一致性也是必要的, 因为不同版本的软件会导致数据损坏或丢失, 当更新时, 大集群中总会有节点未能正确关机, 更新, 导致软件版本不对, 这时候就需要关闭这些节点, 等后续手动操作.</p>
+<p>刚刚初始化的Data Node, 可以加入任一集群并接受集群的namespace ID. 在握手后, Data Node注册到Name Node上. Data Node也存储着他自己独一无二的storage ID, 作为Data Node的内部标识, 保证了即使重启后, 被分配了不同的IP地址和端口, 仍能被正确识别. 而storage ID时Data Node注册到Name Node时被分配的, 以后<strong>不会再改变</strong>.</p>
+<p>Data Node定期发送block report给Name Node, 包含block id, 版本戳和全部块的长度信息. 一经注册就会发送第一个block report. 之后每小时都会发送一次.</p>
+<p>在运转过程中, Data Node会发送heartbeat给Name Node以告知操作正在进行并且数据正常. 默认的时间间隔是3秒. 若是10分钟内, Name Node未能收到Data Node的heartbeat信号, 将会认为Data Node离线并且上面的数据都丢失, 便会重新规划块备份.</p>
+<p>事实上, heartbeat信号还包含了一些额外的信息, 包括中存储容量, 已使用存储的百分比, 正在处理的数据数量. 这些统计信息被Name Node用来平衡负载和安排空间.</p>
+<p>Name Node并不会直接调度Data Node, 而是通过回复heartbeat的方式发送命令. 命令包括:</p>
+<ol>
+<li>往其他Data Node备份块</li>
+<li>删除本地块备份</li>
+<li>重新注册或关闭node</li>
+<li>立刻发送block report</li>
+</ol>
+<h3 id="hdfs-client">HDFS Client</h3>
+<p>用户应用程序想要访问HDFS, 必须使用HDFS Client. 和传统文件系统类似, HDFS支持读, 写和删除文件, 以及创建和删除目录. 用户通过路径指定namespace内的文件和目录. 用户完全不用知道细节.</p>
+<p>当应用读取文件时, HDFS Client会向Name Node请求存储着文件块的Data Node列表. 然后直接访问Data Node并获取数据. 当HDFS Client写入数据时, 首先请求Name Node选择第一个块的备份Data Node列表, Client会组织一个node-to-node的管道并写入数据. 当第一个块完成后, Client会再次请求Data Node列表, 再以同样的方式写后面的块.</p>
+<p>不同于传统文件系统, HDFS提供获取文件块位置的API, 允许应用程序直接将任务运行于目标Data Node上, 减少了不必要的流量消耗. 同时, 允许应用程序设置文件的冗余因子, 默认情况下是3. 对于重要的文件和经常访问的文件, 可以设置为更高的值, 以保证数据安全和提高读带宽.</p>
+<h3 id="imagehe-journal">Image和Journal</h3>
+<p>正如前文所说, image就是当前metadata的版本, 而checkpoint是写入到外存的image, 永远落后于当前RAM中的image, 而journal则记录着checkpoint到当前image之间的操作. checkpoint不会被修改, 只会在重启时被完整替换. 在startup阶段, Name Node从checkpoint中读取image, 并对其执行journal的操作, 以恢复上次的image. 当完成后且开始运作之前, 新的checkpoint和空白的journal文件会被回写.</p>
+<p>若是checkpoint或journal文件丢失或者损坏, namespace的信息就丢失了. 为了保护这重要的信息, HDFS可以存储checkpoint和journal文件在不同的存储目录.</p>
+<blockquote>
+<p>最佳实践: 将这两个文件存储在不同的卷, 甚至远程NFS服务器.</p>
+</blockquote>
+<p>Name Node是多线程服务器, 可以同时处理多个Client的请求. 于是, 将事务写入外存成为了整个系统的瓶颈, 因为一个线程在同步地写入时, 其他线程只能等待. 为了进一步优化, Name Node通过批处理的方式写入事务. 当一个线程请求flush-and-sync操作时, 所有在等待处理的提交会被同时写入. 剩下的线程只需要去检查自己的事务是否被保存, 而不是都去flush-and-sync.</p>
+<h3 id="checkpoint-node">Checkpoint Node</h3>
+<p>Name Node在HDFS中, 除了为Client提供服务外, 还可以作为Checkpoint Node和Backup Node.</p>
+<p>Checkpoint Node定时的合并现有的checkpoint和journal, 创建新的checkpoint和空的journal. Checkpoint Node通常是由运行在其他主机, 因为它必须要有和Name Node相同的内存需求. 它会从Name Node下载最新的checkpoint和journal, 合并, 然后回写.</p>
+<p>这种方式减少了startup阶段的耗时, 因为减少了journal文件的大小.</p>
+<blockquote>
+<p>最佳实践: 每日更新一个checkpoint.</p>
+</blockquote>
+<h3 id="backup-node">Backup Node</h3>
+<p>这是HDFS的新特性. 这部分不详细说, 类似双机热备份一样, 只是只读的备份.</p>
+<h3 id="geng-xin-yu-wen-jian-xi-tong-kuai-zhao">更新与文件系统快照</h3>
+<p>在软件更新过程中, 最容易出现数据损坏. 为了降低这种风险, HDFS拥有快照功能. 快照允许管理员永久地保存当前文件系统的状态, 因此当更新异常导致数据丢失损坏时可以恢复到快照的状态.</p>
+<p>在系统开启时, 可以选择开启快照功能(只能同时保存一个快照). 当要求快照时, Name Node首先读取checkpoint和journal文件, 并在内存中合并, 然后将新checkpoint和空的journal写入新的路径, 旧的checkpoint和journal仍然未改变.</p>
+<h2 id="shu-ju-cao-zuo">数据操作</h2>
+<p>数据操作主要是文件的读取写入以及副本的放置策略, 算是HDFS的核心部分.</p>
+<h3 id="wen-jian-xie-ru">文件写入</h3>
+<p>前文已经提到, 当一个应用创建文件写入数据并关闭后, 内容不再可以改变, 除了append和truncate.</p>
+<p>HDFS实现single-writer-multiple-reader模式. 也就是说, 当一个HDFS Client打开一个文件并写入数据时, 会暂时独占这个文件的, 我们称之为lease, 其它的client都不再可以写入数据. 写入数据的client通过heartbeat信号更新自己对文件的lease. 当文件关闭, lease被回收. lease的期限受到软限制(soft limit)和硬限制(hard limit). 在软限制过期之前, 写入数据的client独占这个文件. 当软限制过期, 而client未能关闭文件或者更新自己的lease, 另一个client就可以抢占lease. 当硬限制过期(一小时), 而client未能更新lease, HDFS会当作client已经退出, 并自动关闭文件, 回收lease. 注意, lease是写入独占, 其它client仍然可以读取文件.</p>
+<p>HDFS的文件是由block组成的. 当需要新的block时, Name Node将分配一个独一无二的block ID并决定一组Data Node去存放block以及它的副本. Data Node之间会组织管道, 它们的顺序会自动最优化, 降低带宽损耗. 数据被以数据包的方式序列化传输. 当第一个数据包被填满(一般是64KB), 数据包会被推送到管道. 下一个数据包可以在收到ACK(由管道最后一个Data Node回复)之前推出(就是TCP). 已发送未收到ACK的包的数量被client的滑动窗口限制(这里是TCP的滑动窗口).</p>
+<p>数据写入HDFS文件后, 在文件被关闭前, HDFS并不保证文件立马可见. 若是应用程序需要边写边可读, 可以通过<code>hflush</code>操作: 当前数据包被立马发送到管道, 并同步等待管道中的ACK回复再继续写入.</p>
+<p><img src="https://i.loli.net/2021/09/17/gHwyJF6TKZ8ReNs.png" alt="HDFS example" /></p>
+<p>上图是HDFS写入的例子.</p>
+<h3 id="wen-jian-du-qu">文件读取</h3>
+<p>在一个由成千上万node组成的集群中, 错误(通常是存储错误)经常发生. 存储于Data Node上的块可能由于内存错误, 硬盘错误或者网络错误导致损坏. 为了避免这些, HDFS生成并存储每个数据block的checksum. checksum被client在读取数据时校验. 当client创建一个HDFS文件时, 同时会计算每个块的checksum并和数据一同发送到管道. 当HDFS读取文件时, 数据block文件和checksum会被同时发送给client, client将会计算校验. 若出错, client会通知Name Node数据算坏, 然后从另一个Data Node获取该block.</p>
+<p>当client打开读取一个文件, client将获取块的存储列表, 并选择最近的Data Node读取数据. 当读取失败, 就会尝试下一个. 可能会有疑问, 什么时候读取会失败呢? 有三个原因:</p>
+<ol>
+<li>目标Data Node挂了.</li>
+<li>目标Data Node并没有目标block了</li>
+<li>目标block校验不通过</li>
+</ol>
+<h3 id="fu-ben-guan-li">副本管理</h3>
+<p>Name Node还需要保证每一时刻每个块都有足够数量的副本. 每次收到block report, Name Node都会检测是否有块的副本数量大于少于预设值. 当副本数量大于预设值, Name Node会选择删除副本, 依据尽量不减少拥有副本的rack(这里的rack, 我理解为物理上放置在同一地点, 网络上属于同一网络的群组)数量. 当副本数了小于预设值, Name Node会将它放到复制优先队列(replication priority queue). 一个后台进程会不断扫描该优先队列的队头并决定哪个Data Node放置副本.</p>
+<p>这部分细节非常多, 写下会导致篇幅过大, 请读者自行深入.</p>
+<p>可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. &quot;The Hadoop Distributed File System&quot;</p>
+<h2 id="zong-jie">总结</h2>
+<p>综上, HDFS是基于GFS的开源分布式文件系统, 具有高容错性, 可以部署在廉价不可靠的机器上. 适合批处理, 大量数据集存储处理与流式文件访问.</p>
+<p>当然HDFS也有着自己的局限, 世界上没有十全十美的事情, 就好像为了简化内存一致性模型HDFS不得不使用one-writer的模式, 又好像为了提高吞吐量不得不放松POSIX标准.</p>
+<ol>
+<li>不支持低延迟访问</li>
+<li>不适合小文件存储</li>
+<li>不支持并发写入</li>
+<li>不支持修改</li>
+</ol>
+<h2 id="can-kao">参考</h2>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">3</sup>
+<p>Google File System (GFS) and Hadoop Distributed File System (HDFS). http://stg-tud.github.io/ctbd/2017/CTBD_06_gfs-hdfs.pdf . p5
+<sup class="footnote-reference"><a href="#2">7</a></sup>:HDFS Architecture. https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html
+<sup class="footnote-reference"><a href="#3">6</a></sup>:Lustre File System. http://www.lustre.org
+<sup class="footnote-reference"><a href="#4">4</a></sup>:P. H. Carns, W. B. Ligon III, R. B. Ross, and R. Thakur. “PVFS: A parallel file system for Linux clusters,” in Proc. of 4th Annual Linux Showcase and Conference, 2000, pp. 317–327.
+<sup class="footnote-reference"><a href="#5">2</a></sup>:S. Ghemawat, H. Gobioff, S. Leung. “The Google file system,” In Proc. of ACM Symposium on Operating Systems Principles, Lake George, NY, Oct 2003, pp 29–43.
+<sup class="footnote-reference"><a href="#6">1</a></sup>:What is Hadoop? - SAS. https://www.sas.com/zh_cn/insights/big-data/hadoop.html
+<sup class="footnote-reference"><a href="#7">5</a></sup>:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name ...” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.</p>
+</div>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-bei-jing" class="toc is-size-7 is-active"
+                href="https://oliverdding.github.io/posts/paper-reading-hdfs/#bei-jing">
+                背景
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-mu-de" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-hdfs/#mu-de">
+                目的
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-jia-gou" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-hdfs/#jia-gou">
+                架构
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-name-node" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#name-node">
+                    Name Node
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-data-node" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#data-node">
+                    Data Node
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-hdfs-client" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#hdfs-client">
+                    HDFS Client
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-imagehe-journal" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#imagehe-journal">
+                    Image和Journal
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-checkpoint-node" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#checkpoint-node">
+                    Checkpoint Node
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-backup-node" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#backup-node">
+                    Backup Node
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-geng-xin-yu-wen-jian-xi-tong-kuai-zhao" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#geng-xin-yu-wen-jian-xi-tong-kuai-zhao">
+                    更新与文件系统快照
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-shu-ju-cao-zuo" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-hdfs/#shu-ju-cao-zuo">
+                数据操作
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-wen-jian-xie-ru" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#wen-jian-xie-ru">
+                    文件写入
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-wen-jian-du-qu" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#wen-jian-du-qu">
+                    文件读取
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-fu-ben-guan-li" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-hdfs/#fu-ben-guan-li">
+                    副本管理
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-zong-jie" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-hdfs/#zong-jie">
+                总结
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-can-kao" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-hdfs/#can-kao">
+                参考
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+          
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;paper-reading-rdd&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              论文阅读笔记：RDD
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;translation-rdd-programming-guide&#x2F;">
+              翻译：RDD编程指导<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+            
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://oliverdding.github.io/elasticlunr.min.js"></script>
+  <script src="https://oliverdding.github.io/search_index.zh.js"></script><script src="https://oliverdding.github.io/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://oliverdding.github.io";
+    this.page.identifier = "/posts/paper-reading-hdfs/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://oliverdding.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>

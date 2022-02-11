@@ -38,7 +38,7 @@
 
   <title>
     
-Aurora | 布隆过滤器
+Aurora | 论文阅读笔记：RDD
 
   </title>
 
@@ -126,9 +126,9 @@ Aurora | 布隆过滤器
       <div class="column is-8 is-offset-2">
         <article class="box">
           <h1 class="title">
-            布隆过滤器
+            论文阅读笔记：RDD
           </h1>
-          <p class="subtitle">用于判断某个元素是否在集合中的一个简单、高效、内存占用低的数据结构</p>
+          <p class="subtitle">Matei Zaharia, Mosharaf Chowdhury, Tathagata Das, Ankur Dave, Justin Ma, Murphy McCauley, Michael J. Franklin, Scott Shenker, Ion Stoica. Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing</p>
           <div class="columns is-multiline is-gapless">
             <div class="column is-8">
               
@@ -140,7 +140,7 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="far fa-calendar-alt"></i>
   </span>
-  <span><time datetime="2022-02-09T17:13:10+08:00">February 09, 2022</time></span>
+  <span><time datetime="2021-10-12T17:31:07+08:00">October 12, 2021</time></span>
 </span>
 
             </div>
@@ -154,7 +154,7 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>644 words</span>
+  <span>695 words</span>
 </span>
 
             </div>
@@ -164,12 +164,12 @@ Aurora | 布隆过滤器
 <p>
   Categories:
   
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/datastructures/">
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/notes/">
     <span class="icon-text">
       <span class="icon">
         <i class="fas fa-cube"></i>
       </span>
-      <span>DataStructures</span>
+      <span>Notes</span>
     </span>
   </a>
   
@@ -183,6 +183,42 @@ Aurora | 布隆过滤器
 <p>
   Tags:
   
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/paper-reading/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>paper reading</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/note/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>note</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/spark/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>spark</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/apache/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>apache</span>
+    </span>
+  </a>
+  
   <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/big-data/">
     <span class="icon-text">
       <span class="icon">
@@ -192,56 +228,81 @@ Aurora | 布隆过滤器
     </span>
   </a>
   
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/data-structure/">
-    <span class="icon-text">
-      <span class="icon">
-        <i class="fas fa-tag"></i>
-      </span>
-      <span>data structure</span>
-    </span>
-  </a>
-  
 </p>
 
               
             </div>
           </div>
           <div class="content mt-2">
-            <p>布隆过滤器（Bloom Filter）是一种类似于哈希表的数据结构，但相比于后者空间利用率更高。</p>
-<p>使用布隆过滤器查找key时，返回值可能情况有两种：</p>
+            <h2 id="abstract">Abstract</h2>
+<p>RDD起源于现有的大数据框架对</p>
 <ol>
-<li>key<strong>不</strong>存在</li>
-<li>key<strong>可能</strong>存在</li>
+<li>迭代算法: 数据复用</li>
+<li>交互式数据</li>
+<li>挖掘: 数据共享</li>
 </ol>
-<h2 id="yuan-li">原理</h2>
-<p>布隆过滤器由以下三部分构成：</p>
-<ol>
-<li>n个key</li>
-<li>m位的位图：<code>bitmap</code></li>
-<li>k个无关的hash函数：<code>h1, h2, ..., hk</code></li>
-</ol>
+<p>支持过差</p>
+<h2 id="introduction">Introduction</h2>
+<p>新提出的Pregel、HaLoop虽然依次针对性提出解决方案，但是方案缺乏统一的抽象接口，无法推广。</p>
+<p>于是，研究人员提出RDD，支持大量场景下内存复用。</p>
 <blockquote>
-<p>可以用$h_{i}(x)=MD5(x+i)$或者$h_{i}(x)=MD5(x|i)$实现k个无关hash函数</p>
+<p>Resilient Distributed Datasets(RDDs): RDDS are fault-tolerant, parallel data structures that enable users explicitly persist intermediate results in memory, control their partitioning to optimize data placement, and manaipulate them using a rich set of operations.</p>
 </blockquote>
-<p>需要插入key时，对<code>key = a</code>时，经过k个hash函数后得到<code>h1(a), h2(a), ..., hk(a)</code></p>
-<p>此时将<code>bitmap</code>中对应的位置1。</p>
-<p><img src="https://raw.githubusercontent.com/oliverdding/imaw.io/main/inserting-key-into-bloom-filter.drawio.svg" alt="往布隆过滤器插入新key" /></p>
-<p>当key越来越多，<code>bitmap</code>中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标都为1的可能越大，此时就发生false positive。</p>
-<p>那么k取何值时，false positive发生概率最小，此时概率为？</p>
-<h2 id="shu-xue-zheng-ming">数学证明</h2>
-<p>对<code>bitmap</code>随机置位后，对于任意一个位，其被置0、1的概率分别是$P(0) = 1 - \frac{1}{m}$、$P(1) = \frac{1}{m}$</p>
-<p>对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P'(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$</p>
-<p>对于n个key插入后，对于任意一个位，仍然是0的概率是$$P''(0)=P'(0)^{n}=(1 - \frac{1}{m})^{kn}$$</p>
-<p>由于有自然对数e的计算公式$$\lim_{n \to \infty}{(1-\frac{1}{x})^{-x}}=e$$</p>
-<p>我们可以近似计算$P''(0)$得到$$P''(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$</p>
-<p>因此，对于任意一个位，其被置1的概率是$$P''(1)=1-P''(0)\approx{}1-e^{-\frac{kn}{m}}$$</p>
-<p>当alse positive发生时，是指它的k个hash函数得到的坐标都为1。由于k个hash函数相互独立，我们可以计算出alse positive的概率为$$f=(1-(1-\frac{1}{m})^{kn})^{k}\approx{}(1-e^{-\frac{kn}{m}})^{k}$$</p>
-<p>由于m、n是用户给定的值，唯一变量就是k，我们需要指定k的值去最小化alse positive概率。</p>
-<p>另$p=e^{-\frac{kn}{m}}$，我们有$$f=(1-p)^{k}=e^{kln(1-p)}$$</p>
-<p>此时变更为最小的$g=kln(1-p)$</p>
-<p>无中生有下得到$$g=kln{}(1-p)=-\frac{m}{n}ln(e^{-\frac{kn}{m}})ln(1-p)=-\frac{m}{n}ln(p)ln(1-p)$$</p>
-<p>得知当$p=\frac{1}{2}$时g取得最小，此时有$$k=ln(2\frac{m}{n})$$</p>
-<p>插入回$$f=(1-p)^{k}$$得到alse positive的最小值为$$f_{min}=(\frac{1}{2})^{k}\approx{}(0.6185)^{\frac{m}{n}}$$</p>
+<p>最大难题是设计接口，如何设计错误容忍度高的接口呢？参考现有设计，DSM、KV-stores、databases和Piccolo，他们提供细粒度内存接口，导致想要支持错误恢复，必须：</p>
+<ol>
+<li>跨设备备份数据</li>
+<li>跨设备日志更新</li>
+</ol>
+<p>这对于大数据应用而言太昂贵了，于是，RDD被设计为粗粒度内存模型接口，提供transformations接口对不同数据执行某些操作操作。此时，备份变得简单，只要记录“血统”(每个RDD的transformations流程)。如果某个RDD的分区丢失了，完全可以只恢复这个分区的RDD数据。</p>
+<h2 id="rdd">RDD</h2>
+<h3 id="rddgai-shu">RDD概述</h3>
+<p>RDD是只读的数据分区集合。每个RDD只有三个来源：</p>
+<ol>
+<li>从内存对象集合生成</li>
+<li>从外存数据生成</li>
+<li>从现有RDD转换</li>
+</ol>
+<p>用户拿到RDD不一定真实存在，可能只是这个RDD的“血统”。</p>
+<blockquote>
+<p>A program cannot reference an RDD that it cannot reconstruct after a failure.</p>
+</blockquote>
+<h3 id="sparkbian-cheng-mo-xing">Spark编程模型</h3>
+<p>spark程序往往起始于通过transformations创建RDD，终止于通过actions处理RDD返回数值结果或者写入存储。</p>
+<p>RDD不一定是实体的，在action被运行前才被计算，因此可以排排站，吃果果。</p>
+<h3 id="rdddui-bi-dsmde-you-dian">RDD对比DSM的优点</h3>
+<p>Distributed Shared Memory(DSM): 另一种分布式框架，细粒度内存共享。</p>
+<p>RDD的优点：</p>
+<ol>
+<li>更高效的错误容忍度</li>
+<li>得益于RDD不可变，可以运行时同时备份数据</li>
+<li>任务可以被调度到离数据物理更近的节点上</li>
+<li>当内存不够时RDD可以优雅缩减RDD数量规模</li>
+</ol>
+<h3 id="bu-gua-he-yu-rddde-chang-jing">不适合于RDD的场景</h3>
+<p>RDD只适合于<strong>批处理</strong>应用。</p>
+<p>RDD不适合于异步细粒度更新共享状态的应用。</p>
+<h2 id="sparkbian-cheng-jie-kou">Spark编程接口</h2>
+<p>开发人员主要写<code>driver program</code>，用于连接集群中的workers。</p>
+<h3 id="sparkzhong-rddde-cao-zuo">Spark中RDD的操作</h3>
+<ul>
+<li><code>transformations</code>: 定义RDD的懒操作</li>
+<li><code>actions</code>: 执行计算，返回结果或者写入存储</li>
+</ul>
+<h2 id="rddshi-xian">RDD实现</h2>
+<p>提出五个需要实现的接口。</p>
+<ul>
+<li>partitions()</li>
+<li>preferredLocations(p)</li>
+<li>dependencies()</li>
+<li>iterator(p,parentIters)</li>
+<li>partitioner()</li>
+</ul>
+<p>依赖分位窄依赖和宽依赖。</p>
+<p>为什么要分窄依赖？</p>
+<ol>
+<li>可以管道执行</li>
+<li>恢复更简单</li>
+</ol>
 
           </div>
         </article>
@@ -253,17 +314,79 @@ Aurora | 布隆过滤器
           <ul class="menu-list">
             
             <li>
-              <a id="link-yuan-li" class="toc is-size-7 is-active"
-                href="https://oliverdding.github.io/posts/bloom-filter/#yuan-li">
-                原理
+              <a id="link-abstract" class="toc is-size-7 is-active"
+                href="https://oliverdding.github.io/posts/paper-reading-rdd/#abstract">
+                Abstract
               </a>
               
             </li>
             
             <li>
-              <a id="link-shu-xue-zheng-ming" class="toc is-size-7 "
-                href="https://oliverdding.github.io/posts/bloom-filter/#shu-xue-zheng-ming">
-                数学证明
+              <a id="link-introduction" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-rdd/#introduction">
+                Introduction
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-rdd" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-rdd/#rdd">
+                RDD
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-rddgai-shu" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-rdd/#rddgai-shu">
+                    RDD概述
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-sparkbian-cheng-mo-xing" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-rdd/#sparkbian-cheng-mo-xing">
+                    Spark编程模型
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-rdddui-bi-dsmde-you-dian" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-rdd/#rdddui-bi-dsmde-you-dian">
+                    RDD对比DSM的优点
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-bu-gua-he-yu-rddde-chang-jing" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-rdd/#bu-gua-he-yu-rddde-chang-jing">
+                    不适合于RDD的场景
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-sparkbian-cheng-jie-kou" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-rdd/#sparkbian-cheng-jie-kou">
+                Spark编程接口
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-sparkzhong-rddde-cao-zuo" class="toc is-size-7" href="https://oliverdding.github.io/posts/paper-reading-rdd/#sparkzhong-rddde-cao-zuo">
+                    Spark中RDD的操作
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-rddshi-xian" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/paper-reading-rdd/#rddshi-xian">
+                RDD实现
               </a>
               
             </li>
@@ -307,10 +430,19 @@ Aurora | 布隆过滤器
     <div class="columns is-centered">
       <div class="column is-8">
         <nav class="level">
-           
+          
           <div class="level-item has-text-centered">
             <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;apache-arrow-the-next-windfall-after-the-data-lake-in-big-data&#x2F;">
-              Apache Arrow: 大数据在数据湖后的下一个风向标<span class="icon ml-2">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Apache Arrow: 大数据在数据湖后的下一个风向标
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;paper-reading-hdfs&#x2F;">
+              论文阅读笔记：HDFS<span class="icon ml-2">
                 <i class="fas fa-arrow-circle-right"></i>
               </span>
             </a>
@@ -434,7 +566,7 @@ Aurora | 布隆过滤器
 <script>
   var disqus_config = function () {
     this.page.url = "https://oliverdding.github.io";
-    this.page.identifier = "/posts/bloom-filter/";
+    this.page.identifier = "/posts/paper-reading-rdd/";
   };
 
   (function () {

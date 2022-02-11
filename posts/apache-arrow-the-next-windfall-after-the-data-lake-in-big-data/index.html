@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" integrity="sha384-IJLmUY0f1ePPX6uSCJ9Bxik64/meJmjSYD7dHaJqTXXEBE4y+Oe9P2KBZa/z7p0Q" crossorigin="anonymous">
+  <link href="https://oliverdding.github.io/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+Aurora | Apache Arrow: 大数据在数据湖后的下一个风向标
+
+  </title>
+
+  
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J661LYF5TY"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-J661LYF5TY");
+  </script>
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;oliverdding.github.io">Aurora</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;categories">
+            Categories
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;tags">
+            Tags
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Apache Arrow: 大数据在数据湖后的下一个风向标
+          </h1>
+          <p class="subtitle">Apache Arrow的产生、现状和发展</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>charmer published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2021-11-18T10:59:50+08:00">November 18, 2021</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>17 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>3370 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/datastructures/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>DataStructures</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+              
+<p>
+  Tags:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/big-data/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>big data</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/apache/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>apache</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/data-structure/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>data structure</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <h2 id="jie-shao">介绍</h2>
+<p>根据<a rel="noopener nofollow noreferrer" target="_blank" href="https://arrow.apache.org/overview/">官方文档</a>介绍，Arrow是</p>
+<blockquote>
+<p>A language-independent columnar memory format for flat and hierarchical data, organized for efficient analytic operations on modern hardware like CPUs and GPUs. The Arrow memory format also supports zero-copy reads for lightning-fast data access without serialization overhead.</p>
+</blockquote>
+<p>一句话概括，Arrow用于系统间高效交互数据的组件。</p>
+<h3 id="arrowde-he-xin-neng-li">Arrow的核心能力</h3>
+<p>Arrow本身不是一个存储、执行引擎，它只是一个交互数据的基础库。比如可以用于以下组件</p>
+<ul>
+<li>SQL执行引擎 (e.g., Drill and Impala)</li>
+<li>数据分析系统 (e.g., Pandas and Spark)</li>
+<li>流和队列系统 (e.g., Kafka and Storm)</li>
+<li>存储系统 (e.g., Parquet, Kudu, Cassandra and HBase)</li>
+</ul>
+<h2 id="bei-jing">背景</h2>
+<blockquote>
+<p>每个事物的产生发展都有其历史原因，如果抛开目的去“学习”，犹如竹篮子打水-一场空</p>
+<p align="right">- 我说的 ;)</p>
+</blockquote>
+<p>让我们回到2008年，故事从那开始...</p>
+<h3 id="qi-yin">起因</h3>
+<p>Wes McKinney在2008年开启了Pandas项目，这个python中分析、操作数据的瑞士军刀。紧接着在2014年，Wes加入Cloudera公司，并着手研究如何让python可以“插入”所有的大数据组件和数据库，但是每个系统都有自己操作数据的方式，于是：</p>
+<blockquote>
+<p>&quot;Oh my gosh, I'm going to have to write a dozen different data converters to marshal data, convert data between Pandas each of these data processing systems from Spark, to Impala, to different file formats and HDFS, so it was basically this overwhelming problem.&quot;</p>
+<p align="right">- Wes McKinney</p>
+</blockquote>
+<p>除此之外，在大数据科学领域，dataframe的概念随处可见，每个框架都将datafrme作为高层定义，代表一个表、一系列API...但是其底层的实现天壤悬隔，Wes完全无法复用代码。</p>
+<p><strong>无法共享数据</strong>、<strong>无法共享代码</strong>这两个大难题暂时困住了Wes。</p>
+<h3 id="fa-zhan">发展</h3>
+<p>Wes开始设计一种table middleware，作为不同组件交换数据的中间层，一种表接口的标准(standardized table interface)。</p>
+<p>接着来到2015年，Wes团队遇到了Jacques和Apache Drill社区的小伙伴们，两伙人不谋而合，开始了合作。</p>
+<p>由于业界没有统一规范的定义，他们合作的首个项目就是设计出了一个内存表视图的标准，并在不同语言都给出实现以证明可以在不同语言中共享数据，也就是说，你可以高效地将数据从Java到C++，或者Python。</p>
+<p>自此，arrow项目创立。</p>
+<p>在项目早期，最重要的是设计出一套与语言无关的内存表结构，并一定要方便分析处理。除此之外，还需要将各种格式、类型的数据转换、转出为这个标准格式的库。最后，还需要一个计算处理的库，以便于直接基于arrow进行快速数据分析处理。</p>
+<blockquote>
+<p>&quot;An important thing to remember about the project is that it's front-end agnostic. So it's not a new data frame library, like Pandas. It's not a new database.&quot;</p>
+<p align="right">- Wes McKinney</p>
+</blockquote>
+<p>此外，Wes在和Apache Impala团队合作的时候，发现Impala的代码中有大量和pandas做相似事情的片段，比如CSV序列化、反序列化的，I/O子系统，自己的查询引擎，甚至自己的前端。在有了这样一个语言无关的内存数据格式，他们开始思考如何避免重复代码。</p>
+<h2 id="shi-xian">实现</h2>
+<p>故事讲完了，现在让我们一起来探索下arrow的设计。</p>
+<p>面对不同语言、不同大数据组件之间的差异，首先我们肯定需要一个中间的表示来避免我们的后端直面差异，也就是前文提到的语言无关的内存表视图，这里就有一个必须挖掘的点，为了批量数据分析，我们应当选择<strong>列式存储</strong>。</p>
+<p><img src="https://i.loli.net/2021/11/13/BNGPznF9xUy4qMi.png" alt="列存表查询" /></p>
+<p>使用列存的方式不仅减少了扫描内存的page数，还可以利用现在计算机SIMD(Single Instruction, Multiple Data)指令进行加速。</p>
+<hr />
+<p>扩展阅读 - <a rel="noopener nofollow noreferrer" target="_blank" href="http://dbmsmusings.blogspot.com/2017/10/apache-arrow-vs-parquet-and-orc-do-we.html">Daniel Abadi的实验</a></p>
+<p>Daniel在亚马逊的EC2 t2.medium机器上创建了一个有60,000,000行数据的内存表。表由6个int32列组成，整个表大概由1.5GB。他创建了行表和列表两个实例，并对两种表进行简单地filter某个值。</p>
+<p>在未开CPU优化的情况下，得到结果：</p>
+<p><img src="https://i.loli.net/2021/11/13/wjkzO3cfR1BAdiE.png" alt="无SIMD" /></p>
+<p>行表和列表查询耗时相差无几。对于行表，每行都需要扫描，即使只使用到第一列；对于列表则只需要扫描第一列，按理说列表应该是行表的6倍快，但是在这个实验中由于CPU是瓶颈，而不是内存发往CPU的数据。</p>
+<p>但是开启SIMD后，结果如下：</p>
+<p><img src="https://i.loli.net/2021/11/13/ysv8F1SCMaQHEOw.png" alt="开SIMD" /></p>
+<p>SIMD可以同时比较多个数值（这里是4个数，差不多3倍快），减少打乱流水线的情况</p>
+<hr />
+<p>现在我们可以继续考虑如何设计语言无关的内存表结构了</p>
+<p><img src="https://i.loli.net/2021/11/13/Ca6DOkIohglrXx4.png" alt="直接IPC" /></p>
+<p>Arrow需要作为通用的传输结构</p>
+<p><img src="https://i.loli.net/2021/11/13/uJ5fAIYCXZK9eND.png" alt="通过arrow交互" /></p>
+<p>可是代码共享该如何实现呢？Arrow不应该是json、protobuf之流，后者适用于磁盘层面的数据存储交互。Arrow应当作为各个语言、组件中的一种数据格式库，应该是运行时的数据存储交互！直接可以操作数据，存取、计算：</p>
+<p><img src="https://i.loli.net/2021/11/13/pGxX76nHLvmNPYy.png" alt="数据操作" /></p>
+<h2 id="arrowlie-ge-shi">Arrow列格式</h2>
+<blockquote>
+<p>🚧 本节内容翻译整理自apache/arrow代码仓库中<a rel="noopener nofollow noreferrer" target="_blank" href="https://github.com/apache/arrow/blob/master/docs/source/format/Columnar.rst">Arrow Columnar Format规范</a>。</p>
+</blockquote>
+<p>Arrow列格式包含三部分：与语言无关的内存数据结构规范、元数据序列化以及一个用于序列化和通用数据传输的协议。</p>
+<p>该列格式支持：</p>
+<ul>
+<li>顺序访问的数据</li>
+<li>O(1)的随机读写</li>
+<li>支持SIMD，向量化操作友好</li>
+<li>可重新定位而无“pointer swizzling”问题，允许在共享内存中zero-copy</li>
+</ul>
+<hr />
+<p>扩展阅读 - <a rel="noopener nofollow noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/Pointer_swizzling">pointer swizzling</a></p>
+<p>简单来说，内存中指针所指向的地址在写入磁盘（序列化）和从磁盘载入指针数据（反序列化）时，需要通过某种方式（swizzling和unswizzling）来使得指针存储的地址信息有效。</p>
+<p>扩展阅读 - <a rel="noopener nofollow noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/Zero-copy">零拷贝</a></p>
+<p>zero-copy（零拷贝）不是指真的没有拷贝了，而是说减少了不必要的数据拷贝与上下文切换（系统调用）。比如正常情况下用户态进程希望从磁盘中读取数据并写入socket，此时需要数据流经过磁盘-&gt;系统态内存-&gt;用户态内存-&gt;系统态内存-&gt;socket，发生了两次系统调用(磁盘的read()和写入socket的write())。使用系统提供的零拷贝函数(比如sendfile())则可以缩减为磁盘-&gt;系统态内存-&gt;socket。</p>
+<hr />
+<p>在Arrow中，最基本的结构是array(或者叫vector，是由一列相同类型的值组成，长度必须已知，且有上限；换个常见的叫法是field，字段)，每个array都有如下几个部分组成：</p>
+<ul>
+<li>逻辑上的数据类型（记录array类型）</li>
+<li>一列缓冲区（存放具体数字、null）</li>
+<li>一个长度为64位带符号的整数（记录array长度，也可以是32位）</li>
+<li>另一个长度为64位的带符号的整数（记录null值的数量）</li>
+<li>（可选）字典（用于字典编码的array）</li>
+</ul>
+<p>Arrow还支持嵌套array类型，其实就是一列array组成，它们叫做子array(child arrays)。</p>
+<h3 id="wu-li-nei-cun-bu-ju">物理内存布局</h3>
+<p>每一个逻辑类型都有一个定义明确的物理布局，Arrow定义了如下物理布局：</p>
+<ul>
+<li>Primitive(fixed-size)：用于存放具有相同长度的数值</li>
+<li>Variable-size Binary：用于存放长度可变的数值。支持32位和64位的长度编码</li>
+<li>Fixed-size List：嵌套类型，但是每个子array长度必须相同</li>
+<li>Variable-size List：嵌套类型，每个子array长度可以不一致。支持32位和64位的长度编码</li>
+<li>Struct：嵌套类型，由一组长度相同的命名子字段组成，但子字段的类型可以不一致。</li>
+<li>Spare和Dense Union：嵌套类型，但是只有一组array，每个数值的类型是子类型集合之一</li>
+<li>Null：存放一组null值，逻辑类型只能是null</li>
+</ul>
+<h4 id="bu-ju-li-zi">布局例子</h4>
+<p>本小节以Fixed-size Primitive Layout为例子讲述Arrow最基础的内存布局。</p>
+<p>如前文所述，Primitive类型的数值槽长度相同，只能存放固定长度的数值，可以是字节或者比特。</p>
+<p>放到具体内存布局上，本类型包含一个连续的内存缓冲区，总大小则是槽宽*长度（对于比特的槽宽，则需要四舍五入到字节）。</p>
+<p>给出文档中一个Int32 Array的例子：</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>[1, null, 2, 4, 8]
+</span></code></pre>
+<p>会这样表示：</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>* Length: 5, Null count: 1
+</span><span>* Validity bitmap buffer:
+</span><span>
+</span><span>  |Byte 0 (validity bitmap) | Bytes 1-63            |
+</span><span>  |-------------------------|-----------------------|
+</span><span>  | 00011101                | 0 (padding)           |
+</span><span>
+</span><span>* Value Buffer:
+</span><span>
+</span><span>  |Bytes 0-3   | Bytes 4-7   | Bytes 8-11  | Bytes 12-15 | Bytes 16-19 | Bytes 20-63 |
+</span><span>  |------------|-------------|-------------|-------------|-------------|-------------|
+</span><span>  | 1          | unspecified | 2           | 4           | 8           | unspecified |
+</span></code></pre>
+<p>其中有效性位图是用于记录每个值槽是否为空的。具体看<a rel="noopener nofollow noreferrer" target="_blank" href="https://arrow.apache.org/docs/format/Columnar.html#validity-bitmaps">规范</a>。</p>
+<p>剩下的布局都在Primitive布局上变化而来，具体看规范。</p>
+<h4 id="bu-ju-shi-yong-de-huan-chong-qu">布局使用的缓冲区</h4>
+<p>Arrow的几种物理布局用到的缓冲区如下表所示：</p>
+<table><thead><tr><th align="center"><strong>Layout Type</strong></th><th align="center"><strong>Buffer 0</strong></th><th align="center"><strong>Buffer 1</strong></th><th align="center"><strong>Buffer 2</strong></th></tr></thead><tbody>
+<tr><td align="center">Primitive</td><td align="center">validity</td><td align="center">data</td><td align="center"></td></tr>
+<tr><td align="center">Variable Binary</td><td align="center">validity</td><td align="center">offsets</td><td align="center">data</td></tr>
+<tr><td align="center">List</td><td align="center">validity</td><td align="center">offsets</td><td align="center"></td></tr>
+<tr><td align="center">Fixed-size List</td><td align="center">validity</td><td align="center"></td><td align="center"></td></tr>
+<tr><td align="center">Struct</td><td align="center">validity</td><td align="center"></td><td align="center"></td></tr>
+<tr><td align="center">Sparse Union</td><td align="center">type ids</td><td align="center"></td><td align="center"></td></tr>
+<tr><td align="center">Dense Union</td><td align="center">type ids</td><td align="center">offsets</td><td align="center"></td></tr>
+<tr><td align="center">Null</td><td align="center"></td><td align="center"></td><td align="center"></td></tr>
+<tr><td align="center">Dictionary-encoded</td><td align="center">validity</td><td align="center">data (indices)</td><td align="center"></td></tr>
+</tbody></table>
+<p>Arrow如何实现O(1)读写的呢？</p>
+<p>所有的物理布局底层都是用数组存储数据，并且会根据层级嵌套建立offsets bitmap，当然就实现了O(1)的读写速度了。</p>
+<h3 id="luo-ji-lei-xing">逻辑类型</h3>
+<p><a rel="noopener nofollow noreferrer" target="_blank" href="https://github.com/apache/arrow/blob/master/format/Schema.fbs">Schema.fbs</a>定义了Arrow支持的逻辑类型，每种逻辑类型都会对应到一种物理布局。</p>
+<h3 id="xu-lie-hua-yu-ipc">序列化与IPC</h3>
+<p>列式格式序列化时最原始的单位是&quot;record batch&quot;(也就是一个表，table啦)。一个record batch是一组有序的array的集合，被称为record batch的字段(fields)。每个字段(field)有相同的长度，但是字段的数据类型可以不一样。record batch的字段名、类型构成了它的schema。</p>
+<p>本节描述一个协议，用于将record batch序列化为二进制流，并可以无需内存拷贝重构record batch。</p>
+<p>序列化时会分为这三部分：</p>
+<ul>
+<li>Schema</li>
+<li>RecordBatch</li>
+<li>DictionaryBatch</li>
+</ul>
+<p>这里我们只提及前两个。</p>
+<p><img src="https://i.loli.net/2021/11/16/ptCPLjx7bcWOXmi.png" alt="布局" /></p>
+<p>一个schema message和多个record batch message就能完整表示一个record batch。其中schema message存储表结构，record batch message存储字段metadata和字段值。</p>
+<p>值得注意的是，record batch message包含实际的数据缓冲区、对应的物理内存布局。</p>
+<p>然后问题又来了，Arrow为何无需pointer-swizzling即可实现流与数据转换的呢？答案就是message的metadata中存储了每个缓冲区的位置和大小，因此可以字节通过指针计算来重建Array数据结构，同时还避免了内存拷贝。</p>
+<p>于是定义IPC流格式：</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>&lt;SCHEMA&gt;
+</span><span>&lt;DICTIONARY 0&gt;
+</span><span>...
+</span><span>&lt;DICTIONARY k - 1&gt;
+</span><span>&lt;RECORD BATCH 0&gt;
+</span><span>...
+</span><span>&lt;DICTIONARY x DELTA&gt;
+</span><span>...
+</span><span>&lt;DICTIONARY y DELTA&gt;
+</span><span>...
+</span><span>&lt;RECORD BATCH n - 1&gt;
+</span><span>&lt;EOS [optional]: 0xFFFFFFFF 0x00000000&gt;
+</span></code></pre>
+<p>由于这部分比较“定义”，本文不展开讲，更详细请看<a rel="noopener nofollow noreferrer" target="_blank" href="https://arrow.apache.org/docs/format/Columnar.html#ipc-streaming-format">规范</a>。</p>
+<h2 id="arrow-flight">Arrow Flight</h2>
+<p>近段时间Arrow最大的变化就是添加了Flight，一个通用C/S架构的高性能数据传输框架。Flight基于gRPC开发，从最开始重点就是优化Arrow格式数据。</p>
+<p>Flight的具体细节请看<a rel="noopener nofollow noreferrer" target="_blank" href="https://arrow.apache.org/blog/2019/10/13/introducing-arrow-flight/">官方文档</a>。这里只介绍它的优势：</p>
+<ul>
+<li>无序列化/反序列化：Flight会直接将内存中的Arrow发送，不进行任何序列化/反序列化操作</li>
+<li>批处理：Flight对record batch的操作无需访问具体的列、记录或者元素</li>
+<li>高并发：Flight的吞吐量只收到客户端和服务端的吞吐量以及网络的限制</li>
+<li>网络利用率高：Flight使用基于HTTP/2的gRPC，不仅是快</li>
+</ul>
+<p><a rel="noopener nofollow noreferrer" target="_blank" href="https://www.dremio.com/is-time-to-replace-odbc-jdbc/">官方给出的数据</a>是Flight的传输大约是标准ODBC的20-50倍。</p>
+<p>对每个batch record平均行数256K时，在单节点传输时的性能对比（因为flight多节点时可以平行传输数据流）：</p>
+<p><img src="https://i.loli.net/2021/11/16/EOrNiXqY9Le2jTy.png" alt="性能对比" /></p>
+<h3 id="shi-yong-chang-jing">使用场景</h3>
+<p>最过经典的非<a rel="noopener nofollow noreferrer" target="_blank" href="https://arrow.apache.org/blog/2017/07/26/spark-arrow/">PySpark</a>莫属，此外还有<a rel="noopener nofollow noreferrer" target="_blank" href="https://arrow.apache.org/blog/2019/01/25/r-spark-improvements/">sparklyr</a>。</p>
+<p>另外，ClickHouse也有计划实现Arrow Flight的server端，一旦落地可用，spark与clickhouse交互就可以抛弃3G网般的JDBC了~</p>
+<h2 id="zong-jie">总结</h2>
+<p>本文从Arrow立项的背景入手，再到Arrow实现所需的设计，最后到Arrow具体columnar格式定义，介绍了Arrow的各种相关概念。最后补上一张图作为Arrow的优点、限制的总结：</p>
+<p><img src="https://i.loli.net/2021/11/14/i9hQ5wd4sj6y8Tf.png" alt="总结" /></p>
+<h2 id="can-kao">参考</h2>
+<ol>
+<li>Wes和Jacques的视频访谈: <a rel="noopener nofollow noreferrer" target="_blank" href="https://www.dremio.com/starting-apache-arrow/">Starting Apache Arrow</a></li>
+<li>Arrow起名投票: <a rel="noopener nofollow noreferrer" target="_blank" href="https://docs.google.com/spreadsheets/d/1q6UqluW6SLuMKRwW2TBGBzHfYLlXYm37eKJlIxWQGQM/edit#gid=0">Vector Naming Discussion</a></li>
+<li>思路来源: <a rel="noopener nofollow noreferrer" target="_blank" href="https://tech.ipalfish.com/blog/2020/12/08/apache_arrow_summary/">伴鱼技术团队</a></li>
+<li><a rel="noopener nofollow noreferrer" target="_blank" href="https://github.com/apache/arrow/blob/master/docs/source/format/Columnar.rst">Arrow Columnar Format</a></li>
+<li><a rel="noopener nofollow noreferrer" target="_blank" href="https://arrow.apache.org/faq/">Arrow FAQ</a></li>
+</ol>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-jie-shao" class="toc is-size-7 is-active"
+                href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#jie-shao">
+                介绍
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-arrowde-he-xin-neng-li" class="toc is-size-7" href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#arrowde-he-xin-neng-li">
+                    Arrow的核心能力
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-bei-jing" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#bei-jing">
+                背景
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-qi-yin" class="toc is-size-7" href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#qi-yin">
+                    起因
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-fa-zhan" class="toc is-size-7" href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#fa-zhan">
+                    发展
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-shi-xian" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#shi-xian">
+                实现
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-arrowlie-ge-shi" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#arrowlie-ge-shi">
+                Arrow列格式
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-wu-li-nei-cun-bu-ju" class="toc is-size-7" href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#wu-li-nei-cun-bu-ju">
+                    物理内存布局
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-luo-ji-lei-xing" class="toc is-size-7" href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#luo-ji-lei-xing">
+                    逻辑类型
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-xu-lie-hua-yu-ipc" class="toc is-size-7" href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#xu-lie-hua-yu-ipc">
+                    序列化与IPC
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-arrow-flight" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#arrow-flight">
+                Arrow Flight
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-shi-yong-chang-jing" class="toc is-size-7" href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#shi-yong-chang-jing">
+                    使用场景
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-zong-jie" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#zong-jie">
+                总结
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-can-kao" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/#can-kao">
+                参考
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+          
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;bloom-filter&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              布隆过滤器
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;paper-reading-rdd&#x2F;">
+              论文阅读笔记：RDD<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+            
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://oliverdding.github.io/elasticlunr.min.js"></script>
+  <script src="https://oliverdding.github.io/search_index.zh.js"></script><script src="https://oliverdding.github.io/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://oliverdding.github.io";
+    this.page.identifier = "/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://oliverdding.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>
