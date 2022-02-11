@@ -189,7 +189,7 @@
 &lt;h3 id=&quot;fu-ben-guan-li&quot;&gt;副本管理&lt;&#x2F;h3&gt;
 &lt;p&gt;Name Node还需要保证每一时刻每个块都有足够数量的副本. 每次收到block report, Name Node都会检测是否有块的副本数量大于少于预设值. 当副本数量大于预设值, Name Node会选择删除副本, 依据尽量不减少拥有副本的rack(这里的rack, 我理解为物理上放置在同一地点, 网络上属于同一网络的群组)数量. 当副本数了小于预设值, Name Node会将它放到复制优先队列(replication priority queue). 一个后台进程会不断扫描该优先队列的队头并决定哪个Data Node放置副本.&lt;&#x2F;p&gt;
 &lt;p&gt;这部分细节非常多, 写下会导致篇幅过大, 请读者自行深入.&lt;&#x2F;p&gt;
-&lt;p&gt;可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. &amp;quot;The Hadoop Distributed File System&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. “The Hadoop Distributed File System”&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h2&gt;
 &lt;p&gt;综上, HDFS是基于GFS的开源分布式文件系统, 具有高容错性, 可以部署在廉价不可靠的机器上. 适合批处理, 大量数据集存储处理与流式文件访问.&lt;&#x2F;p&gt;
 &lt;p&gt;当然HDFS也有着自己的局限, 世界上没有十全十美的事情, 就好像为了简化内存一致性模型HDFS不得不使用one-writer的模式, 又好像为了提高吞吐量不得不放松POSIX标准.&lt;&#x2F;p&gt;
@@ -207,7 +207,7 @@
 &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#4&quot;&gt;4&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:P. H. Carns, W. B. Ligon III, R. B. Ross, and R. Thakur. “PVFS: A parallel file system for Linux clusters,” in Proc. of 4th Annual Linux Showcase and Conference, 2000, pp. 317–327.
 &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#5&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:S. Ghemawat, H. Gobioff, S. Leung. “The Google file system,” In Proc. of ACM Symposium on Operating Systems Principles, Lake George, NY, Oct 2003, pp 29–43.
 &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#6&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:What is Hadoop? - SAS. https:&#x2F;&#x2F;www.sas.com&#x2F;zh_cn&#x2F;insights&#x2F;big-data&#x2F;hadoop.html
-&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#7&quot;&gt;5&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name ...” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.&lt;&#x2F;p&gt;
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#7&quot;&gt;5&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name …” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.&lt;&#x2F;p&gt;
 &lt;&#x2F;div&gt;
 </description>
         </item>

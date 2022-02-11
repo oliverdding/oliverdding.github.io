@@ -109,11 +109,11 @@
 &lt;p&gt;那么k取何值时，false positive发生概率最小，此时概率为？&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;shu-xue-zheng-ming&quot;&gt;数学证明&lt;&#x2F;h2&gt;
 &lt;p&gt;对&lt;code&gt;bitmap&lt;&#x2F;code&gt;随机置位后，对于任意一个位，其被置0、1的概率分别是$P(0) = 1 - \frac{1}{m}$、$P(1) = \frac{1}{m}$&lt;&#x2F;p&gt;
-&lt;p&gt;对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P&#x27;(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$&lt;&#x2F;p&gt;
-&lt;p&gt;对于n个key插入后，对于任意一个位，仍然是0的概率是$$P&#x27;&#x27;(0)=P&#x27;(0)^{n}=(1 - \frac{1}{m})^{kn}$$&lt;&#x2F;p&gt;
+&lt;p&gt;对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P’(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$&lt;&#x2F;p&gt;
+&lt;p&gt;对于n个key插入后，对于任意一个位，仍然是0的概率是$$P’‘(0)=P’(0)^{n}=(1 - \frac{1}{m})^{kn}$$&lt;&#x2F;p&gt;
 &lt;p&gt;由于有自然对数e的计算公式$$\lim_{n \to \infty}{(1-\frac{1}{x})^{-x}}=e$$&lt;&#x2F;p&gt;
-&lt;p&gt;我们可以近似计算$P&#x27;&#x27;(0)$得到$$P&#x27;&#x27;(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$&lt;&#x2F;p&gt;
-&lt;p&gt;因此，对于任意一个位，其被置1的概率是$$P&#x27;&#x27;(1)=1-P&#x27;&#x27;(0)\approx{}1-e^{-\frac{kn}{m}}$$&lt;&#x2F;p&gt;
+&lt;p&gt;我们可以近似计算$P’‘(0)$得到$$P’’(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$&lt;&#x2F;p&gt;
+&lt;p&gt;因此，对于任意一个位，其被置1的概率是$$P’‘(1)=1-P’’(0)\approx{}1-e^{-\frac{kn}{m}}$$&lt;&#x2F;p&gt;
 &lt;p&gt;当alse positive发生时，是指它的k个hash函数得到的坐标都为1。由于k个hash函数相互独立，我们可以计算出alse positive的概率为$$f=(1-(1-\frac{1}{m})^{kn})^{k}\approx{}(1-e^{-\frac{kn}{m}})^{k}$$&lt;&#x2F;p&gt;
 &lt;p&gt;由于m、n是用户给定的值，唯一变量就是k，我们需要指定k的值去最小化alse positive概率。&lt;&#x2F;p&gt;
 &lt;p&gt;另$p=e^{-\frac{kn}{m}}$，我们有$$f=(1-p)^{k}=e^{kln(1-p)}$$&lt;&#x2F;p&gt;
@@ -147,14 +147,14 @@
 &lt;p&gt;每个事物的产生发展都有其历史原因，如果抛开目的去“学习”，犹如竹篮子打水-一场空&lt;&#x2F;p&gt;
 &lt;p align=&quot;right&quot;&gt;- 我说的 ;)&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
-&lt;p&gt;让我们回到2008年，故事从那开始...&lt;&#x2F;p&gt;
+&lt;p&gt;让我们回到2008年，故事从那开始…&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;qi-yin&quot;&gt;起因&lt;&#x2F;h3&gt;
 &lt;p&gt;Wes McKinney在2008年开启了Pandas项目，这个python中分析、操作数据的瑞士军刀。紧接着在2014年，Wes加入Cloudera公司，并着手研究如何让python可以“插入”所有的大数据组件和数据库，但是每个系统都有自己操作数据的方式，于是：&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;quot;Oh my gosh, I&#x27;m going to have to write a dozen different data converters to marshal data, convert data between Pandas each of these data processing systems from Spark, to Impala, to different file formats and HDFS, so it was basically this overwhelming problem.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;“Oh my gosh, I’m going to have to write a dozen different data converters to marshal data, convert data between Pandas each of these data processing systems from Spark, to Impala, to different file formats and HDFS, so it was basically this overwhelming problem.”&lt;&#x2F;p&gt;
 &lt;p align=&quot;right&quot;&gt;- Wes McKinney&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
-&lt;p&gt;除此之外，在大数据科学领域，dataframe的概念随处可见，每个框架都将datafrme作为高层定义，代表一个表、一系列API...但是其底层的实现天壤悬隔，Wes完全无法复用代码。&lt;&#x2F;p&gt;
+&lt;p&gt;除此之外，在大数据科学领域，dataframe的概念随处可见，每个框架都将datafrme作为高层定义，代表一个表、一系列API…但是其底层的实现天壤悬隔，Wes完全无法复用代码。&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;strong&gt;无法共享数据&lt;&#x2F;strong&gt;、&lt;strong&gt;无法共享代码&lt;&#x2F;strong&gt;这两个大难题暂时困住了Wes。&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;fa-zhan&quot;&gt;发展&lt;&#x2F;h3&gt;
 &lt;p&gt;Wes开始设计一种table middleware，作为不同组件交换数据的中间层，一种表接口的标准(standardized table interface)。&lt;&#x2F;p&gt;
@@ -163,7 +163,7 @@
 &lt;p&gt;自此，arrow项目创立。&lt;&#x2F;p&gt;
 &lt;p&gt;在项目早期，最重要的是设计出一套与语言无关的内存表结构，并一定要方便分析处理。除此之外，还需要将各种格式、类型的数据转换、转出为这个标准格式的库。最后，还需要一个计算处理的库，以便于直接基于arrow进行快速数据分析处理。&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;quot;An important thing to remember about the project is that it&#x27;s front-end agnostic. So it&#x27;s not a new data frame library, like Pandas. It&#x27;s not a new database.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;“An important thing to remember about the project is that it’s front-end agnostic. So it’s not a new data frame library, like Pandas. It’s not a new database.”&lt;&#x2F;p&gt;
 &lt;p align=&quot;right&quot;&gt;- Wes McKinney&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
 &lt;p&gt;此外，Wes在和Apache Impala团队合作的时候，发现Impala的代码中有大量和pandas做相似事情的片段，比如CSV序列化、反序列化的，I&#x2F;O子系统，自己的查询引擎，甚至自己的前端。在有了这样一个语言无关的内存数据格式，他们开始思考如何避免重复代码。&lt;&#x2F;p&gt;
@@ -267,7 +267,7 @@
 &lt;h3 id=&quot;luo-ji-lei-xing&quot;&gt;逻辑类型&lt;&#x2F;h3&gt;
 &lt;p&gt;&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;arrow&#x2F;blob&#x2F;master&#x2F;format&#x2F;Schema.fbs&quot;&gt;Schema.fbs&lt;&#x2F;a&gt;定义了Arrow支持的逻辑类型，每种逻辑类型都会对应到一种物理布局。&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;xu-lie-hua-yu-ipc&quot;&gt;序列化与IPC&lt;&#x2F;h3&gt;
-&lt;p&gt;列式格式序列化时最原始的单位是&amp;quot;record batch&amp;quot;(也就是一个表，table啦)。一个record batch是一组有序的array的集合，被称为record batch的字段(fields)。每个字段(field)有相同的长度，但是字段的数据类型可以不一样。record batch的字段名、类型构成了它的schema。&lt;&#x2F;p&gt;
+&lt;p&gt;列式格式序列化时最原始的单位是“record batch“(也就是一个表，table啦)。一个record batch是一组有序的array的集合，被称为record batch的字段(fields)。每个字段(field)有相同的长度，但是字段的数据类型可以不一样。record batch的字段名、类型构成了它的schema。&lt;&#x2F;p&gt;
 &lt;p&gt;本节描述一个协议，用于将record batch序列化为二进制流，并可以无需内存拷贝重构record batch。&lt;&#x2F;p&gt;
 &lt;p&gt;序列化时会分为这三部分：&lt;&#x2F;p&gt;
 &lt;ul&gt;
@@ -504,7 +504,7 @@
 &lt;h3 id=&quot;fu-ben-guan-li&quot;&gt;副本管理&lt;&#x2F;h3&gt;
 &lt;p&gt;Name Node还需要保证每一时刻每个块都有足够数量的副本. 每次收到block report, Name Node都会检测是否有块的副本数量大于少于预设值. 当副本数量大于预设值, Name Node会选择删除副本, 依据尽量不减少拥有副本的rack(这里的rack, 我理解为物理上放置在同一地点, 网络上属于同一网络的群组)数量. 当副本数了小于预设值, Name Node会将它放到复制优先队列(replication priority queue). 一个后台进程会不断扫描该优先队列的队头并决定哪个Data Node放置副本.&lt;&#x2F;p&gt;
 &lt;p&gt;这部分细节非常多, 写下会导致篇幅过大, 请读者自行深入.&lt;&#x2F;p&gt;
-&lt;p&gt;可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. &amp;quot;The Hadoop Distributed File System&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. “The Hadoop Distributed File System”&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h2&gt;
 &lt;p&gt;综上, HDFS是基于GFS的开源分布式文件系统, 具有高容错性, 可以部署在廉价不可靠的机器上. 适合批处理, 大量数据集存储处理与流式文件访问.&lt;&#x2F;p&gt;
 &lt;p&gt;当然HDFS也有着自己的局限, 世界上没有十全十美的事情, 就好像为了简化内存一致性模型HDFS不得不使用one-writer的模式, 又好像为了提高吞吐量不得不放松POSIX标准.&lt;&#x2F;p&gt;
@@ -522,7 +522,7 @@
 &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#4&quot;&gt;4&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:P. H. Carns, W. B. Ligon III, R. B. Ross, and R. Thakur. “PVFS: A parallel file system for Linux clusters,” in Proc. of 4th Annual Linux Showcase and Conference, 2000, pp. 317–327.
 &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#5&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:S. Ghemawat, H. Gobioff, S. Leung. “The Google file system,” In Proc. of ACM Symposium on Operating Systems Principles, Lake George, NY, Oct 2003, pp 29–43.
 &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#6&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:What is Hadoop? - SAS. https:&#x2F;&#x2F;www.sas.com&#x2F;zh_cn&#x2F;insights&#x2F;big-data&#x2F;hadoop.html
-&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#7&quot;&gt;5&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name ...” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.&lt;&#x2F;p&gt;
+&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#7&quot;&gt;5&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name …” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.&lt;&#x2F;p&gt;
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -554,7 +554,7 @@
 &lt;li&gt;shared variables: 可以在并行操作中使用。
 &lt;ol&gt;
 &lt;li&gt;broadcast类型变量: 用于在不同节点地内存中存储一个值&lt;&#x2F;li&gt;
-&lt;li&gt;accumulators类型变量: 只支持&amp;quot;add&amp;quot;操作的变量&lt;&#x2F;li&gt;
+&lt;li&gt;accumulators类型变量: 只支持“add“操作的变量&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
@@ -618,7 +618,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;println(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;Counter value: &amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; counter)&lt;&#x2F;span&gt;&lt;span&gt;;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;这段代码的结果取决于是否运行在同一个JVM中。也就是说，是本地运行 (--master = local[n]) 还是集群运行（spark-submit）。&lt;&#x2F;p&gt;
+&lt;p&gt;这段代码的结果取决于是否运行在同一个JVM中。也就是说，是本地运行 (–master = local[n]) 还是集群运行（spark-submit）。&lt;&#x2F;p&gt;
 &lt;p&gt;运行jobs时，spark会将RDD的operations分解为tasks，交由一个个executor执行。而在执行前，spark会构建task的闭包。闭包是对RDD执行计算时必须要用到的变量(例子中就是counter)和方法(例子中就是foreach())，会被序列化并发送给各个executor。&lt;&#x2F;p&gt;
 &lt;p&gt;在集群模式，闭包使用到的变量会被拷贝进闭包，然后发送给executor执行，executo后续会对闭包内的counter进行处理，而不是driver program中的counter。也就是说，修改并不成功，最终结果还是0。而local模式则相反，task运行在相同JVM，counter的引用就是原变量，因此可以得到正确结果。&lt;&#x2F;p&gt;
 &lt;p&gt;在这个场景中，为了得到正确结果，spark定义了accumulator类型变量，提供了跨节点累加值的机制。&lt;&#x2F;p&gt;
@@ -626,7 +626,7 @@
 &lt;p&gt;RDD的另一种常见错误用法是通过forEach(println)和map(println)输出元素。在单例模式下正常运作，但是在集群模式下，打印的值会输出到executor的标准输出，而不是driver program的，因此也就看不到元素内容。&lt;&#x2F;p&gt;
 &lt;p&gt;为了正确获取元素内容，需要先调用&lt;code&gt;collect()&lt;&#x2F;code&gt;函数以将元素收集到driver program，然后再调用输出函数。但是这容易造成OOM。另一种方案是&lt;code&gt;take()&lt;&#x2F;code&gt;函数，只收集一定数量的元素。&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;key-valuedui&quot;&gt;Key-Value对&lt;&#x2F;h4&gt;
-&lt;p&gt;虽然大多数Spark操作都适用于包含任何类型对象的RDDs，但有几个特殊的操作只适用于键值对的RDDs。最常见的是分布式 &amp;quot;洗牌(shuffle)&amp;quot;操作，如按键分组或聚合元素。&lt;&#x2F;p&gt;
+&lt;p&gt;虽然大多数Spark操作都适用于包含任何类型对象的RDDs，但有几个特殊的操作只适用于键值对的RDDs。最常见的是分布式 “洗牌(shuffle)“操作，如按键分组或聚合元素。&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;transformations&quot;&gt;Transformations&lt;&#x2F;h4&gt;
 &lt;p&gt;请到网页查看: &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;http:&#x2F;&#x2F;spark.apache.org&#x2F;docs&#x2F;latest&#x2F;rdd-programming-guide.html#transformations&quot;&gt;transformations&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;actions&quot;&gt;Actions&lt;&#x2F;h4&gt;
@@ -635,11 +635,11 @@
 &lt;p&gt;Spark中的某些操作会触发一个被称为洗牌的事件。洗牌是Spark重新分配数据的机制，使其在不同的分区中以不同的方式分组。这通常涉及跨执行器和机器的数据复制，使洗牌成为一个复杂而昂贵的操作。&lt;&#x2F;p&gt;
 &lt;h5 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h5&gt;
 &lt;p&gt;为了解释洗牌操作，用&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;来演示，这个方法生成新的RDD，将所有于key关联的value合并为一个touple。最麻烦的地方是，不是所有和key关联的value在同一个分区、甚至节点。不同executor需要合作以得到结果。&lt;&#x2F;p&gt;
-&lt;p&gt;在spark中，不会为了某个operation去交换分区。在计算过程中，一个task就只操作一个分区；因此，为了规划&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;这个reduce任务，spark需要一个&lt;strong&gt;all-to-all&lt;&#x2F;strong&gt;操作: 从所有分区读取所有key对应的所有的的value，然后跨集群聚集所有value以计算每个key对应的结果集。这就是&amp;quot;洗牌&amp;quot;。&lt;&#x2F;p&gt;
+&lt;p&gt;在spark中，不会为了某个operation去交换分区。在计算过程中，一个task就只操作一个分区；因此，为了规划&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;这个reduce任务，spark需要一个&lt;strong&gt;all-to-all&lt;&#x2F;strong&gt;操作: 从所有分区读取所有key对应的所有的的value，然后跨集群聚集所有value以计算每个key对应的结果集。这就是“洗牌“。&lt;&#x2F;p&gt;
 &lt;p&gt;洗牌后排序看网站&lt;&#x2F;p&gt;
 &lt;h5 id=&quot;xing-neng-sun-shi&quot;&gt;性能损失&lt;&#x2F;h5&gt;
-&lt;p&gt;洗牌操作非常消耗资源，需要磁盘I&#x2F;O、序列化和网络I&#x2F;O。为了聚集洗牌需要的数据，spark会启动一系列task，&amp;quot;map任务&amp;quot;用于组织数据，&amp;quot;reduce任务&amp;quot;用于聚合数据。&lt;&#x2F;p&gt;
-&lt;p&gt;在spark内部，洗牌操作执行时，每个&amp;quot;map任务&amp;quot;会将结果保存在内存中(直到溢出，溢出则分块写入外存)，然后根据分区顺序排序后写入单一的文件内; &amp;quot;reduce任务&amp;quot;会读取这个文件。&lt;&#x2F;p&gt;
+&lt;p&gt;洗牌操作非常消耗资源，需要磁盘I&#x2F;O、序列化和网络I&#x2F;O。为了聚集洗牌需要的数据，spark会启动一系列task，“map任务“用于组织数据，“reduce任务“用于聚合数据。&lt;&#x2F;p&gt;
+&lt;p&gt;在spark内部，洗牌操作执行时，每个“map任务“会将结果保存在内存中(直到溢出，溢出则分块写入外存)，然后根据分区顺序排序后写入单一的文件内; “reduce任务“会读取这个文件。&lt;&#x2F;p&gt;
 &lt;p&gt;洗牌还会产生大量临时文件，直到RDD生命周期结束并且相关资源被垃圾回收。注意，垃圾回收会在任务停止之后很久很久才进行，也就是说，长期的的spark job会导致大量存储消耗。&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;chi-jiu-cun-chu&quot;&gt;持久存储&lt;&#x2F;h3&gt;
 &lt;p&gt;RDD可以被持久化存储，每个节点都会将它计算的分区存储在内存中，并在该数据集（或由其衍生的数据集）上的其他操作中重复使用。&lt;&#x2F;p&gt;
@@ -654,7 +654,23 @@
 &lt;h3 id=&quot;broadcast-variables&quot;&gt;Broadcast Variables&lt;&#x2F;h3&gt;
 &lt;p&gt;广播变量可以让每个节点保存一个只读变量在本地，而不是每次运行task传入。用于高效地给每个节点一些较大数据集。&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;accumulators&quot;&gt;Accumulators&lt;&#x2F;h3&gt;
-&lt;p&gt;累加器是只通过关联和换元操作 &amp;quot;只增&amp;quot;的变量，因此可以有效地支持并行，可以用来实现计数器（如MapReduce）或总和。Spark原生支持数字类型的累加器，程序员可以增加对新类型的支持。&lt;&#x2F;p&gt;
+&lt;p&gt;累加器是只通过关联和换元操作 “只增“的变量，因此可以有效地支持并行，可以用来实现计数器（如MapReduce）或总和。Spark原生支持数字类型的累加器，程序员可以增加对新类型的支持。&lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>Comment Policy</title>
+            <pubDate>Fri, 01 Jan 2021 00:00:00 +0800</pubDate>
+            <link>https://oliverdding.github.io/comment-policy/</link>
+            <guid>https://oliverdding.github.io/comment-policy/</guid>
+            <description>&lt;p&gt;Welcome to my blog! To ensure that you have a good time over here at Aurora, please make sure to stick to the following guidelines:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Be polite – don’t be rude to anyone and respect others. If something you would say would get you bottled on the head offline, please don’t say it here. Remember there is a person behind the screen and that your words affect people.&lt;&#x2F;li&gt;
+&lt;li&gt;Don’t troll. We appreciate and welcome criticism towards writers here, but comments that add no value to the discussion or that are merely insulting would be deleted without exception.&lt;&#x2F;li&gt;
+&lt;li&gt;Spam? Goodbye. We understand that you may make thousands of dollars working from home, however, we are not interested. Please refrain from posting or we’ll give you a hand and show both you and your post the door.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;To put it in a simple sentence, our guidelines boil down to “Don’t be a dick”. If you don’t follow any of these guidelines, not only will our moderators remove the comment but we may also ban you from participating in the discussions.&lt;&#x2F;p&gt;
+&lt;p&gt;If you find any comments which violate our guidelines, please make sure to &lt;code&gt;flag&lt;&#x2F;code&gt; or &lt;code&gt;mark as spam&lt;&#x2F;code&gt; – our moderators highly appreciate your support!&lt;&#x2F;p&gt;
+&lt;p&gt;Happy commenting!&lt;&#x2F;p&gt;
 </description>
         </item>
     </channel>

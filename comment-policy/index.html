@@ -38,7 +38,7 @@
 
   <title>
     
-Aurora | 布隆过滤器
+Aurora | Comment Policy
 
   </title>
 
@@ -126,9 +126,9 @@ Aurora | 布隆过滤器
       <div class="column is-8 is-offset-2">
         <article class="box">
           <h1 class="title">
-            布隆过滤器
+            Comment Policy
           </h1>
-          <p class="subtitle">用于判断某个元素是否在集合中的一个简单、高效、内存占用低的数据结构</p>
+          <p class="subtitle"></p>
           <div class="columns is-multiline is-gapless">
             <div class="column is-8">
               
@@ -140,7 +140,7 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="far fa-calendar-alt"></i>
   </span>
-  <span><time datetime="2022-02-09T17:13:10+08:00">February 09, 2022</time></span>
+  <span><time datetime="2021-01-01T00:00:00+08:00">January 01, 2021</time></span>
 </span>
 
             </div>
@@ -150,126 +150,34 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="far fa-clock"></i>
   </span>
-  <span>4 min,</span>
+  <span>2 min,</span>
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>650 words</span>
+  <span>203 words</span>
 </span>
 
             </div>
             <div class="column">
               
-              
-<p>
-  Categories:
-  
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/datastructures/">
-    <span class="icon-text">
-      <span class="icon">
-        <i class="fas fa-cube"></i>
-      </span>
-      <span>DataStructures</span>
-    </span>
-  </a>
-  
-</p>
-
-              
             </div>
             <div class="column has-text-right-desktop">
-              
-              
-<p>
-  Tags:
-  
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/big-data/">
-    <span class="icon-text">
-      <span class="icon">
-        <i class="fas fa-tag"></i>
-      </span>
-      <span>big data</span>
-    </span>
-  </a>
-  
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/data-structure/">
-    <span class="icon-text">
-      <span class="icon">
-        <i class="fas fa-tag"></i>
-      </span>
-      <span>data structure</span>
-    </span>
-  </a>
-  
-</p>
-
               
             </div>
           </div>
           <div class="content mt-2">
-            <p>布隆过滤器（Bloom Filter）是一种类似于哈希表的数据结构，但相比于后者空间利用率更高。</p>
-<p>使用布隆过滤器查找key时，返回值可能情况有两种：</p>
-<ol>
-<li>key<strong>不</strong>存在</li>
-<li>key<strong>可能</strong>存在</li>
-</ol>
-<h2 id="yuan-li">原理</h2>
-<p>布隆过滤器由以下三部分构成：</p>
-<ol>
-<li>n个key</li>
-<li>m位的位图：<code>bitmap</code></li>
-<li>k个无关的hash函数：<code>h1, h2, ..., hk</code></li>
-</ol>
-<blockquote>
-<p>可以用$h_{i}(x)=MD5(x+i)$或者$h_{i}(x)=MD5(x|i)$实现k个无关hash函数</p>
-</blockquote>
-<p>需要插入key时，对<code>key = a</code>时，经过k个hash函数后得到<code>h1(a), h2(a), ..., hk(a)</code></p>
-<p>此时将<code>bitmap</code>中对应的位置1。</p>
-<p><img src="https://raw.githubusercontent.com/oliverdding/imaw.io/main/inserting-key-into-bloom-filter.drawio.svg" alt="往布隆过滤器插入新key" /></p>
-<p>当key越来越多，<code>bitmap</code>中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标对应<code>bitmap</code>中的值都为1的概率越大，此时就发生false positive。</p>
-<p>那么k取何值时，false positive发生概率最小，此时概率为？</p>
-<h2 id="shu-xue-zheng-ming">数学证明</h2>
-<p>对<code>bitmap</code>随机置位后，对于任意一个位，其被置0、1的概率分别是$P(0) = 1 - \frac{1}{m}$、$P(1) = \frac{1}{m}$</p>
-<p>对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P’(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$</p>
-<p>对于n个key插入后，对于任意一个位，仍然是0的概率是$$P’‘(0)=P’(0)^{n}=(1 - \frac{1}{m})^{kn}$$</p>
-<p>由于有自然对数e的计算公式$$\lim_{n \to \infty}{(1-\frac{1}{x})^{-x}}=e$$</p>
-<p>我们可以近似计算$P’‘(0)$得到$$P’’(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$</p>
-<p>因此，对于任意一个位，其被置1的概率是$$P’‘(1)=1-P’’(0)\approx{}1-e^{-\frac{kn}{m}}$$</p>
-<p>当alse positive发生时，是指它的k个hash函数得到的坐标都为1。由于k个hash函数相互独立，我们可以计算出alse positive的概率为$$f=(1-(1-\frac{1}{m})^{kn})^{k}\approx{}(1-e^{-\frac{kn}{m}})^{k}$$</p>
-<p>由于m、n是用户给定的值，唯一变量就是k，我们需要指定k的值去最小化alse positive概率。</p>
-<p>另$p=e^{-\frac{kn}{m}}$，我们有$$f=(1-p)^{k}=e^{kln(1-p)}$$</p>
-<p>此时变更为最小的$g=kln(1-p)$</p>
-<p>无中生有下得到$$g=kln{}(1-p)=-\frac{m}{n}ln(e^{-\frac{kn}{m}})ln(1-p)=-\frac{m}{n}ln(p)ln(1-p)$$</p>
-<p>得知当$p=\frac{1}{2}$时g取得最小，此时有$$k=ln(2\frac{m}{n})$$</p>
-<p>插入回$$f=(1-p)^{k}$$得到alse positive的最小值为$$f_{min}=(\frac{1}{2})^{k}\approx{}(0.6185)^{\frac{m}{n}}$$</p>
+            <p>Welcome to my blog! To ensure that you have a good time over here at Aurora, please make sure to stick to the following guidelines:</p>
+<ul>
+<li>Be polite – don’t be rude to anyone and respect others. If something you would say would get you bottled on the head offline, please don’t say it here. Remember there is a person behind the screen and that your words affect people.</li>
+<li>Don’t troll. We appreciate and welcome criticism towards writers here, but comments that add no value to the discussion or that are merely insulting would be deleted without exception.</li>
+<li>Spam? Goodbye. We understand that you may make thousands of dollars working from home, however, we are not interested. Please refrain from posting or we’ll give you a hand and show both you and your post the door.</li>
+</ul>
+<p>To put it in a simple sentence, our guidelines boil down to “Don’t be a dick”. If you don’t follow any of these guidelines, not only will our moderators remove the comment but we may also ban you from participating in the discussions.</p>
+<p>If you find any comments which violate our guidelines, please make sure to <code>flag</code> or <code>mark as spam</code> – our moderators highly appreciate your support!</p>
+<p>Happy commenting!</p>
 
           </div>
         </article>
-      </div>
-      
-      <div class="column is-2 is-hidden-mobile">
-        <aside class="menu" style="position: sticky; top: 48px">
-          <p class="heading has-text-weight-bold">Contents</p>
-          <ul class="menu-list">
-            
-            <li>
-              <a id="link-yuan-li" class="toc is-size-7 is-active"
-                href="https://oliverdding.github.io/posts/bloom-filter/#yuan-li">
-                原理
-              </a>
-              
-            </li>
-            
-            <li>
-              <a id="link-shu-xue-zheng-ming" class="toc is-size-7 "
-                href="https://oliverdding.github.io/posts/bloom-filter/#shu-xue-zheng-ming">
-                数学证明
-              </a>
-              
-            </li>
-            
-          </ul>
-        </aside>
       </div>
       
     </div>
@@ -302,48 +210,9 @@ Aurora | 布隆过滤器
 
   
 
-<section class="section">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <nav class="level">
-          
-          <div class="level-item has-text-centered">
-            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;best-practice-for-writing-blog-with-ssg&#x2F;">
-              <span class="icon mr-2">
-                <i class="fas fa-arrow-circle-left"></i>
-              </span>
-              使用静态网站写博客的最佳实践
-            </a>
-          </div>
-           
-          <div class="level-item has-text-centered">
-            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;apache-arrow-the-next-windfall-after-the-data-lake-in-big-data&#x2F;">
-              Apache Arrow: 大数据在数据湖后的下一个风向标<span class="icon ml-2">
-                <i class="fas fa-arrow-circle-right"></i>
-              </span>
-            </a>
-          </div>
-            
-        </nav>
-      </div>
-    </div>
-  </div>
-</section>
-
 
 
   
-
-<section class="section">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-6">
-        <div id="disqus_thread"></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 
 
@@ -394,65 +263,7 @@ Aurora | 布隆过滤器
 
   
 
-<script type="text/javascript">
-  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
-  const tocItems = document.querySelectorAll(".toc");
-  const navSections = new Array(tocItems.length);
 
-  tocItems.forEach((el, i) => {
-    let id = el.getAttribute("id").substring(5);
-    navSections[i] = document.getElementById(id);
-  })
-
-  function isVisible(tocIndex) {
-    const current = navSections[tocIndex];
-    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
-      : document.querySelectorAll("section.section").item(1);
-
-    const c = current.getBoundingClientRect();
-    const n = next.getBoundingClientRect();
-    const h = (window.innerHeight || document.documentElement.clientHeight);
-
-    return (c.top <= h) && (n.top - menuBarHeight >= 0);
-  }
-
-  function activateIfVisible() {
-    for (b = true, i = 0; i < tocItems.length; i++) {
-      if (b && isVisible(i)) {
-        tocItems[i].classList.add('is-active');
-        b = false;
-      } else
-        tocItems[i].classList.remove('is-active');
-    }
-  }
-
-  var isTicking = null;
-  window.addEventListener('scroll', () => {
-    if (!isTicking) {
-      window.requestAnimationFrame(() => {
-        activateIfVisible();
-        isTicking = false;
-      });
-      isTicking = true;
-    }
-  }, false);
-</script>
-
-
-
-<script>
-  var disqus_config = function () {
-    this.page.url = "https://oliverdding.github.io";
-    this.page.identifier = "/posts/bloom-filter/";
-  };
-
-  (function () {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://oliverdding.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-</script>
 
 
 

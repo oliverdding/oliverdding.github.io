@@ -36,7 +36,7 @@
 &lt;li&gt;shared variables: 可以在并行操作中使用。
 &lt;ol&gt;
 &lt;li&gt;broadcast类型变量: 用于在不同节点地内存中存储一个值&lt;&#x2F;li&gt;
-&lt;li&gt;accumulators类型变量: 只支持&amp;quot;add&amp;quot;操作的变量&lt;&#x2F;li&gt;
+&lt;li&gt;accumulators类型变量: 只支持“add“操作的变量&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
@@ -100,7 +100,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;println(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;Counter value: &amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; counter)&lt;&#x2F;span&gt;&lt;span&gt;;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;这段代码的结果取决于是否运行在同一个JVM中。也就是说，是本地运行 (--master = local[n]) 还是集群运行（spark-submit）。&lt;&#x2F;p&gt;
+&lt;p&gt;这段代码的结果取决于是否运行在同一个JVM中。也就是说，是本地运行 (–master = local[n]) 还是集群运行（spark-submit）。&lt;&#x2F;p&gt;
 &lt;p&gt;运行jobs时，spark会将RDD的operations分解为tasks，交由一个个executor执行。而在执行前，spark会构建task的闭包。闭包是对RDD执行计算时必须要用到的变量(例子中就是counter)和方法(例子中就是foreach())，会被序列化并发送给各个executor。&lt;&#x2F;p&gt;
 &lt;p&gt;在集群模式，闭包使用到的变量会被拷贝进闭包，然后发送给executor执行，executo后续会对闭包内的counter进行处理，而不是driver program中的counter。也就是说，修改并不成功，最终结果还是0。而local模式则相反，task运行在相同JVM，counter的引用就是原变量，因此可以得到正确结果。&lt;&#x2F;p&gt;
 &lt;p&gt;在这个场景中，为了得到正确结果，spark定义了accumulator类型变量，提供了跨节点累加值的机制。&lt;&#x2F;p&gt;
@@ -108,7 +108,7 @@
 &lt;p&gt;RDD的另一种常见错误用法是通过forEach(println)和map(println)输出元素。在单例模式下正常运作，但是在集群模式下，打印的值会输出到executor的标准输出，而不是driver program的，因此也就看不到元素内容。&lt;&#x2F;p&gt;
 &lt;p&gt;为了正确获取元素内容，需要先调用&lt;code&gt;collect()&lt;&#x2F;code&gt;函数以将元素收集到driver program，然后再调用输出函数。但是这容易造成OOM。另一种方案是&lt;code&gt;take()&lt;&#x2F;code&gt;函数，只收集一定数量的元素。&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;key-valuedui&quot;&gt;Key-Value对&lt;&#x2F;h4&gt;
-&lt;p&gt;虽然大多数Spark操作都适用于包含任何类型对象的RDDs，但有几个特殊的操作只适用于键值对的RDDs。最常见的是分布式 &amp;quot;洗牌(shuffle)&amp;quot;操作，如按键分组或聚合元素。&lt;&#x2F;p&gt;
+&lt;p&gt;虽然大多数Spark操作都适用于包含任何类型对象的RDDs，但有几个特殊的操作只适用于键值对的RDDs。最常见的是分布式 “洗牌(shuffle)“操作，如按键分组或聚合元素。&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;transformations&quot;&gt;Transformations&lt;&#x2F;h4&gt;
 &lt;p&gt;请到网页查看: &lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;http:&#x2F;&#x2F;spark.apache.org&#x2F;docs&#x2F;latest&#x2F;rdd-programming-guide.html#transformations&quot;&gt;transformations&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;actions&quot;&gt;Actions&lt;&#x2F;h4&gt;
@@ -117,11 +117,11 @@
 &lt;p&gt;Spark中的某些操作会触发一个被称为洗牌的事件。洗牌是Spark重新分配数据的机制，使其在不同的分区中以不同的方式分组。这通常涉及跨执行器和机器的数据复制，使洗牌成为一个复杂而昂贵的操作。&lt;&#x2F;p&gt;
 &lt;h5 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h5&gt;
 &lt;p&gt;为了解释洗牌操作，用&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;来演示，这个方法生成新的RDD，将所有于key关联的value合并为一个touple。最麻烦的地方是，不是所有和key关联的value在同一个分区、甚至节点。不同executor需要合作以得到结果。&lt;&#x2F;p&gt;
-&lt;p&gt;在spark中，不会为了某个operation去交换分区。在计算过程中，一个task就只操作一个分区；因此，为了规划&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;这个reduce任务，spark需要一个&lt;strong&gt;all-to-all&lt;&#x2F;strong&gt;操作: 从所有分区读取所有key对应的所有的的value，然后跨集群聚集所有value以计算每个key对应的结果集。这就是&amp;quot;洗牌&amp;quot;。&lt;&#x2F;p&gt;
+&lt;p&gt;在spark中，不会为了某个operation去交换分区。在计算过程中，一个task就只操作一个分区；因此，为了规划&lt;code&gt;reduceByKey&lt;&#x2F;code&gt;这个reduce任务，spark需要一个&lt;strong&gt;all-to-all&lt;&#x2F;strong&gt;操作: 从所有分区读取所有key对应的所有的的value，然后跨集群聚集所有value以计算每个key对应的结果集。这就是“洗牌“。&lt;&#x2F;p&gt;
 &lt;p&gt;洗牌后排序看网站&lt;&#x2F;p&gt;
 &lt;h5 id=&quot;xing-neng-sun-shi&quot;&gt;性能损失&lt;&#x2F;h5&gt;
-&lt;p&gt;洗牌操作非常消耗资源，需要磁盘I&#x2F;O、序列化和网络I&#x2F;O。为了聚集洗牌需要的数据，spark会启动一系列task，&amp;quot;map任务&amp;quot;用于组织数据，&amp;quot;reduce任务&amp;quot;用于聚合数据。&lt;&#x2F;p&gt;
-&lt;p&gt;在spark内部，洗牌操作执行时，每个&amp;quot;map任务&amp;quot;会将结果保存在内存中(直到溢出，溢出则分块写入外存)，然后根据分区顺序排序后写入单一的文件内; &amp;quot;reduce任务&amp;quot;会读取这个文件。&lt;&#x2F;p&gt;
+&lt;p&gt;洗牌操作非常消耗资源，需要磁盘I&#x2F;O、序列化和网络I&#x2F;O。为了聚集洗牌需要的数据，spark会启动一系列task，“map任务“用于组织数据，“reduce任务“用于聚合数据。&lt;&#x2F;p&gt;
+&lt;p&gt;在spark内部，洗牌操作执行时，每个“map任务“会将结果保存在内存中(直到溢出，溢出则分块写入外存)，然后根据分区顺序排序后写入单一的文件内; “reduce任务“会读取这个文件。&lt;&#x2F;p&gt;
 &lt;p&gt;洗牌还会产生大量临时文件，直到RDD生命周期结束并且相关资源被垃圾回收。注意，垃圾回收会在任务停止之后很久很久才进行，也就是说，长期的的spark job会导致大量存储消耗。&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;chi-jiu-cun-chu&quot;&gt;持久存储&lt;&#x2F;h3&gt;
 &lt;p&gt;RDD可以被持久化存储，每个节点都会将它计算的分区存储在内存中，并在该数据集（或由其衍生的数据集）上的其他操作中重复使用。&lt;&#x2F;p&gt;
@@ -136,7 +136,7 @@
 &lt;h3 id=&quot;broadcast-variables&quot;&gt;Broadcast Variables&lt;&#x2F;h3&gt;
 &lt;p&gt;广播变量可以让每个节点保存一个只读变量在本地，而不是每次运行task传入。用于高效地给每个节点一些较大数据集。&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;accumulators&quot;&gt;Accumulators&lt;&#x2F;h3&gt;
-&lt;p&gt;累加器是只通过关联和换元操作 &amp;quot;只增&amp;quot;的变量，因此可以有效地支持并行，可以用来实现计数器（如MapReduce）或总和。Spark原生支持数字类型的累加器，程序员可以增加对新类型的支持。&lt;&#x2F;p&gt;
+&lt;p&gt;累加器是只通过关联和换元操作 “只增“的变量，因此可以有效地支持并行，可以用来实现计数器（如MapReduce）或总和。Spark原生支持数字类型的累加器，程序员可以增加对新类型的支持。&lt;&#x2F;p&gt;
 </description>
         </item>
     </channel>
