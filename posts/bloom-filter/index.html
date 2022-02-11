@@ -152,7 +152,7 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>646 words</span>
+  <span>644 words</span>
 </span>
 
             </div>
@@ -223,16 +223,16 @@ Aurora | 布隆过滤器
 </blockquote>
 <p>需要插入key时，对<code>key = a</code>时，经过k个hash函数后得到<code>h1(a), h2(a), ..., hk(a)</code></p>
 <p>此时将<code>bitmap</code>中对应的位置1。</p>
-<p><img src="/images/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8F%92%E5%85%A5%E6%96%B0key.drawio.svg" alt="布隆过滤器插入新key示意图" /></p>
+<p><img src="https://raw.githubusercontent.com/oliverdding/imaw.io/main/inserting-key-into-bloom-filter.drawio.svg" alt="往布隆过滤器插入新key" /></p>
 <p>当key越来越多，<code>bitmap</code>中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标都为1的可能越大，此时就发生false positive。</p>
 <p>那么k取何值时，false positive发生概率最小，此时概率为？</p>
 <h2 id="shu-xue-zheng-ming">数学证明</h2>
 <p>对<code>bitmap</code>随机置位后，对于任意一个位，其被置0、1的概率分别是$P(0) = 1 - \frac{1}{m}$、$P(1) = \frac{1}{m}$</p>
-<p>对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P’(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$</p>
-<p>对于n个key插入后，对于任意一个位，仍然是0的概率是$$P’‘(0)=P’(0)^{n}=(1 - \frac{1}{m})^{kn}$$</p>
+<p>对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P'(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$</p>
+<p>对于n个key插入后，对于任意一个位，仍然是0的概率是$$P''(0)=P'(0)^{n}=(1 - \frac{1}{m})^{kn}$$</p>
 <p>由于有自然对数e的计算公式$$\lim_{n \to \infty}{(1-\frac{1}{x})^{-x}}=e$$</p>
-<p>我们可以近似计算$P’‘(0)$得到$$P’’(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$</p>
-<p>因此，对于任意一个位，其被置1的概率是$$P’‘(1)=1-P’’(0)\approx{}1-e^{-\frac{kn}{m}}$$</p>
+<p>我们可以近似计算$P''(0)$得到$$P''(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$</p>
+<p>因此，对于任意一个位，其被置1的概率是$$P''(1)=1-P''(0)\approx{}1-e^{-\frac{kn}{m}}$$</p>
 <p>当alse positive发生时，是指它的k个hash函数得到的坐标都为1。由于k个hash函数相互独立，我们可以计算出alse positive的概率为$$f=(1-(1-\frac{1}{m})^{kn})^{k}\approx{}(1-e^{-\frac{kn}{m}})^{k}$$</p>
 <p>由于m、n是用户给定的值，唯一变量就是k，我们需要指定k的值去最小化alse positive概率。</p>
 <p>另$p=e^{-\frac{kn}{m}}$，我们有$$f=(1-p)^{k}=e^{kln(1-p)}$$</p>
