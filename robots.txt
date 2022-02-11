@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://charmer.netlify.app/sitemap.xml
+Sitemap: https://charmer.fun/sitemap.xml

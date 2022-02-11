@@ -2,17 +2,17 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
       <title>Aurora - DataStructures</title>
-        <link>https://charmer.netlify.app</link>
+        <link>https://charmer.fun</link>
         <description>Sidere mens eadem mutato</description>
         <generator>Zola</generator>
         <language>zh</language>
-        <atom:link href="https://charmer.netlify.app/categories/datastructures/rss.xml" rel="self" type="application/rss+xml"/>
+        <atom:link href="https://charmer.fun/categories/datastructures/rss.xml" rel="self" type="application/rss+xml"/>
         <lastBuildDate>Wed, 09 Feb 2022 17:13:10 +0800</lastBuildDate>
         <item>
             <title>布隆过滤器</title>
             <pubDate>Wed, 09 Feb 2022 17:13:10 +0800</pubDate>
-            <link>https://charmer.netlify.app/posts/bloom-filter/</link>
-            <guid>https://charmer.netlify.app/posts/bloom-filter/</guid>
+            <link>https://charmer.fun/posts/bloom-filter/</link>
+            <guid>https://charmer.fun/posts/bloom-filter/</guid>
             <description>&lt;p&gt;布隆过滤器（Bloom Filter）是一种类似于哈希表的数据结构，但相比于后者空间利用率更高。&lt;&#x2F;p&gt;
 &lt;p&gt;使用布隆过滤器查找key时，返回值可能情况有两种：&lt;&#x2F;p&gt;
 &lt;ol&gt;
@@ -53,8 +53,8 @@
         <item>
             <title>Apache Arrow: 大数据在数据湖后的下一个风向标</title>
             <pubDate>Thu, 18 Nov 2021 10:59:50 +0800</pubDate>
-            <link>https://charmer.netlify.app/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</link>
-            <guid>https://charmer.netlify.app/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</guid>
+            <link>https://charmer.fun/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</link>
+            <guid>https://charmer.fun/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</guid>
             <description>&lt;h2 id=&quot;jie-shao&quot;&gt;介绍&lt;&#x2F;h2&gt;
 &lt;p&gt;根据&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;arrow.apache.org&#x2F;overview&#x2F;&quot;&gt;官方文档&lt;&#x2F;a&gt;介绍，Arrow是&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
