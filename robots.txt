@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://oliverdding.github.io/sitemap.xml
+Sitemap: https://charmer.fun/sitemap.xml

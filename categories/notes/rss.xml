@@ -2,17 +2,17 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
       <title>Aurora - Notes</title>
-        <link>https://oliverdding.github.io</link>
+        <link>https://charmer.fun</link>
         <description>Sidere mens eadem mutato</description>
         <generator>Zola</generator>
         <language>zh</language>
-        <atom:link href="https://oliverdding.github.io/categories/notes/rss.xml" rel="self" type="application/rss+xml"/>
+        <atom:link href="https://charmer.fun/categories/notes/rss.xml" rel="self" type="application/rss+xml"/>
         <lastBuildDate>Tue, 12 Oct 2021 17:31:07 +0800</lastBuildDate>
         <item>
             <title>论文阅读笔记：RDD</title>
             <pubDate>Tue, 12 Oct 2021 17:31:07 +0800</pubDate>
-            <link>https://oliverdding.github.io/posts/paper-reading-rdd/</link>
-            <guid>https://oliverdding.github.io/posts/paper-reading-rdd/</guid>
+            <link>https://charmer.fun/posts/paper-reading-rdd/</link>
+            <guid>https://charmer.fun/posts/paper-reading-rdd/</guid>
             <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;&#x2F;h2&gt;
 &lt;p&gt;RDD起源于现有的大数据框架对&lt;&#x2F;p&gt;
 &lt;ol&gt;
@@ -87,8 +87,8 @@
         <item>
             <title>论文阅读笔记：HDFS</title>
             <pubDate>Fri, 17 Sep 2021 13:17:46 +0800</pubDate>
-            <link>https://oliverdding.github.io/posts/paper-reading-hdfs/</link>
-            <guid>https://oliverdding.github.io/posts/paper-reading-hdfs/</guid>
+            <link>https://charmer.fun/posts/paper-reading-hdfs/</link>
+            <guid>https://charmer.fun/posts/paper-reading-hdfs/</guid>
             <description>&lt;p&gt;&lt;mark&gt;注意: 本文涉及到的专有名词将直接使用英文, 便于理解记忆&lt;&#x2F;mark&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;mark&gt;注意: 本文面向hadoop 2版本, 其它版本差异并不涉及&lt;&#x2F;mark&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;Hadoop是什么? SAS给出的描述&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#6&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;是:&lt;&#x2F;p&gt;
