@@ -7,6 +7,12 @@
         <loc>https://oliverdding.github.io/categories/</loc>
     </url>
     <url>
+        <loc>https://oliverdding.github.io/categories/bestpractices/</loc>
+    </url>
+    <url>
+        <loc>https://oliverdding.github.io/categories/bestpractices/page/1/</loc>
+    </url>
+    <url>
         <loc>https://oliverdding.github.io/categories/datastructures/</loc>
     </url>
     <url>
@@ -32,11 +38,18 @@
         <lastmod>2021-11-18T10:59:50+08:00</lastmod>
     </url>
     <url>
+        <loc>https://oliverdding.github.io/posts/best-practice-for-writing-blog-with-ssg/</loc>
+        <lastmod>2022-02-11T20:37:06+08:00</lastmod>
+    </url>
+    <url>
         <loc>https://oliverdding.github.io/posts/bloom-filter/</loc>
         <lastmod>2022-02-09T17:13:10+08:00</lastmod>
     </url>
     <url>
         <loc>https://oliverdding.github.io/posts/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://oliverdding.github.io/posts/page/2/</loc>
     </url>
     <url>
         <loc>https://oliverdding.github.io/posts/paper-reading-hdfs/</loc>
@@ -58,6 +71,12 @@
     </url>
     <url>
         <loc>https://oliverdding.github.io/tags/apache/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://oliverdding.github.io/tags/best-practice/</loc>
+    </url>
+    <url>
+        <loc>https://oliverdding.github.io/tags/best-practice/page/1/</loc>
     </url>
     <url>
         <loc>https://oliverdding.github.io/tags/big-data/</loc>
@@ -88,5 +107,11 @@
     </url>
     <url>
         <loc>https://oliverdding.github.io/tags/spark/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://oliverdding.github.io/tags/tip/</loc>
+    </url>
+    <url>
+        <loc>https://oliverdding.github.io/tags/tip/page/1/</loc>
     </url>
 </urlset>

@@ -38,7 +38,7 @@
 
   <title>
     
-Aurora | 布隆过滤器
+Aurora | 使用静态网站写博客的最佳实践
 
   </title>
 
@@ -126,9 +126,9 @@ Aurora | 布隆过滤器
       <div class="column is-8 is-offset-2">
         <article class="box">
           <h1 class="title">
-            布隆过滤器
+            使用静态网站写博客的最佳实践
           </h1>
-          <p class="subtitle">用于判断某个元素是否在集合中的一个简单、高效、内存占用低的数据结构</p>
+          <p class="subtitle">SSG+Github存储源码+Github Action自动编译+Github Pages发布网站</p>
           <div class="columns is-multiline is-gapless">
             <div class="column is-8">
               
@@ -140,7 +140,7 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="far fa-calendar-alt"></i>
   </span>
-  <span><time datetime="2022-02-09T17:13:10+08:00">February 09, 2022</time></span>
+  <span><time datetime="2022-02-11T20:37:06+08:00">February 11, 2022</time></span>
 </span>
 
             </div>
@@ -150,11 +150,11 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="far fa-clock"></i>
   </span>
-  <span>4 min,</span>
+  <span>5 min,</span>
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>650 words</span>
+  <span>808 words</span>
 </span>
 
             </div>
@@ -164,12 +164,12 @@ Aurora | 布隆过滤器
 <p>
   Categories:
   
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/datastructures/">
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/categories/bestpractices/">
     <span class="icon-text">
       <span class="icon">
         <i class="fas fa-cube"></i>
       </span>
-      <span>DataStructures</span>
+      <span>BestPractices</span>
     </span>
   </a>
   
@@ -183,21 +183,21 @@ Aurora | 布隆过滤器
 <p>
   Tags:
   
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/big-data/">
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/best-practice/">
     <span class="icon-text">
       <span class="icon">
         <i class="fas fa-tag"></i>
       </span>
-      <span>big data</span>
+      <span>best practice</span>
     </span>
   </a>
   
-  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/data-structure/">
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://oliverdding.github.io/tags/tip/">
     <span class="icon-text">
       <span class="icon">
         <i class="fas fa-tag"></i>
       </span>
-      <span>data structure</span>
+      <span>tip</span>
     </span>
   </a>
   
@@ -207,41 +207,72 @@ Aurora | 布隆过滤器
             </div>
           </div>
           <div class="content mt-2">
-            <p>布隆过滤器（Bloom Filter）是一种类似于哈希表的数据结构，但相比于后者空间利用率更高。</p>
-<p>使用布隆过滤器查找key时，返回值可能情况有两种：</p>
+            <p>我尝试过hexo，用过hugo，最终转向zola这个完全还没发展起来的SSG。这篇文章记录下使用SSG写博客的最佳实践。</p>
+<h2 id="zhu-ti-xuan-ze">主题选择</h2>
+<p>主题选择驱使我从hugo迁移到zola。我对主题的要求非常苛刻：</p>
 <ol>
-<li>key<strong>不</strong>存在</li>
-<li>key<strong>可能</strong>存在</li>
-</ol>
-<h2 id="yuan-li">原理</h2>
-<p>布隆过滤器由以下三部分构成：</p>
+<li>积极维护中，并且有庞大的用户群体。</li>
+<li>样式简洁美观，我倾向于fluent design。</li>
+<li>功能简单但不单调
 <ol>
-<li>n个key</li>
-<li>m位的位图：<code>bitmap</code></li>
-<li>k个无关的hash函数：<code>h1, h2, ..., hk</code></li>
+<li>支持latex渲染</li>
+<li>支持toc</li>
+<li>（可选）支持评论</li>
+<li>（可选）支持admonition</li>
 </ol>
-<blockquote>
-<p>可以用$h_{i}(x)=MD5(x+i)$或者$h_{i}(x)=MD5(x|i)$实现k个无关hash函数</p>
-</blockquote>
-<p>需要插入key时，对<code>key = a</code>时，经过k个hash函数后得到<code>h1(a), h2(a), ..., hk(a)</code></p>
-<p>此时将<code>bitmap</code>中对应的位置1。</p>
-<p><img src="https://raw.githubusercontent.com/oliverdding/imaw.io/main/inserting-key-into-bloom-filter.drawio.svg" alt="往布隆过滤器插入新key" /></p>
-<p>当key越来越多，<code>bitmap</code>中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标对应<code>bitmap</code>中的值都为1的概率越大，此时就发生false positive。</p>
-<p>那么k取何值时，false positive发生概率最小，此时概率为？</p>
-<h2 id="shu-xue-zheng-ming">数学证明</h2>
-<p>对<code>bitmap</code>随机置位后，对于任意一个位，其被置0、1的概率分别是$P(0) = 1 - \frac{1}{m}$、$P(1) = \frac{1}{m}$</p>
-<p>对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P'(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$</p>
-<p>对于n个key插入后，对于任意一个位，仍然是0的概率是$$P''(0)=P'(0)^{n}=(1 - \frac{1}{m})^{kn}$$</p>
-<p>由于有自然对数e的计算公式$$\lim_{n \to \infty}{(1-\frac{1}{x})^{-x}}=e$$</p>
-<p>我们可以近似计算$P''(0)$得到$$P''(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$</p>
-<p>因此，对于任意一个位，其被置1的概率是$$P''(1)=1-P''(0)\approx{}1-e^{-\frac{kn}{m}}$$</p>
-<p>当alse positive发生时，是指它的k个hash函数得到的坐标都为1。由于k个hash函数相互独立，我们可以计算出alse positive的概率为$$f=(1-(1-\frac{1}{m})^{kn})^{k}\approx{}(1-e^{-\frac{kn}{m}})^{k}$$</p>
-<p>由于m、n是用户给定的值，唯一变量就是k，我们需要指定k的值去最小化alse positive概率。</p>
-<p>另$p=e^{-\frac{kn}{m}}$，我们有$$f=(1-p)^{k}=e^{kln(1-p)}$$</p>
-<p>此时变更为最小的$g=kln(1-p)$</p>
-<p>无中生有下得到$$g=kln{}(1-p)=-\frac{m}{n}ln(e^{-\frac{kn}{m}})ln(1-p)=-\frac{m}{n}ln(p)ln(1-p)$$</p>
-<p>得知当$p=\frac{1}{2}$时g取得最小，此时有$$k=ln(2\frac{m}{n})$$</p>
-<p>插入回$$f=(1-p)^{k}$$得到alse positive的最小值为$$f_{min}=(\frac{1}{2})^{k}\approx{}(0.6185)^{\frac{m}{n}}$$</p>
+</li>
+<li>我极其讨厌复杂庞大的可选项（没错，我也讨厌kde），所以配置文件越精简越好。</li>
+</ol>
+<p>在hugo中，我从Loveit（似乎停止维护了）搬迁到papermod（非常惊艳，但是公式渲染需要html代码配置，并且渲染异常），再尝试了stack（太花哨）、terminal（风格不喜）、MemE（配置项过于庞大），我逃离到了zola。再一番抉择后发现了现在正在使用的主题<a rel="noopener nofollow noreferrer" target="_blank" href="https://github.com/RatanShreshtha/DeepThought">DeepThought</a>。zola中几乎最流行的定制，界面简洁优美，配置精简，原生支持渲染，toc可选，支持评论，唯一的缺点就是缺少中文搜索的支持，因为打包出来的体积太大了。</p>
+<h2 id="bo-ke-yuan-wen-ben-cun-chu">博客源文本存储</h2>
+<p>首先，博客的源码肯定是要纳入版本管理的，理所当然需要给它们创建一个仓库。</p>
+<p>这里有一些约定：</p>
+<ol>
+<li>只有网站本身使用的图片（图标、头像）放到static文件夹中，其他博文图片全部使用图床的方式+markdown链接引用。</li>
+<li>画图尽量使用mermaid、plantuml、draw.io这些纯文图图片来记录。draw.io同样存储于图床。</li>
+</ol>
+<h2 id="bo-ke-jing-tai-wang-zhan-cun-chu">博客静态网站存储</h2>
+<p>想要使用Github Pages，需要创建一个仓库用于存储build出来的静态网站文件。</p>
+<h2 id="bo-ke-bian-yi-zi-dong-hua">博客编译自动化</h2>
+<p>现在源码在仓库A中，编译的静态网站在仓库B中，每次写完博文都需要手动build下然后推送仓库B、仓库A，这当然无法忍受。</p>
+<p>于是可以利用Github Action配置流水线，每次提交到仓库A都会触发流水线，自动编译发布仓库B。</p>
+<p>这里涉及到仓库A的编译发布流水线提交git到仓库B的权限问题，github可以使用token来解决。</p>
+<p>但是我更倾向于使用仓库级密钥：</p>
+<p>通过以下命令创建一对SSh key：</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fdf4c1;">ssh-keygen -t rsa -b 4096 -C </span><span style="color:#b8bb26;">&quot;$(</span><span style="color:#fdf4c1;">git config user.email</span><span style="color:#b8bb26;">)&quot;</span><span style="color:#fdf4c1;"> -f gh-pages -N </span><span style="color:#b8bb26;">&quot;&quot;
+</span></code></pre>
+<p>将生成的gh-pages.pub公钥配置仓库B，允许写入。并将生成的gh-pages私钥配置仓库A的私有变量，我将它命名为<code>ZOLA</code>。</p>
+<p>这是我zola的配置，<code>.github/workflows/deploy-website.yml</code>：</p>
+<pre data-lang="yaml" style="background-color:#282828;color:#fdf4c1aa;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="font-weight:bold;color:#8ec07c;">name</span><span>: </span><span style="color:#b8bb26;">CI
+</span><span style="color:#d3869b;">on</span><span>:
+</span><span>  </span><span style="font-weight:bold;color:#8ec07c;">push</span><span>:
+</span><span>    </span><span style="font-weight:bold;color:#8ec07c;">branches</span><span>: [ </span><span style="color:#b8bb26;">main </span><span>]
+</span><span>  </span><span style="font-weight:bold;color:#8ec07c;">workflow_dispatch</span><span>:
+</span><span style="font-weight:bold;color:#8ec07c;">jobs</span><span>:
+</span><span>  </span><span style="font-weight:bold;color:#8ec07c;">build-and-deploy</span><span>:
+</span><span>    </span><span style="font-weight:bold;color:#8ec07c;">runs-on</span><span>: </span><span style="color:#b8bb26;">ubuntu-latest
+</span><span>    </span><span style="font-weight:bold;color:#8ec07c;">steps</span><span>:
+</span><span>      - </span><span style="font-weight:bold;color:#8ec07c;">name</span><span>: </span><span style="color:#b8bb26;">Checkout the code
+</span><span>        </span><span style="font-weight:bold;color:#8ec07c;">uses</span><span>: </span><span style="color:#b8bb26;">actions/checkout@master
+</span><span>        </span><span style="font-weight:bold;color:#8ec07c;">with</span><span>:
+</span><span>          </span><span style="font-weight:bold;color:#8ec07c;">submodules</span><span>: </span><span style="color:#d3869b;">true
+</span><span>      - </span><span style="font-weight:bold;color:#8ec07c;">name</span><span>: </span><span style="color:#b8bb26;">Build Static Website
+</span><span>        </span><span style="font-weight:bold;color:#8ec07c;">uses</span><span>: </span><span style="color:#b8bb26;">shalzz/zola-deploy-action@master
+</span><span>        </span><span style="font-weight:bold;color:#8ec07c;">env</span><span>:
+</span><span>          </span><span style="font-weight:bold;color:#8ec07c;">BUILD_ONLY</span><span>: </span><span style="color:#d3869b;">true
+</span><span>          </span><span style="font-weight:bold;color:#8ec07c;">BUILD_DIR</span><span>: </span><span style="color:#d3869b;">.
+</span><span>      - </span><span style="font-weight:bold;color:#8ec07c;">name</span><span>: </span><span style="color:#b8bb26;">Deploy Static Website
+</span><span>        </span><span style="font-weight:bold;color:#8ec07c;">uses</span><span>: </span><span style="color:#b8bb26;">peaceiris/actions-gh-pages@v3
+</span><span>        </span><span style="font-weight:bold;color:#8ec07c;">with</span><span>: 
+</span><span>         </span><span style="font-weight:bold;color:#8ec07c;">deploy_key</span><span>: </span><span style="color:#b8bb26;">${{ secrets.ZOLA }}
+</span><span>         </span><span style="font-weight:bold;color:#8ec07c;">external_repository</span><span>: </span><span style="color:#b8bb26;">oliverdding/oliverdding.github.io
+</span><span>         </span><span style="font-weight:bold;color:#8ec07c;">publish_branch</span><span>: </span><span style="color:#b8bb26;">main
+</span><span>         </span><span style="font-weight:bold;color:#8ec07c;">publish_dir</span><span>: </span><span style="color:#b8bb26;">./public
+</span><span>         </span><span style="font-weight:bold;color:#8ec07c;">user_name</span><span>: </span><span style="color:#b8bb26;">&#39;github-actions[bot]&#39;
+</span><span>         </span><span style="font-weight:bold;color:#8ec07c;">user_email</span><span>: </span><span style="color:#b8bb26;">&#39;github-actions[bot]@users.noreply.github.com&#39;
+</span><span>         </span><span style="font-weight:bold;color:#8ec07c;">full_commit_message</span><span>: </span><span style="color:#b8bb26;">${{ github.event.head_commit.message }}
+</span></code></pre>
+<p>shalzz/zola-deploy-action也可以直接推送，但是我想K.I.S.S些，就职责分离了。hexo、hugo大体相同，只要改动第二部build即可。</p>
 
           </div>
         </article>
@@ -253,17 +284,33 @@ Aurora | 布隆过滤器
           <ul class="menu-list">
             
             <li>
-              <a id="link-yuan-li" class="toc is-size-7 is-active"
-                href="https://oliverdding.github.io/posts/bloom-filter/#yuan-li">
-                原理
+              <a id="link-zhu-ti-xuan-ze" class="toc is-size-7 is-active"
+                href="https://oliverdding.github.io/posts/best-practice-for-writing-blog-with-ssg/#zhu-ti-xuan-ze">
+                主题选择
               </a>
               
             </li>
             
             <li>
-              <a id="link-shu-xue-zheng-ming" class="toc is-size-7 "
-                href="https://oliverdding.github.io/posts/bloom-filter/#shu-xue-zheng-ming">
-                数学证明
+              <a id="link-bo-ke-yuan-wen-ben-cun-chu" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/best-practice-for-writing-blog-with-ssg/#bo-ke-yuan-wen-ben-cun-chu">
+                博客源文本存储
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-bo-ke-jing-tai-wang-zhan-cun-chu" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/best-practice-for-writing-blog-with-ssg/#bo-ke-jing-tai-wang-zhan-cun-chu">
+                博客静态网站存储
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-bo-ke-bian-yi-zi-dong-hua" class="toc is-size-7 "
+                href="https://oliverdding.github.io/posts/best-practice-for-writing-blog-with-ssg/#bo-ke-bian-yi-zi-dong-hua">
+                博客编译自动化
               </a>
               
             </li>
@@ -307,19 +354,10 @@ Aurora | 布隆过滤器
     <div class="columns is-centered">
       <div class="column is-8">
         <nav class="level">
-          
-          <div class="level-item has-text-centered">
-            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;best-practice-for-writing-blog-with-ssg&#x2F;">
-              <span class="icon mr-2">
-                <i class="fas fa-arrow-circle-left"></i>
-              </span>
-              使用静态网站写博客的最佳实践
-            </a>
-          </div>
            
           <div class="level-item has-text-centered">
-            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;apache-arrow-the-next-windfall-after-the-data-lake-in-big-data&#x2F;">
-              Apache Arrow: 大数据在数据湖后的下一个风向标<span class="icon ml-2">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;oliverdding.github.io&#x2F;posts&#x2F;bloom-filter&#x2F;">
+              布隆过滤器<span class="icon ml-2">
                 <i class="fas fa-arrow-circle-right"></i>
               </span>
             </a>
@@ -443,7 +481,7 @@ Aurora | 布隆过滤器
 <script>
   var disqus_config = function () {
     this.page.url = "https://oliverdding.github.io";
-    this.page.identifier = "/posts/bloom-filter/";
+    this.page.identifier = "/posts/best-practice-for-writing-blog-with-ssg/";
   };
 
   (function () {

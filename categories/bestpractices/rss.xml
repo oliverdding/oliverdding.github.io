@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Aurora - BestPractices</title>
+        <link>https://oliverdding.github.io</link>
+        <description>Sidere mens eadem mutato</description>
+        <generator>Zola</generator>
+        <language>zh</language>
+        <atom:link href="https://oliverdding.github.io/categories/bestpractices/rss.xml" rel="self" type="application/rss+xml"/>
+        <lastBuildDate>Fri, 11 Feb 2022 20:37:06 +0800</lastBuildDate>
+        <item>
+            <title>使用静态网站写博客的最佳实践</title>
+            <pubDate>Fri, 11 Feb 2022 20:37:06 +0800</pubDate>
+            <link>https://oliverdding.github.io/posts/best-practice-for-writing-blog-with-ssg/</link>
+            <guid>https://oliverdding.github.io/posts/best-practice-for-writing-blog-with-ssg/</guid>
+            <description>&lt;p&gt;我尝试过hexo，用过hugo，最终转向zola这个完全还没发展起来的SSG。这篇文章记录下使用SSG写博客的最佳实践。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;zhu-ti-xuan-ze&quot;&gt;主题选择&lt;&#x2F;h2&gt;
+&lt;p&gt;主题选择驱使我从hugo迁移到zola。我对主题的要求非常苛刻：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;积极维护中，并且有庞大的用户群体。&lt;&#x2F;li&gt;
+&lt;li&gt;样式简洁美观，我倾向于fluent design。&lt;&#x2F;li&gt;
+&lt;li&gt;功能简单但不单调
+&lt;ol&gt;
+&lt;li&gt;支持latex渲染&lt;&#x2F;li&gt;
+&lt;li&gt;支持toc&lt;&#x2F;li&gt;
+&lt;li&gt;（可选）支持评论&lt;&#x2F;li&gt;
+&lt;li&gt;（可选）支持admonition&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;我极其讨厌复杂庞大的可选项（没错，我也讨厌kde），所以配置文件越精简越好。&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;在hugo中，我从Loveit（似乎停止维护了）搬迁到papermod（非常惊艳，但是公式渲染需要html代码配置，并且渲染异常），再尝试了stack（太花哨）、terminal（风格不喜）、MemE（配置项过于庞大），我逃离到了zola。再一番抉择后发现了现在正在使用的主题&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;RatanShreshtha&#x2F;DeepThought&quot;&gt;DeepThought&lt;&#x2F;a&gt;。zola中几乎最流行的定制，界面简洁优美，配置精简，原生支持渲染，toc可选，支持评论，唯一的缺点就是缺少中文搜索的支持，因为打包出来的体积太大了。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;bo-ke-yuan-wen-ben-cun-chu&quot;&gt;博客源文本存储&lt;&#x2F;h2&gt;
+&lt;p&gt;首先，博客的源码肯定是要纳入版本管理的，理所当然需要给它们创建一个仓库。&lt;&#x2F;p&gt;
+&lt;p&gt;这里有一些约定：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;只有网站本身使用的图片（图标、头像）放到static文件夹中，其他博文图片全部使用图床的方式+markdown链接引用。&lt;&#x2F;li&gt;
+&lt;li&gt;画图尽量使用mermaid、plantuml、draw.io这些纯文图图片来记录。draw.io同样存储于图床。&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;bo-ke-jing-tai-wang-zhan-cun-chu&quot;&gt;博客静态网站存储&lt;&#x2F;h2&gt;
+&lt;p&gt;想要使用Github Pages，需要创建一个仓库用于存储build出来的静态网站文件。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;bo-ke-bian-yi-zi-dong-hua&quot;&gt;博客编译自动化&lt;&#x2F;h2&gt;
+&lt;p&gt;现在源码在仓库A中，编译的静态网站在仓库B中，每次写完博文都需要手动build下然后推送仓库B、仓库A，这当然无法忍受。&lt;&#x2F;p&gt;
+&lt;p&gt;于是可以利用Github Action配置流水线，每次提交到仓库A都会触发流水线，自动编译发布仓库B。&lt;&#x2F;p&gt;
+&lt;p&gt;这里涉及到仓库A的编译发布流水线提交git到仓库B的权限问题，github可以使用token来解决。&lt;&#x2F;p&gt;
+&lt;p&gt;但是我更倾向于使用仓库级密钥：&lt;&#x2F;p&gt;
+&lt;p&gt;通过以下命令创建一对SSh key：&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ssh-keygen -t rsa -b 4096 -C &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;git config user.email&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;)&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; -f gh-pages -N &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;将生成的gh-pages.pub公钥配置仓库B，允许写入。并将生成的gh-pages私钥配置仓库A的私有变量，我将它命名为&lt;code&gt;ZOLA&lt;&#x2F;code&gt;。&lt;&#x2F;p&gt;
+&lt;p&gt;这是我zola的配置，&lt;code&gt;.github&#x2F;workflows&#x2F;deploy-website.yml&lt;&#x2F;code&gt;：&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;CI
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;on&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;branches&lt;&#x2F;span&gt;&lt;span&gt;: [ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;main &lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;workflow_dispatch&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;jobs&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;build-and-deploy&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;runs-on&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;ubuntu-latest
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;steps&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;Checkout the code
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;uses&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;actions&#x2F;checkout@master
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;submodules&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;true
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;Build Static Website
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;uses&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;shalzz&#x2F;zola-deploy-action@master
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;env&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;BUILD_ONLY&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;true
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;BUILD_DIR&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;.
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;Deploy Static Website
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;uses&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;peaceiris&#x2F;actions-gh-pages@v3
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;: 
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;deploy_key&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;${{ secrets.ZOLA }}
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;external_repository&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;oliverdding&#x2F;oliverdding.github.io
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;publish_branch&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;main
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;publish_dir&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;.&#x2F;public
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;user_name&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;github-actions[bot]&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;user_email&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;github-actions[bot]@users.noreply.github.com&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;full_commit_message&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;${{ github.event.head_commit.message }}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;shalzz&#x2F;zola-deploy-action也可以直接推送，但是我想K.I.S.S些，就职责分离了。hexo、hugo大体相同，只要改动第二部build即可。&lt;&#x2F;p&gt;
+</description>
+        </item>
+    </channel>
+</rss>

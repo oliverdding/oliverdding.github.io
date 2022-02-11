@@ -32,7 +32,7 @@
 &lt;p&gt;需要插入key时，对&lt;code&gt;key = a&lt;&#x2F;code&gt;时，经过k个hash函数后得到&lt;code&gt;h1(a), h2(a), ..., hk(a)&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;此时将&lt;code&gt;bitmap&lt;&#x2F;code&gt;中对应的位置1。&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;oliverdding&#x2F;imaw.io&#x2F;main&#x2F;inserting-key-into-bloom-filter.drawio.svg&quot; alt=&quot;往布隆过滤器插入新key&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;p&gt;当key越来越多，&lt;code&gt;bitmap&lt;&#x2F;code&gt;中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标都为1的可能越大，此时就发生false positive。&lt;&#x2F;p&gt;
+&lt;p&gt;当key越来越多，&lt;code&gt;bitmap&lt;&#x2F;code&gt;中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标对应&lt;code&gt;bitmap&lt;&#x2F;code&gt;中的值都为1的概率越大，此时就发生false positive。&lt;&#x2F;p&gt;
 &lt;p&gt;那么k取何值时，false positive发生概率最小，此时概率为？&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;shu-xue-zheng-ming&quot;&gt;数学证明&lt;&#x2F;h2&gt;
 &lt;p&gt;对&lt;code&gt;bitmap&lt;&#x2F;code&gt;随机置位后，对于任意一个位，其被置0、1的概率分别是$P(0) = 1 - \frac{1}{m}$、$P(1) = \frac{1}{m}$&lt;&#x2F;p&gt;
