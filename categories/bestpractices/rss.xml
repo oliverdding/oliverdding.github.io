@@ -79,6 +79,8 @@
 &lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;full_commit_message&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;${{ github.event.head_commit.message }}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;shalzz&#x2F;zola-deploy-action也可以直接推送，但是我想K.I.S.S些，就职责分离了。hexo、hugo大体相同，只要改动第二部build即可。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;kuo-zhan&quot;&gt;扩展&lt;&#x2F;h2&gt;
+&lt;p&gt;当然，也可以选择第三方发布平台部署静态网站，比如比较出名的&lt;a href=&quot;netlify.com&quot;&gt;netify&lt;&#x2F;a&gt;和&lt;a href=&quot;vercel.com&quot;&gt;vercel&lt;&#x2F;a&gt;，此时只需要源码仓库即可编译发布静态博客。&lt;&#x2F;p&gt;
 </description>
         </item>
     </channel>
