@@ -235,14 +235,14 @@ Aurora | Apache Arrow: 大数据在数据湖后的下一个风向标
 <p>每个事物的产生发展都有其历史原因，如果抛开目的去“学习”，犹如竹篮子打水-一场空</p>
 <p align="right">- 我说的 ;)</p>
 </blockquote>
-<p>让我们回到2008年，故事从那开始…</p>
+<p>让我们回到2008年，故事从那开始...</p>
 <h3 id="qi-yin">起因</h3>
 <p>Wes McKinney在2008年开启了Pandas项目，这个python中分析、操作数据的瑞士军刀。紧接着在2014年，Wes加入Cloudera公司，并着手研究如何让python可以“插入”所有的大数据组件和数据库，但是每个系统都有自己操作数据的方式，于是：</p>
 <blockquote>
-<p>“Oh my gosh, I’m going to have to write a dozen different data converters to marshal data, convert data between Pandas each of these data processing systems from Spark, to Impala, to different file formats and HDFS, so it was basically this overwhelming problem.”</p>
+<p>&quot;Oh my gosh, I'm going to have to write a dozen different data converters to marshal data, convert data between Pandas each of these data processing systems from Spark, to Impala, to different file formats and HDFS, so it was basically this overwhelming problem.&quot;</p>
 <p align="right">- Wes McKinney</p>
 </blockquote>
-<p>除此之外，在大数据科学领域，dataframe的概念随处可见，每个框架都将datafrme作为高层定义，代表一个表、一系列API…但是其底层的实现天壤悬隔，Wes完全无法复用代码。</p>
+<p>除此之外，在大数据科学领域，dataframe的概念随处可见，每个框架都将datafrme作为高层定义，代表一个表、一系列API...但是其底层的实现天壤悬隔，Wes完全无法复用代码。</p>
 <p><strong>无法共享数据</strong>、<strong>无法共享代码</strong>这两个大难题暂时困住了Wes。</p>
 <h3 id="fa-zhan">发展</h3>
 <p>Wes开始设计一种table middleware，作为不同组件交换数据的中间层，一种表接口的标准(standardized table interface)。</p>
@@ -251,7 +251,7 @@ Aurora | Apache Arrow: 大数据在数据湖后的下一个风向标
 <p>自此，arrow项目创立。</p>
 <p>在项目早期，最重要的是设计出一套与语言无关的内存表结构，并一定要方便分析处理。除此之外，还需要将各种格式、类型的数据转换、转出为这个标准格式的库。最后，还需要一个计算处理的库，以便于直接基于arrow进行快速数据分析处理。</p>
 <blockquote>
-<p>“An important thing to remember about the project is that it’s front-end agnostic. So it’s not a new data frame library, like Pandas. It’s not a new database.”</p>
+<p>&quot;An important thing to remember about the project is that it's front-end agnostic. So it's not a new data frame library, like Pandas. It's not a new database.&quot;</p>
 <p align="right">- Wes McKinney</p>
 </blockquote>
 <p>此外，Wes在和Apache Impala团队合作的时候，发现Impala的代码中有大量和pandas做相似事情的片段，比如CSV序列化、反序列化的，I/O子系统，自己的查询引擎，甚至自己的前端。在有了这样一个语言无关的内存数据格式，他们开始思考如何避免重复代码。</p>
@@ -355,7 +355,7 @@ Aurora | Apache Arrow: 大数据在数据湖后的下一个风向标
 <h3 id="luo-ji-lei-xing">逻辑类型</h3>
 <p><a rel="noopener nofollow noreferrer" target="_blank" href="https://github.com/apache/arrow/blob/master/format/Schema.fbs">Schema.fbs</a>定义了Arrow支持的逻辑类型，每种逻辑类型都会对应到一种物理布局。</p>
 <h3 id="xu-lie-hua-yu-ipc">序列化与IPC</h3>
-<p>列式格式序列化时最原始的单位是“record batch“(也就是一个表，table啦)。一个record batch是一组有序的array的集合，被称为record batch的字段(fields)。每个字段(field)有相同的长度，但是字段的数据类型可以不一样。record batch的字段名、类型构成了它的schema。</p>
+<p>列式格式序列化时最原始的单位是&quot;record batch&quot;(也就是一个表，table啦)。一个record batch是一组有序的array的集合，被称为record batch的字段(fields)。每个字段(field)有相同的长度，但是字段的数据类型可以不一样。record batch的字段名、类型构成了它的schema。</p>
 <p>本节描述一个协议，用于将record batch序列化为二进制流，并可以无需内存拷贝重构record batch。</p>
 <p>序列化时会分为这三部分：</p>
 <ul>

@@ -236,14 +236,14 @@ Aurora | 论文阅读笔记：HDFS
           <div class="content mt-2">
             <p><mark>注意: 本文涉及到的专有名词将直接使用英文, 便于理解记忆</mark></p>
 <p><mark>注意: 本文面向hadoop 2版本, 其它版本差异并不涉及</mark></p>
-<p>Hadoop是什么? SAS给出的描述<sup class="footnote-reference"><a href="#6">1</a></sup>是:</p>
+<p>Hadoop是什么? SAS给出的描述[6]是:</p>
 <blockquote>
 <p>Hadoop is an open-source software framework for storing data and running applications on clusters of commodity hardware. It provides massive storage for any kind of data, enormous processing power and the ability to handle virtually limitless concurrent tasks or jobs.</p>
 </blockquote>
 <p>不难看出, 其中commodity hardware, massive storage和enormous processing power就是Hadoop的重要特点. 而The Hadoop Distributed File System(HDFS)作为Hadoop的核心子项目之一, 是Google File System(GFS)的实现, 为分布式计算提供数据存储和管理的功能.</p>
 <h2 id="bei-jing">背景</h2>
-<p>讲到HDFS就不得不提及GFS. 随着业务发展, Google公司对数据存储处理的需要日益增长, 便设计出GFS, 实现了在廉价的商品机型上高容错地存储数据, 并提供了高计算性能, 满足了Google公司的需要<sup class="footnote-reference"><a href="#5">2</a></sup>. HDFS正是基于Google公司在2000年左右完成的GFS而改进实现的<sup class="footnote-reference"><a href="#1">3</a></sup>, 主要是改为通用文件系统(可以支持更多的存储系统而不只是Google的), 并为了内存一致性和性能, 修改了写入模型和写入流程, 其他几乎和GFS一致.</p>
-<p>HDFS将metadata和data分开存放, 像其它的同类文件系统比如PVFS<sup class="footnote-reference"><a href="#4">4</a></sup><sup class="footnote-reference"><a href="#7">5</a></sup>, Lustre<sup class="footnote-reference"><a href="#3">6</a></sup>和GFS, HDFS将metadata存储于一个叫Name Node的专用服务器上, 将data存储于叫Data Node的服务器上. 所有的服务器都通过一个基于TCP的专用协议进行互联通信.</p>
+<p>讲到HDFS就不得不提及GFS. 随着业务发展, Google公司对数据存储处理的需要日益增长, 便设计出GFS, 实现了在廉价的商品机型上高容错地存储数据, 并提供了高计算性能, 满足了Google公司的需要[5]. HDFS正是基于Google公司在2000年左右完成的GFS而改进实现的[1], 主要是改为通用文件系统(可以支持更多的存储系统而不只是Google的), 并为了内存一致性和性能, 修改了写入模型和写入流程, 其他几乎和GFS一致.</p>
+<p>HDFS将metadata和data分开存放, 像其它的同类文件系统比如PVFS[4][7], Lustre[3]和GFS, HDFS将metadata存储于一个叫Name Node的专用服务器上, 将data存储于叫Data Node的服务器上. 所有的服务器都通过一个基于TCP的专用协议进行互联通信.</p>
 <p>不同于Lustre和PVFS, HDFS的Data Node并不使用诸如RAID的数据保护策略, 而是仿照GFS, 将文件冗余存放于不同的Data Node. 这种方式除了提高数据的安全性, 还提高了系统的可用带宽, 因为随着文件冗余存储于不同的节点, 对于需要数据计算的软件而言, 数据正好在本地Data Node的概率更高.</p>
 <h2 id="mu-de">目的</h2>
 <ol>
@@ -257,7 +257,7 @@ Aurora | 论文阅读笔记：HDFS
 </li>
 <li>
 <p>存储大数据集</p>
-<p>存储在HDFS的文件可能是以GB, TB为单位的文件, HDFS provides high aggregate data bandwidth and can scale to hundreds of nodes in a single cluster.<sup class="footnote-reference"><a href="#2">7</a></sup></p>
+<p>存储在HDFS的文件可能是以GB, TB为单位的文件, HDFS provides high aggregate data bandwidth and can scale to hundreds of nodes in a single cluster.[2]</p>
 </li>
 <li>
 <p>保证内存一致性</p>
@@ -334,7 +334,7 @@ Aurora | 论文阅读笔记：HDFS
 <h3 id="fu-ben-guan-li">副本管理</h3>
 <p>Name Node还需要保证每一时刻每个块都有足够数量的副本. 每次收到block report, Name Node都会检测是否有块的副本数量大于少于预设值. 当副本数量大于预设值, Name Node会选择删除副本, 依据尽量不减少拥有副本的rack(这里的rack, 我理解为物理上放置在同一地点, 网络上属于同一网络的群组)数量. 当副本数了小于预设值, Name Node会将它放到复制优先队列(replication priority queue). 一个后台进程会不断扫描该优先队列的队头并决定哪个Data Node放置副本.</p>
 <p>这部分细节非常多, 写下会导致篇幅过大, 请读者自行深入.</p>
-<p>可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. “The Hadoop Distributed File System”</p>
+<p>可以参看本文的基础论文: Konstantin Shvachko, Hairong Kuang, Sanjay Radia, Robert Chansler. &quot;The Hadoop Distributed File System&quot;</p>
 <h2 id="zong-jie">总结</h2>
 <p>综上, HDFS是基于GFS的开源分布式文件系统, 具有高容错性, 可以部署在廉价不可靠的机器上. 适合批处理, 大量数据集存储处理与流式文件访问.</p>
 <p>当然HDFS也有着自己的局限, 世界上没有十全十美的事情, 就好像为了简化内存一致性模型HDFS不得不使用one-writer的模式, 又好像为了提高吞吐量不得不放松POSIX标准.</p>
@@ -345,15 +345,15 @@ Aurora | 论文阅读笔记：HDFS
 <li>不支持修改</li>
 </ol>
 <h2 id="can-kao">参考</h2>
-<div class="footnote-definition" id="1"><sup class="footnote-definition-label">3</sup>
-<p>Google File System (GFS) and Hadoop Distributed File System (HDFS). http://stg-tud.github.io/ctbd/2017/CTBD_06_gfs-hdfs.pdf . p5
-<sup class="footnote-reference"><a href="#2">7</a></sup>:HDFS Architecture. https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html
-<sup class="footnote-reference"><a href="#3">6</a></sup>:Lustre File System. http://www.lustre.org
-<sup class="footnote-reference"><a href="#4">4</a></sup>:P. H. Carns, W. B. Ligon III, R. B. Ross, and R. Thakur. “PVFS: A parallel file system for Linux clusters,” in Proc. of 4th Annual Linux Showcase and Conference, 2000, pp. 317–327.
-<sup class="footnote-reference"><a href="#5">2</a></sup>:S. Ghemawat, H. Gobioff, S. Leung. “The Google file system,” In Proc. of ACM Symposium on Operating Systems Principles, Lake George, NY, Oct 2003, pp 29–43.
-<sup class="footnote-reference"><a href="#6">1</a></sup>:What is Hadoop? - SAS. https://www.sas.com/zh_cn/insights/big-data/hadoop.html
-<sup class="footnote-reference"><a href="#7">5</a></sup>:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name …” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.</p>
-</div>
+<ul>
+<li>[1]:Google File System (GFS) and Hadoop Distributed File System (HDFS). http://stg-tud.github.io/ctbd/2017/CTBD_06_gfs-hdfs.pdf . p5</li>
+<li>[2]:HDFS Architecture. https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html</li>
+<li>[3]:Lustre File System. http://www.lustre.org</li>
+<li>[4]:P. H. Carns, W. B. Ligon III, R. B. Ross, and R. Thakur. “PVFS: A parallel file system for Linux clusters,” in Proc. of 4th Annual Linux Showcase and Conference, 2000, pp. 317–327.</li>
+<li>[5]:S. Ghemawat, H. Gobioff, S. Leung. “The Google file system,” In Proc. of ACM Symposium on Operating Systems Principles, Lake George, NY, Oct 2003, pp 29–43.</li>
+<li>[6]:What is Hadoop? - SAS. https://www.sas.com/zh_cn/insights/big-data/hadoop.html</li>
+<li>[7]:W. Tantisiriroj, S. Patil, G. Gibson. “Data-intensive file systems for Internet services: A rose by any other name ...” Technical Report CMUPDL-08-114, Parallel Data Laboratory, Carnegie Mellon University, Pittsburgh, PA, October 2008.</li>
+</ul>
 
           </div>
         </article>

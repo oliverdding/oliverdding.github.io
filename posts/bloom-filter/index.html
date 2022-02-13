@@ -150,11 +150,11 @@ Aurora | 布隆过滤器
   <span class="icon">
     <i class="far fa-clock"></i>
   </span>
-  <span>5 min,</span>
+  <span>7 min,</span>
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>851 words</span>
+  <span>1321 words</span>
 </span>
 
             </div>
@@ -207,17 +207,20 @@ Aurora | 布隆过滤器
             </div>
           </div>
           <div class="content mt-2">
-            <h2 id="jie-shao">介绍</h2>
-<p>布隆过滤器（Bloom Filter）是一种类似于哈希表的数据结构，用于查询成员存在与否，相比于后者，它允许存在false positive值，但显著地降低了内存占用。</p>
+            <h2 id="ji-chu">基础</h2>
+<p>布隆过滤器（Bloom Filter）是一种类似于哈希表的数据结构，用于查询成员存在与否，相比于后者，它允许存在false positive值，但显著地降低了内存占用。这种思想值得体会，以退为进，<em>只要false positive控制在可以允许的范围</em>，资源消耗被大幅降低[4]。</p>
 <p>使用布隆过滤器查找key时，返回值可能情况有两种：</p>
 <ol>
 <li>key<strong>不</strong>存在</li>
 <li>key<strong>可能</strong>存在（存在、纳伪）</li>
 </ol>
-<h2 id="li-shi">历史</h2>
-<p>布隆过滤器于1970年代被Burton Bloom创造，在查询集合成员存在与否时一般考虑时间成本或空间成本，论文提出第三个优化方向：Allowable Fraction of Errors，也就是说允许一定的误判，来大幅降低空间占用[1]。之后一段时间布隆过滤器被广泛运用在数据库领域，</p>
-<p>之后又有人提出利用布隆过滤器+共享缓存的方式大幅降低缓存服务器的带宽[2]，于是布隆过滤器在互联网中展现实力 💥 。</p>
-<h2 id="yuan-li">原理</h2>
+<blockquote>
+<p>使用布隆过滤器原则：false positive影响可控。</p>
+</blockquote>
+<h3 id="li-shi">历史</h3>
+<p>布隆过滤器于1970年代被Burton Bloom创造，在查询集合成员存在与否时一般考虑时间成本或空间成本，论文提出第三个优化方向：Allowable Fraction of Errors，也就是说允许一定的误判，来大幅降低空间占用[1]。之后一段时间布隆过滤器被广泛运用在数据库领域。</p>
+<p>之后又有人提出利用布隆过滤器+共享缓存的方式大幅降低缓存服务器的带宽[2]，自此布隆过滤器在互联网中展现实力[3]。</p>
+<h3 id="yuan-li">原理</h3>
 <p>布隆过滤器由以下三部分构成：</p>
 <ol>
 <li>n个key</li>
@@ -231,25 +234,55 @@ Aurora | 布隆过滤器
 <p>此时将<code>bitmap</code>中对应的位置1。</p>
 <p><img src="https://raw.githubusercontent.com/oliverdding/imaw.io/main/inserting-key-into-bloom-filter.drawio.svg" alt="往布隆过滤器插入新key" /></p>
 <p>当key越来越多，<code>bitmap</code>中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标对应<code>bitmap</code>中的值都为1的概率越大，此时就发生false positive。</p>
-<p>那么k取何值时，false positive发生概率最小，此时概率为？</p>
+<h3 id="li-zi">例子</h3>
+<p>假设有10位的bitmap如下所示：</p>
+<table><thead><tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead><tbody>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody></table>
+<p>我们使用Fnv和Murmur这两个hash函数。</p>
+<p>首先插入字符串<code>hello</code>，计算<code>Fnv=6</code>，<code>Murmur=0</code>，于是bitmap如下所示：</p>
+<table><thead><tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead><tbody>
+<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody></table>
+<p>接着插入字符串<code>world</code>，计算<code>Fnv=7</code>，<code>Murmur=1</code>，于是bitmap如下所示：</p>
+<table><thead><tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead><tbody>
+<tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+</tbody></table>
+<p>此时我们查询<code>charmer</code>是否存在，计算<code>Fnv=12</code>，<code>Murmur=10</code>，bitmap中存在0，因此<strong>不存在</strong>。</p>
+<p>再查询<code>hello</code>是否存在，计算<code>Fnv=6</code>，<code>Murmur=0</code>，bitmap中都为1，因此<strong>可能存在</strong>。（当然我们知道它的确存在）</p>
+<p>再查询<code>zaslf</code>是否存在，计算<code>Fnv=7</code>，<code>Murmur=1</code>，bitmap都为1，因此<strong>可能存在</strong>。（它实际不存在，这就是false positive）</p>
 <h2 id="shu-xue-zheng-ming">数学证明</h2>
+<p><strong>那么k取何值时，false positive发生概率最小，此时概率为？</strong></p>
 <p>对<code>bitmap</code>随机置位后，对于任意一个位，其被置0、1的概率分别是$P(0) = 1 - \frac{1}{m}$、$P(1) = \frac{1}{m}$</p>
-<p>对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P’(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$</p>
-<p>对于n个key插入后，对于任意一个位，仍然是0的概率是$$P’‘(0)=P’(0)^{n}=(1 - \frac{1}{m})^{kn}$$</p>
+<p>对于k个hash函数的置位后，对于任意一个位，仍然是0的概率是$$P'(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$</p>
+<p>对于n个key插入后，对于任意一个位，仍然是0的概率是$$P''(0)=P'(0)^{n}=(1 - \frac{1}{m})^{kn}$$</p>
 <p>由于有自然对数e的计算公式$$\lim_{n \to \infty}{(1-\frac{1}{x})^{-x}}=e$$</p>
-<p>我们可以<strong>近似</strong>计算$P’‘(0)$得到$$P’’(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$</p>
-<p>因此，对于任意一个位，其被置1的概率是$$P’‘(1)=1-P’’(0)\approx{}1-e^{-\frac{kn}{m}}$$</p>
+<p>我们可以<strong>近似</strong>计算$P''(0)$得到$$P''(0)=(1-\frac{1}{m})^{kn}\approx{}e^{-\frac{kn}{m}}$$</p>
+<p>因此，对于任意一个位，其被置1的概率是$$P''(1)=1-P''(0)\approx{}1-e^{-\frac{kn}{m}}$$</p>
 <p>当alse positive发生时，是指它的k个hash函数得到的坐标都为1。由于k个hash函数相互独立，我们可以计算出alse positive的概率为$$f=(1-(1-\frac{1}{m})^{kn})^{k}\approx{}(1-e^{-\frac{kn}{m}})^{k}$$</p>
 <p>由于m、n是用户给定的值，唯一变量就是k，我们需要指定k的值去最小化alse positive概率。</p>
-<p>另$p=e^{-\frac{kn}{m}}$，我们有$$f=(1-p)^{k}=e^{kln(1-p)}$$</p>
+<p>令$p=e^{-\frac{kn}{m}}$以及自然对数公式，我们有$$f=(1-p)^{k}=e^{kln(1-p)}$$</p>
 <p>此时变更为最小的$g=kln(1-p)$</p>
 <p>无中生有下得到$$g=kln{}(1-p)=-\frac{m}{n}ln(e^{-\frac{kn}{m}})ln(1-p)=-\frac{m}{n}ln(p)ln(1-p)$$</p>
 <p>得知当$p=\frac{1}{2}$时g取得最小，此时有$$k=ln(2\frac{m}{n})$$</p>
 <p>插入回$$f=(1-p)^{k}$$得到alse positive的最小值为$$f_{min}=(\frac{1}{2})^{k}\approx{}(0.6185)^{\frac{m}{n}}$$</p>
+<h2 id="ying-yong">应用</h2>
+<p>如何正确使用布隆过滤器呢？</p>
+<p>首先是确定false positive是否可以接受，之后</p>
+<ol>
+<li>评估n的范围</li>
+<li>确定m的值（m越大，发生false positive的概率越低；因此m一般越大越好，当然需要考虑内存的消耗）</li>
+<li>根据公式$$k=ln(2\frac{m}{n})$$计算k的值</li>
+<li>根据公式$$f=(1-(1-\frac{1}{m})^{kn})^{k}$$计算false positive的概率f，若无法接受回到第二步重新确定m的值</li>
+</ol>
+<p>布隆过滤器使用例子？</p>
+<p>参考文献中的三篇论文是最好的例子。除此之外还可以参考<a rel="noopener nofollow noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/Bloom_filter#Examples">wiki</a>。</p>
 <h2 id="can-kao">参考</h2>
 <ul>
 <li>[1]: Space/Time Trade-offs in Hash Coding with Allowable Errors</li>
 <li>[2]: Summary Cache: A Scalable Wide-Area Web Cache Sharing Protocol </li>
+<li>[3]: Network Applications of Bloom Filters: A Survey</li>
+<li>[4]: Bloom Filters by Example. https://llimllib.github.io/bloomfilter-tutorial/</li>
 </ul>
 
           </div>
@@ -262,26 +295,32 @@ Aurora | 布隆过滤器
           <ul class="menu-list">
             
             <li>
-              <a id="link-jie-shao" class="toc is-size-7 is-active"
-                href="https://charmer.fun/posts/bloom-filter/#jie-shao">
-                介绍
+              <a id="link-ji-chu" class="toc is-size-7 is-active"
+                href="https://charmer.fun/posts/bloom-filter/#ji-chu">
+                基础
               </a>
               
-            </li>
-            
-            <li>
-              <a id="link-li-shi" class="toc is-size-7 "
-                href="https://charmer.fun/posts/bloom-filter/#li-shi">
-                历史
-              </a>
-              
-            </li>
-            
-            <li>
-              <a id="link-yuan-li" class="toc is-size-7 "
-                href="https://charmer.fun/posts/bloom-filter/#yuan-li">
-                原理
-              </a>
+              <ul>
+                
+                <li>
+                  <a id="link-li-shi" class="toc is-size-7" href="https://charmer.fun/posts/bloom-filter/#li-shi">
+                    历史
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-yuan-li" class="toc is-size-7" href="https://charmer.fun/posts/bloom-filter/#yuan-li">
+                    原理
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-li-zi" class="toc is-size-7" href="https://charmer.fun/posts/bloom-filter/#li-zi">
+                    例子
+                  </a>
+                </li>
+                
+              </ul>
               
             </li>
             
@@ -289,6 +328,14 @@ Aurora | 布隆过滤器
               <a id="link-shu-xue-zheng-ming" class="toc is-size-7 "
                 href="https://charmer.fun/posts/bloom-filter/#shu-xue-zheng-ming">
                 数学证明
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-ying-yong" class="toc is-size-7 "
+                href="https://charmer.fun/posts/bloom-filter/#ying-yong">
+                应用
               </a>
               
             </li>
