@@ -7,13 +7,22 @@
         <generator>Zola</generator>
         <language>zh</language>
         <atom:link href="https://charmer.fun/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Sun, 27 Feb 2022 14:00:16 +0800</lastBuildDate>
+        <lastBuildDate>Sun, 27 Feb 2022 17:15:52 +0800</lastBuildDate>
+        <item>
+            <title>HyperLogLog</title>
+            <pubDate>Sun, 27 Feb 2022 17:15:52 +0800</pubDate>
+            <link>https://charmer.fun/posts/hyper-log-log/</link>
+            <guid>https://charmer.fun/posts/hyper-log-log/</guid>
+            <description>&lt;p&gt;TODO&lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>2 可扩展布隆过滤器</title>
-            <pubDate>Sun, 27 Feb 2022 14:00:16 +0800</pubDate>
+            <pubDate>Tue, 15 Feb 2022 14:00:16 +0800</pubDate>
             <link>https://charmer.fun/posts/bloom-filter-2/</link>
             <guid>https://charmer.fun/posts/bloom-filter-2/</guid>
-            <description></description>
+            <description>&lt;p&gt;TODO&lt;&#x2F;p&gt;
+</description>
         </item>
         <item>
             <title>使用静态网站写博客的最佳实践</title>
@@ -96,7 +105,7 @@
             <link>https://charmer.fun/posts/bloom-filter-1/</link>
             <guid>https://charmer.fun/posts/bloom-filter-1/</guid>
             <description>&lt;h2 id=&quot;ji-chu&quot;&gt;基础&lt;&#x2F;h2&gt;
-&lt;p&gt;布隆过滤器（Bloom Filter）用于判断某个元素是否在集合中的一个简单、高效、内存占用低的数据结构，它类似于哈希表，相比于后者，它存在false positive值，但显著地降低了内存占用。这种思想值得体会，以退为进，&lt;em&gt;只要false positive控制在可以允许的范围&lt;&#x2F;em&gt;，资源消耗被大幅降低[4]。&lt;&#x2F;p&gt;
+&lt;p&gt;布隆过滤器（Bloom Filter）用于判断某个元素是否在集合中的一个简单、高效、内存占用低的数据结构，它类似于哈希表，相比于后者，它存在false positive值，但显著地降低了内存占用。这种&lt;a href=&quot;&#x2F;categories&#x2F;probabilisticdatastructure&#x2F;&quot;&gt;概率性数据结构&lt;&#x2F;a&gt;值得体会，以退为进，&lt;em&gt;只要false positive控制在可以允许的范围&lt;&#x2F;em&gt;，资源消耗被大幅降低[4]。&lt;&#x2F;p&gt;
 &lt;p&gt;使用布隆过滤器查找key时，返回值可能情况有两种：&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;key&lt;strong&gt;不&lt;&#x2F;strong&gt;存在&lt;&#x2F;li&gt;

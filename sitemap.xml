@@ -19,6 +19,12 @@
         <loc>https://charmer.fun/categories/notes/page/1/</loc>
     </url>
     <url>
+        <loc>https://charmer.fun/categories/probabilisticdatastructure/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/categories/probabilisticdatastructure/page/1/</loc>
+    </url>
+    <url>
         <loc>https://charmer.fun/categories/translations/</loc>
     </url>
     <url>
@@ -45,7 +51,11 @@
     </url>
     <url>
         <loc>https://charmer.fun/posts/bloom-filter-2/</loc>
-        <lastmod>2022-02-27T14:00:16+08:00</lastmod>
+        <lastmod>2022-02-15T14:00:16+08:00</lastmod>
+    </url>
+    <url>
+        <loc>https://charmer.fun/posts/hyper-log-log/</loc>
+        <lastmod>2022-02-27T17:15:52+08:00</lastmod>
     </url>
     <url>
         <loc>https://charmer.fun/posts/page/1/</loc>
