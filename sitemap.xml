@@ -7,16 +7,10 @@
         <loc>https://charmer.fun/categories/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/bestpractices/</loc>
+        <loc>https://charmer.fun/categories/bloomfilter/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/bestpractices/page/1/</loc>
-    </url>
-    <url>
-        <loc>https://charmer.fun/categories/datastructures/</loc>
-    </url>
-    <url>
-        <loc>https://charmer.fun/categories/datastructures/page/1/</loc>
+        <loc>https://charmer.fun/categories/bloomfilter/page/1/</loc>
     </url>
     <url>
         <loc>https://charmer.fun/categories/notes/</loc>
@@ -46,8 +40,12 @@
         <lastmod>2022-02-11T20:37:06+08:00</lastmod>
     </url>
     <url>
-        <loc>https://charmer.fun/posts/bloom-filter/</loc>
+        <loc>https://charmer.fun/posts/bloom-filter-1/</loc>
         <lastmod>2022-02-09T17:13:10+08:00</lastmod>
+    </url>
+    <url>
+        <loc>https://charmer.fun/posts/bloom-filter-2/</loc>
+        <lastmod>2022-02-27T14:00:16+08:00</lastmod>
     </url>
     <url>
         <loc>https://charmer.fun/posts/page/1/</loc>

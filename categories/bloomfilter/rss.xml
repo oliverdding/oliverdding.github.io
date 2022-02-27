@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Aurora - BloomFilter</title>
+        <link>https://charmer.fun</link>
+        <description>Sidere mens eadem mutato</description>
+        <generator>Zola</generator>
+        <language>zh</language>
+        <atom:link href="https://charmer.fun/categories/bloomfilter/rss.xml" rel="self" type="application/rss+xml"/>
+        <lastBuildDate>Sun, 27 Feb 2022 14:00:16 +0800</lastBuildDate>
+        <item>
+            <title>2 可扩展布隆过滤器</title>
+            <pubDate>Sun, 27 Feb 2022 14:00:16 +0800</pubDate>
+            <link>https://charmer.fun/posts/bloom-filter-2/</link>
+            <guid>https://charmer.fun/posts/bloom-filter-2/</guid>
+            <description></description>
+        </item>
+        <item>
+            <title>1 基础布隆过滤器</title>
+            <pubDate>Wed, 09 Feb 2022 17:13:10 +0800</pubDate>
+            <link>https://charmer.fun/posts/bloom-filter-1/</link>
+            <guid>https://charmer.fun/posts/bloom-filter-1/</guid>
+            <description>&lt;h2 id=&quot;ji-chu&quot;&gt;基础&lt;&#x2F;h2&gt;
+&lt;p&gt;布隆过滤器（Bloom Filter）用于判断某个元素是否在集合中的一个简单、高效、内存占用低的数据结构，它类似于哈希表，相比于后者，它存在false positive值，但显著地降低了内存占用。这种思想值得体会，以退为进，&lt;em&gt;只要false positive控制在可以允许的范围&lt;&#x2F;em&gt;，资源消耗被大幅降低[4]。&lt;&#x2F;p&gt;
+&lt;p&gt;使用布隆过滤器查找key时，返回值可能情况有两种：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;key&lt;strong&gt;不&lt;&#x2F;strong&gt;存在&lt;&#x2F;li&gt;
+&lt;li&gt;key&lt;strong&gt;可能&lt;&#x2F;strong&gt;存在（存在、纳伪）&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;使用布隆过滤器原则：false positive影响可控。&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h3 id=&quot;li-shi&quot;&gt;历史&lt;&#x2F;h3&gt;
+&lt;p&gt;布隆过滤器于1970年代被Burton Bloom创造，在查询集合成员存在与否时一般考虑时间成本或空间成本，论文提出第三个优化方向：Allowable Fraction of Errors，也就是说允许一定的误判，来大幅降低空间占用[1]。之后一段时间布隆过滤器被广泛运用在数据库领域。&lt;&#x2F;p&gt;
+&lt;p&gt;之后又有人提出利用布隆过滤器+共享缓存的方式大幅降低缓存服务器的带宽[2]，自此布隆过滤器在互联网中展现实力[3]。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;yuan-li&quot;&gt;原理&lt;&#x2F;h3&gt;
+&lt;p&gt;布隆过滤器由以下三部分构成：&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;n个key&lt;&#x2F;li&gt;
+&lt;li&gt;m位的位图：&lt;code&gt;bitmap&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;k个相互独立的hash函数：&lt;code&gt;h1, h2, ..., hk&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可以用$h_{i}(x)=MD5(x+i)$或者$h_{i}(x)=MD5(x|i)$实现k个无关hash函数&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;需要插入key时，对&lt;code&gt;key = a&lt;&#x2F;code&gt;时，经过k个hash函数后得到k个数&lt;code&gt;h1(a), h2(a), ..., hk(a)&lt;&#x2F;code&gt;，此时将&lt;code&gt;bitmap&lt;&#x2F;code&gt;中对应的位置1。&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;oliverdding&#x2F;imaw.io&#x2F;main&#x2F;inserting-key-into-bloom-filter.drawio.svg&quot; alt=&quot;往布隆过滤器插入新key&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;需要查询key时，同样经过k个hash函数得到k个体数，查询&lt;code&gt;bitmap&lt;&#x2F;code&gt;中对应位，若全为1，则key&lt;strong&gt;可能&lt;&#x2F;strong&gt;存在；若任意位为0，则&lt;strong&gt;一定不&lt;&#x2F;strong&gt;存在。（这里可以利用短路减少消耗，若出现0则直接返回不存在）&lt;&#x2F;p&gt;
+&lt;p&gt;当key越来越多，&lt;code&gt;bitmap&lt;&#x2F;code&gt;中为1的位越多，对于某个不存在的key，k个hash函数得到的坐标对应&lt;code&gt;bitmap&lt;&#x2F;code&gt;中的值都为1的概率越大，此时就发生false positive。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;li-zi&quot;&gt;例子&lt;&#x2F;h3&gt;
+&lt;p&gt;为了直观描述布隆过滤器如何加速查询的，我们用数据库场景来描述。&lt;&#x2F;p&gt;
+&lt;p&gt;我们对表中某个字段建立bloom filter，假设有10位的bitmap如下所示：&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;0&lt;&#x2F;th&gt;&lt;th&gt;1&lt;&#x2F;th&gt;&lt;th&gt;2&lt;&#x2F;th&gt;&lt;th&gt;3&lt;&#x2F;th&gt;&lt;th&gt;4&lt;&#x2F;th&gt;&lt;th&gt;5&lt;&#x2F;th&gt;&lt;th&gt;6&lt;&#x2F;th&gt;&lt;th&gt;7&lt;&#x2F;th&gt;&lt;th&gt;8&lt;&#x2F;th&gt;&lt;th&gt;9&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;我们使用Fnv和Murmur这两个hash函数。&lt;&#x2F;p&gt;
+&lt;p&gt;首先插入字符串&lt;code&gt;hello&lt;&#x2F;code&gt;，计算&lt;code&gt;Fnv=6&lt;&#x2F;code&gt;，&lt;code&gt;Murmur=0&lt;&#x2F;code&gt;，于是bitmap如下所示：&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;0&lt;&#x2F;th&gt;&lt;th&gt;1&lt;&#x2F;th&gt;&lt;th&gt;2&lt;&#x2F;th&gt;&lt;th&gt;3&lt;&#x2F;th&gt;&lt;th&gt;4&lt;&#x2F;th&gt;&lt;th&gt;5&lt;&#x2F;th&gt;&lt;th&gt;6&lt;&#x2F;th&gt;&lt;th&gt;7&lt;&#x2F;th&gt;&lt;th&gt;8&lt;&#x2F;th&gt;&lt;th&gt;9&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;接着插入字符串&lt;code&gt;world&lt;&#x2F;code&gt;，计算&lt;code&gt;Fnv=7&lt;&#x2F;code&gt;，&lt;code&gt;Murmur=1&lt;&#x2F;code&gt;，于是bitmap如下所示：&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;0&lt;&#x2F;th&gt;&lt;th&gt;1&lt;&#x2F;th&gt;&lt;th&gt;2&lt;&#x2F;th&gt;&lt;th&gt;3&lt;&#x2F;th&gt;&lt;th&gt;4&lt;&#x2F;th&gt;&lt;th&gt;5&lt;&#x2F;th&gt;&lt;th&gt;6&lt;&#x2F;th&gt;&lt;th&gt;7&lt;&#x2F;th&gt;&lt;th&gt;8&lt;&#x2F;th&gt;&lt;th&gt;9&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;此时我们查询&lt;code&gt;charmer&lt;&#x2F;code&gt;是否存在，计算&lt;code&gt;Fnv=12&lt;&#x2F;code&gt;，&lt;code&gt;Murmur=10&lt;&#x2F;code&gt;，bitmap中存在0，因此&lt;strong&gt;不存在&lt;&#x2F;strong&gt;。&lt;&#x2F;p&gt;
+&lt;p&gt;再查询&lt;code&gt;hello&lt;&#x2F;code&gt;是否存在，计算&lt;code&gt;Fnv=6&lt;&#x2F;code&gt;，&lt;code&gt;Murmur=0&lt;&#x2F;code&gt;，bitmap中都为1，因此&lt;strong&gt;可能存在&lt;&#x2F;strong&gt;，需要访问磁盘，得知真的存在。&lt;&#x2F;p&gt;
+&lt;p&gt;再查询&lt;code&gt;zaslf&lt;&#x2F;code&gt;是否存在，计算&lt;code&gt;Fnv=7&lt;&#x2F;code&gt;，&lt;code&gt;Murmur=1&lt;&#x2F;code&gt;，bitmap都为1，因此&lt;strong&gt;可能存在&lt;&#x2F;strong&gt;，需要访问磁盘，得知它不存在。这次磁盘访问就是false positive带来的坏影响，多余的磁盘访问。&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;oliverdding&#x2F;imaw.io&#x2F;main&#x2F;bloom-filter-speed-up-answers.drawio.svg&quot; alt=&quot;布隆过滤器加速查询&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;shu-xue-zheng-ming&quot;&gt;数学证明&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;strong&gt;那么k取何值时，false positive发生概率最小，此时概率为？&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;由于hash函数“选择”&lt;code&gt;bitmap&lt;&#x2F;code&gt;的位置是随机的，因此对于长度为m的&lt;code&gt;bitmap&lt;&#x2F;code&gt;而言，插入一个值时某个位被置1、0的概率分别是$P(1) = \frac{1}{m}$、$P(0) = 1 - \frac{1}{m}$&lt;&#x2F;p&gt;
+&lt;p&gt;当k个hash函数置位后，对于任意一个位，仍然是0的概率是$$P&#x27;(0)=P(0)^{k}=(1 - \frac{1}{m})^{k}$$&lt;&#x2F;p&gt;
+&lt;p&gt;对于n个key插入后，对于任意一个位，仍然是0的概率是$$P&#x27;&#x27;(0)=P&#x27;(0)^{n}=(1 - \frac{1}{m})^{kn}$$&lt;&#x2F;p&gt;
+&lt;p&gt;由于有自然对数e的计算公式$$\lim_{x \to \infty}{(1-\frac{1}{x})^{-x}}=e$$&lt;&#x2F;p&gt;
+&lt;p&gt;我们可以&lt;strong&gt;近似&lt;&#x2F;strong&gt;计算$P&#x27;&#x27;(0)$得到$$P&#x27;&#x27;(0)=((1-\frac{1}{m})^{-m})^{-\frac{kn}{m}}\approx{}e^{-\frac{kn}{m}}$$&lt;&#x2F;p&gt;
+&lt;p&gt;因此，对于任意一个位，其被置1的概率是$$P&#x27;&#x27;(1)=1-P&#x27;&#x27;(0)\approx{}1-e^{-\frac{kn}{m}}$$&lt;&#x2F;p&gt;
+&lt;p&gt;当alse positive发生时，是指它的k个hash函数得到的位置都为1。由于k个hash函数相互独立，我们可以计算出alse positive的概率为$$\varepsilon=(1-(1-\frac{1}{m})^{kn})^{k}\approx{}(1-e^{-\frac{kn}{m}})^{k}$$&lt;&#x2F;p&gt;
+&lt;p&gt;由于m、n是用户给定的值，唯一变量就是k，我们需要指定k的值去最小化alse positive概率。&lt;&#x2F;p&gt;
+&lt;p&gt;令$p=e^{-\frac{kn}{m}}$以及自然对数公式，我们有$$\varepsilon=(1-p)^{k}=e^{kln(1-p)}$$&lt;&#x2F;p&gt;
+&lt;p&gt;此时变更为最小的$g=kln(1-p)$&lt;&#x2F;p&gt;
+&lt;p&gt;无中生有下得到$$g=kln{}(1-p)=-\frac{m}{n}ln(e^{-\frac{kn}{m}})ln(1-p)=-\frac{m}{n}ln(p)ln(1-p)$$&lt;&#x2F;p&gt;
+&lt;p&gt;根据对称性原理得知当$p=\frac{1}{2}$时g取得最小，此时有$$k=\frac{m}{n}ln(2)$$&lt;&#x2F;p&gt;
+&lt;p&gt;插入回$$\varepsilon=(1-p)^{k}$$得到alse positive的最小值为$$\varepsilon_{min}=(\frac{1}{2})^{k}\approx{}(0.6185)^{\frac{m}{n}}$$&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;ying-yong&quot;&gt;应用&lt;&#x2F;h2&gt;
+&lt;p&gt;那么如何在项目中使用bloom filter呢？&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;yi-zhi-n-he-varepsilon&quot;&gt;已知$n$和$\varepsilon$&lt;&#x2F;h3&gt;
+&lt;p&gt;$n$由系统输入决定，$\varepsilon$则是开发者平衡内存使用和性能的选择，因此可以通过传入这两个变量自动计算剩下的值。&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;根据公式$$m=\lceil{}-\frac{nln(\varepsilon)}{(ln(2))^2}\rceil$$计算m的值&lt;&#x2F;li&gt;
+&lt;li&gt;根据公式$$k=\lceil{}-log_2(\varepsilon)\rceil$$计算k的值&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;can-kao&quot;&gt;参考&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;[1]: Space&#x2F;Time Trade-offs in Hash Coding with Allowable Errors&lt;&#x2F;li&gt;
+&lt;li&gt;[2]: Summary Cache: A Scalable Wide-Area Web Cache Sharing Protocol &lt;&#x2F;li&gt;
+&lt;li&gt;[3]: Network Applications of Bloom Filters: A Survey&lt;&#x2F;li&gt;
+&lt;li&gt;[4]: Bloom Filters by Example. https:&#x2F;&#x2F;llimllib.github.io&#x2F;bloomfilter-tutorial&#x2F;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</description>
+        </item>
+    </channel>
+</rss>
