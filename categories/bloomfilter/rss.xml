@@ -37,8 +37,8 @@
 &lt;h3 id=&quot;ying-yong&quot;&gt;应用&lt;&#x2F;h3&gt;
 &lt;h4 id=&quot;yi-zhi-n-he-p&quot;&gt;已知$n$和$P$&lt;&#x2F;h4&gt;
 &lt;ol&gt;
-&lt;li&gt;根据公式$M\approx{}\frac{n\lvert{}ln(P)\rvert{}}{ln^2(2)}$计算M的值&lt;&#x2F;li&gt;
-&lt;li&gt;根据公式$k=log_{2}\frac{1}{P}$计算k的值&lt;&#x2F;li&gt;
+&lt;li&gt;根据公式$k=\lceil{}log_{2}\frac{1}{P}\rceil{}$计算k的值&lt;&#x2F;li&gt;
+&lt;li&gt;根据公式$m\approx{}\lceil{}\frac{n\lvert{}ln(P)\rvert{}}{kln^2(2)}\rceil{}$计算m的值&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;h2 id=&quot;ke-kuo-zhan-de-bu-long-guo-lu-qi&quot;&gt;可扩展的布隆过滤器&lt;&#x2F;h2&gt;
 &lt;p&gt;本篇介绍的可扩展布隆过滤器（Scalable Bloom Filter, SBF）基于前文提及的布隆过滤器变体，有两个关键部分：&lt;&#x2F;p&gt;
