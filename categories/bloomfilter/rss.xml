@@ -16,6 +16,7 @@
             <description>&lt;h2 id=&quot;jie-shao&quot;&gt;介绍&lt;&#x2F;h2&gt;
 &lt;p&gt;在上篇博文&lt;a href=&quot;&#x2F;posts&#x2F;bloom-filter-1&#x2F;&quot;&gt;基础布隆过滤器&lt;&#x2F;a&gt;中介绍了基础的bloom filter以及相关数学推导，最后给出了应用最佳实践。在文章最后提及基础布隆过滤器无法在保证false positive率的同时扩展存储，必须在使用前预估集合大小（n）。但是在很多情况下，集合大小无法预估，这就需要使用本篇介绍的布隆过滤器变体。&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;bu-long-guo-lu-qi-bian-ti&quot;&gt;布隆过滤器变体&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;oliverdding&#x2F;imaw.io&#x2F;main&#x2F;variant_bloom_filter.drawio.svg&quot; alt=&quot;布隆过滤器变体&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;布隆过滤器变体由以下两部分构成：&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;M位的位图：&lt;code&gt;bitmap&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
