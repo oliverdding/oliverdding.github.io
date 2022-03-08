@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Aurora - Rust</title>
+        <link>https://charmer.fun</link>
+        <description>Sidere mens eadem mutato</description>
+        <generator>Zola</generator>
+        <language>zh</language>
+        <atom:link href="https://charmer.fun/categories/rust/rss.xml" rel="self" type="application/rss+xml"/>
+        <lastBuildDate>Mon, 07 Mar 2022 14:37:06 +0800</lastBuildDate>
+        <item>
+            <title>rust的trait和trait对象</title>
+            <pubDate>Mon, 07 Mar 2022 14:37:06 +0800</pubDate>
+            <link>https://charmer.fun/posts/rust-traits-and-trait-objects/</link>
+            <guid>https://charmer.fun/posts/rust-traits-and-trait-objects/</guid>
+            <description></description>
+        </item>
+    </channel>
+</rss>

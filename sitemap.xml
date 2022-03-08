@@ -13,6 +13,12 @@
         <loc>https://charmer.fun/categories/bloomfilter/page/1/</loc>
     </url>
     <url>
+        <loc>https://charmer.fun/categories/c-plus-plus/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/categories/c-plus-plus/page/1/</loc>
+    </url>
+    <url>
         <loc>https://charmer.fun/categories/notes/</loc>
     </url>
     <url>
@@ -23,6 +29,12 @@
     </url>
     <url>
         <loc>https://charmer.fun/categories/probabilisticdatastructure/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/categories/rust/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/categories/rust/page/1/</loc>
     </url>
     <url>
         <loc>https://charmer.fun/categories/translations/</loc>
@@ -36,6 +48,10 @@
     </url>
     <url>
         <loc>https://charmer.fun/posts/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/posts/a-quick-introduction-to-c-plus-plus/</loc>
+        <lastmod>2022-03-07T14:37:06+08:00</lastmod>
     </url>
     <url>
         <loc>https://charmer.fun/posts/apache-arrow-the-next-windfall-after-the-data-lake-in-big-data/</loc>
@@ -72,6 +88,10 @@
         <lastmod>2021-10-12T17:31:07+08:00</lastmod>
     </url>
     <url>
+        <loc>https://charmer.fun/posts/rust-traits-and-trait-objects/</loc>
+        <lastmod>2022-03-07T14:37:06+08:00</lastmod>
+    </url>
+    <url>
         <loc>https://charmer.fun/posts/translation-rdd-programming-guide/</loc>
         <lastmod>2021-07-04T12:42:17+08:00</lastmod>
     </url>
@@ -97,6 +117,12 @@
         <loc>https://charmer.fun/tags/big-data/page/1/</loc>
     </url>
     <url>
+        <loc>https://charmer.fun/tags/c-plus-plus/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/tags/c-plus-plus/page/1/</loc>
+    </url>
+    <url>
         <loc>https://charmer.fun/tags/data-structure/</loc>
     </url>
     <url>
@@ -113,6 +139,18 @@
     </url>
     <url>
         <loc>https://charmer.fun/tags/paper-reading/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/tags/programming-language/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/tags/programming-language/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/tags/rust/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/tags/rust/page/1/</loc>
     </url>
     <url>
         <loc>https://charmer.fun/tags/spark/</loc>
