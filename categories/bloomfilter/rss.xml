@@ -9,7 +9,7 @@
         <atom:link href="https://charmer.fun/categories/bloomfilter/rss.xml" rel="self" type="application/rss+xml"/>
         <lastBuildDate>Tue, 15 Feb 2022 14:00:16 +0800</lastBuildDate>
         <item>
-            <title>2 可扩展布隆过滤器</title>
+            <title>可扩展布隆过滤器</title>
             <pubDate>Tue, 15 Feb 2022 14:00:16 +0800</pubDate>
             <link>https://charmer.fun/posts/bloom-filter-2/</link>
             <guid>https://charmer.fun/posts/bloom-filter-2/</guid>
@@ -75,7 +75,7 @@
 </description>
         </item>
         <item>
-            <title>1 基础布隆过滤器</title>
+            <title>基础布隆过滤器</title>
             <pubDate>Wed, 09 Feb 2022 17:13:10 +0800</pubDate>
             <link>https://charmer.fun/posts/bloom-filter-1/</link>
             <guid>https://charmer.fun/posts/bloom-filter-1/</guid>
