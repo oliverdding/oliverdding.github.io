@@ -7,12 +7,6 @@
         <loc>https://charmer.fun/categories/</loc>
     </url>
     <url>
-        <loc>https://charmer.fun/categories/bloomfilter/</loc>
-    </url>
-    <url>
-        <loc>https://charmer.fun/categories/bloomfilter/page/1/</loc>
-    </url>
-    <url>
         <loc>https://charmer.fun/categories/c-plus-plus/</loc>
     </url>
     <url>
@@ -70,6 +64,10 @@
         <lastmod>2022-02-15T14:00:16+08:00</lastmod>
     </url>
     <url>
+        <loc>https://charmer.fun/posts/count-min-sketch/</loc>
+        <lastmod>2022-03-15T22:58:53+08:00</lastmod>
+    </url>
+    <url>
         <loc>https://charmer.fun/posts/hyper-log-log/</loc>
         <lastmod>2022-02-27T17:15:52+08:00</lastmod>
     </url>
@@ -78,6 +76,9 @@
     </url>
     <url>
         <loc>https://charmer.fun/posts/page/2/</loc>
+    </url>
+    <url>
+        <loc>https://charmer.fun/posts/page/3/</loc>
     </url>
     <url>
         <loc>https://charmer.fun/posts/paper-reading-hdfs/</loc>
