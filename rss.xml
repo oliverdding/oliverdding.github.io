@@ -7,7 +7,39 @@
         <generator>Zola</generator>
         <language>zh</language>
         <atom:link href="https://charmer.fun/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Tue, 15 Mar 2022 22:58:53 +0800</lastBuildDate>
+        <lastBuildDate>Fri, 15 Apr 2022 15:15:43 +0800</lastBuildDate>
+        <item>
+            <title>到底什么是Spark Job</title>
+            <pubDate>Fri, 15 Apr 2022 15:15:43 +0800</pubDate>
+            <link>https://charmer.fun/posts/what-is-spark-job/</link>
+            <guid>https://charmer.fun/posts/what-is-spark-job/</guid>
+            <description>&lt;p&gt;Well, terminology can always be difficult since it depends on context. In many cases, you can be used to &amp;quot;submit a job to a cluster&amp;quot;, which for spark would be to submit a driver program.&lt;&#x2F;p&gt;
+&lt;p&gt;That said, Spark has his own definition for &amp;quot;job&amp;quot;, directly from the glossary:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Job A parallel computation consisting of multiple tasks that gets spawned in response to a Spark action (e.g. save, collect); you&#x27;ll see this term used in the driver&#x27;s logs.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;So I this context, let&#x27;s say you need to do the following:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Load a file with people names and addresses into RDD1&lt;&#x2F;li&gt;
+&lt;li&gt;Load a file with people names and phones into RDD2&lt;&#x2F;li&gt;
+&lt;li&gt;Join RDD1 and RDD2 by name, to get RDD3&lt;&#x2F;li&gt;
+&lt;li&gt;Map on RDD3 to get a nice HTML presentation card for each person as RDD4&lt;&#x2F;li&gt;
+&lt;li&gt;.Save RDD4 to file.&lt;&#x2F;li&gt;
+&lt;li&gt;Map RDD1 to extract zipcodes from the addresses to get RDD5&lt;&#x2F;li&gt;
+&lt;li&gt;Aggregate on RDD5 to get a count of how many people live on each zipcode as RDD6&lt;&#x2F;li&gt;
+&lt;li&gt;Collect RDD6 and prints these stats to the stdout.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;So,&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;The driver program is this entire piece of code, running all 8 steps.&lt;&#x2F;li&gt;
+&lt;li&gt;Producing the entire HTML card set on step 5 is a job (clear because we are using the save action, not a transformation). Same with the collect on step 8&lt;&#x2F;li&gt;
+&lt;li&gt;Other steps will be organized into stages, with each job being the result of a sequence of stages. For simple things a job can have a single stage, but the need to repartition data (for instance, the join on step 3) or anything that breaks the locality of the data usually causes more stages to appear. You can think of stages as computations that produce intermediate results, which can in fact be persisted. For instance, we can persist RDD1 since we&#x27;ll be using it more than once, avoiding recomputation.&lt;&#x2F;li&gt;
+&lt;li&gt;All 3 above basically talk about how the logic of a given algorithm will be broken. In contrast, a task is a particular piece of data that will go through a given stage, on a given executor.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;原文：&lt;a rel=&quot;noopener nofollow noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;28974346&quot;&gt;What is Spark Job ?&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>Count-Min Sketch</title>
             <pubDate>Tue, 15 Mar 2022 22:58:53 +0800</pubDate>
