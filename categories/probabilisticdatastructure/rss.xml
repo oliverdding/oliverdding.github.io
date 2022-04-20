@@ -19,15 +19,10 @@
 &lt;p&gt;理所当然，原型方案只是用于提供一个解决问题的思路与方式，我们需要考虑它的局限。假设流中有千万个数据，若它们都不一样，那HashMap中就有千万个键值对，空间占用可想而知。本文介绍的Count-Min Sketch(CMS)就是利用概率的方式解决空间消耗过大问题。&lt;&#x2F;p&gt;
 &lt;p&gt;⚠️ 相比于论文&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#1&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;，本文的查询只涉及point query，而不涉及range query和inner product query。&lt;&#x2F;p&gt;
 &lt;p&gt;可以先看这个视频对本文有直观的认识&lt;&#x2F;p&gt;
-&lt;div class=&quot;youtube is-flex is-justify-content-center is-align-items-center&quot;&gt;
-    &lt;iframe
-        width=&quot;848&quot; height=&quot;510&quot;
-        src=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;embed&#x2F;mPxslXpg8wA&quot;
-        frameborder=&quot;0&quot; 
-        allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; 
-        allowfullscreen&gt;
-    &lt;&#x2F;iframe&gt;
-&lt;&#x2F;div&gt;&lt;h2 id=&quot;li-yong-hashjie-sheng-kong-jian&quot;&gt;利用Hash节省空间&lt;&#x2F;h2&gt;
+&lt;div &gt;
+    &lt;iframe src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;mPxslXpg8wA&quot; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;li-yong-hashjie-sheng-kong-jian&quot;&gt;利用Hash节省空间&lt;&#x2F;h2&gt;
 &lt;p&gt;首先想到的方案是利用Hash函数和数组，将元素Hash结果作为index，在数组中统计，这样就可以节省掉HashMap中存储key的空间。&lt;&#x2F;p&gt;
 &lt;p&gt;首先准备一个Hash函数$h$，一个长度为$w$的数组$count$。&lt;&#x2F;p&gt;
 &lt;ul&gt;
@@ -81,15 +76,10 @@
             <guid>https://charmer.fun/posts/hyper-log-log/</guid>
             <description>&lt;p&gt;基数统计问题（&lt;em&gt;Count-distinct problem&lt;&#x2F;em&gt;）是指在具有重复元素的数据流中找到不同元素的数目的，该问题有许多场景，比如统计通过某个路由器的ip数量、统计访问某网站的用户数以及数据库总某一字段的基数。&lt;&#x2F;p&gt;
 &lt;p&gt;可以先看这个视频对本文有直观的认识&lt;&#x2F;p&gt;
-&lt;div class=&quot;youtube is-flex is-justify-content-center is-align-items-center&quot;&gt;
-    &lt;iframe
-        width=&quot;848&quot; height=&quot;510&quot;
-        src=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;embed&#x2F;jD2d7jr7z1Q&quot;
-        frameborder=&quot;0&quot; 
-        allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; 
-        allowfullscreen&gt;
-    &lt;&#x2F;iframe&gt;
-&lt;&#x2F;div&gt;&lt;h2 id=&quot;b-tree&quot;&gt;B-tree&lt;&#x2F;h2&gt;
+&lt;div &gt;
+    &lt;iframe src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;jD2d7jr7z1Q&quot; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;b-tree&quot;&gt;B-tree&lt;&#x2F;h2&gt;
 &lt;p&gt;首先，基数统计的难点有：&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;
